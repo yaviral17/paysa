@@ -32,3 +32,7 @@ class OnboardingPageModel {
     ];
   }
 }
+
+
+
+// impliment it dynamic from firestore
