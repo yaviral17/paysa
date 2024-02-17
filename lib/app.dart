@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paysa/Views/OnBoarding/onboarding.dart';
+import 'package:paysa/Views/NavigationMenu.dart';
+import 'package:paysa/routes.dart';
 import 'package:paysa/utils/constants/colors.dart';
 
 class App extends StatefulWidget {
@@ -14,6 +15,8 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
       title: 'Paysa',
       // dark only theme
       theme: ThemeData(
@@ -34,7 +37,6 @@ class _AppState extends State<App> {
           },
         ),
       ),
-      home: const OnBoardingScreen(),
     );
   }
 }
