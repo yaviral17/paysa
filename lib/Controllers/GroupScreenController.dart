@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Models/GroupModel.dart';
 
 class GroupController extends GetxController {
@@ -139,4 +143,16 @@ class GroupController extends GetxController {
   ].obs;
 
   TextEditingController searchController = TextEditingController();
+
+  void getGroup() async {
+    await FireStoreRef.getUserGroupList().then((value) {
+      value.forEach((element) {
+        FireStoreRef.groupCollection.doc(element).get().then((value) {
+          groups.add(Group.fromJson(value.data()!));
+        });
+      });
+    });
+
+    log(groups.toString());
+  }
 }

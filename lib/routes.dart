@@ -1,13 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:paysa/Controllers/LoginController.dart';
+import 'package:paysa/Controllers/ProfileController.dart';
+import 'package:paysa/Controllers/UserData.dart';
+import 'package:paysa/Views/Auth/login.dart';
+import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
 import 'package:paysa/Views/NavigationMenu.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    UserData userData = Get.find();
     switch (settings.name) {
       case '/':
         {
-          return MaterialPageRoute(builder: (_) => NavigationMenu());
+          if (userData.user.value == null) {
+            return MaterialPageRoute(builder: (_) => const LoginScreen());
+          } else {
+            return MaterialPageRoute(builder: (_) => const NavigationMenu());
+          }
+        }
+      case '/cerategroup':
+        {
+          return MaterialPageRoute(builder: (_) => const CreateGroupScreen());
         }
 
       default:

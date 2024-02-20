@@ -52,6 +52,10 @@ dependencies:
   salomon_bottom_bar: ^3.3.2
   grouped_list: ^5.1.2
   firebase_core: ^2.25.4
+  firebase_auth: ^4.17.4
+  google_sign_in: ^6.2.1
+  uuid: ^4.3.3
+  cloud_firestore: ^4.15.4
 
 dev_dependencies:
   flutter_test:
