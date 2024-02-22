@@ -34,4 +34,34 @@ class FireStoreRef {
       "profile": user.photoURL,
     });
   }
+
+  static Future<Map<String, dynamic>?> getUserByEmail(String email) async {
+    return await userCollection
+        .where('email', isEqualTo: email)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) {
+        return null;
+      }
+      return value.docs.first.data();
+    });
+  }
+
+  static getuserByUid(String uid) async {
+    return await userCollection
+        .where('uid', isEqualTo: uid)
+        .get()
+        .then((value) => value.docs.first.data());
+  }
+
+  static createGroup(Group group) async {
+    await groupCollection.doc(group.id).set(group.toJson());
+    await userCollection.where('uid', isEqualTo: group.createdBy).get().then(
+      (value) {
+        userCollection.doc(value.docs.first.id).update({
+          'groups': FieldValue.arrayUnion([group.id])
+        });
+      },
+    );
+  }
 }

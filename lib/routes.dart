@@ -21,7 +21,7 @@ class RouteGenerator {
             return MaterialPageRoute(builder: (_) => const NavigationMenu());
           }
         }
-      case '/cerategroup':
+      case '/create-group':
         {
           return MaterialPageRoute(builder: (_) => const CreateGroupScreen());
         }
