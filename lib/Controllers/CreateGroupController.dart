@@ -17,13 +17,23 @@ class CreateGroupController extends GetxController {
   TextEditingController addMember = TextEditingController();
   RxList<UserModel> members = <UserModel>[].obs;
 
-  void createGroup() {
+  void createGroup(BuildContext context) async {
     isLoading.value = true;
     // create group
-    if (groupNameController.text.trim().isEmpty &&
-        groupDescriptionController.text.trim().isEmpty) {
+
+    if (groupNameController.text.trim().isEmpty) {
+      log("hiii");
+      isLoading.value = false;
+      showErrorToast(context, 'Please enter group name');
       return;
     }
+
+    if (groupDescriptionController.text.trim().isEmpty) {
+      isLoading.value = false;
+      showErrorToast(context, 'Please enter group description');
+      return;
+    }
+
     Group group = Group(
       id: const Uuid().v1(),
       name: groupNameController.text,
@@ -35,7 +45,7 @@ class CreateGroupController extends GetxController {
           "https://cdn.pixabay.com/photo/2023/07/25/18/42/vector-graphic-8149677_640.jpg",
       createdBy: FirebaseAuth.instance.currentUser!.uid,
     );
-    FireStoreRef.addGroup(group);
+    await FireStoreRef.addGroup(group);
 
     isLoading.value = false;
   }

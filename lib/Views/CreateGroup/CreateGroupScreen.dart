@@ -20,9 +20,15 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          controller.createGroup();
+          controller.createGroup(context);
         },
-        label: const Text('Create Group'),
+        label: Obx(
+          () => controller.isLoading.value
+              ? const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
+              : const Text('Create Group'),
+        ),
         icon: const Icon(Icons.add),
         backgroundColor: TColors.primary,
       ),
@@ -33,7 +39,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 72,
               ),
               // Group name
@@ -47,7 +53,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: TSizes.spaceBtwInputFields,
               ),
               // Group description
@@ -61,7 +67,21 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
+                height: TSizes.spaceBtwInputFields,
+              ),
+              // Group category
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: controller.groupCategoryController,
+                  decoration: const InputDecoration(
+                    labelText: 'Group Category',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(
                 height: TSizes.spaceBtwInputFields,
               ),
               Text(
@@ -71,7 +91,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                       fontWeight: FontWeight.w500,
                     ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: TSizes.spaceBtwInputFields,
               ),
               // Add members

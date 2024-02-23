@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:paysa/Models/GroupModel.dart';
+import 'package:paysa/utils/constants/cherryToast.dart';
 
 class FireStoreRef {
   static String users = 'users';
@@ -19,14 +22,31 @@ class FireStoreRef {
   }
 
   static getUserGroupList() async {
-    return userCollection
+    List<Group> groups = [];
+    Map<String, dynamic>? data = await userCollection
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
-        .then((value) => value.data()!['groups']);
+        .then((value) => value.data());
+    if (data == null) {
+      return null;
+    }
+    for (String groupId in data['groups']) {
+      Map<String, dynamic>? groupData = await getGroupById(groupId);
+      if (groupData != null) {
+        groups.add(Group.fromJson(groupData));
+        continue;
+      }
+      log('Group id not found');
+    }
+    return groups;
+  }
+
+  static getGroupById(String id) async {
+    return await groupCollection.doc(id).get().then((value) => value.data());
   }
 
   static uploadUser(User user) {
-    userCollection.doc().set({
+    userCollection.doc(user.uid).set({
       "uid": user.uid,
       "name": user.displayName,
       "email": user.email,
@@ -48,20 +68,13 @@ class FireStoreRef {
   }
 
   static getuserByUid(String uid) async {
-    return await userCollection
-        .where('uid', isEqualTo: uid)
-        .get()
-        .then((value) => value.docs.first.data());
+    return await userCollection.doc(uid).get().then((value) => value.data());
   }
 
   static createGroup(Group group) async {
     await groupCollection.doc(group.id).set(group.toJson());
-    await userCollection.where('uid', isEqualTo: group.createdBy).get().then(
-      (value) {
-        userCollection.doc(value.docs.first.id).update({
-          'groups': FieldValue.arrayUnion([group.id])
-        });
-      },
-    );
+    await userCollection.doc(group.createdBy).update({
+      'groups': FieldValue.arrayUnion([group.id])
+    });
   }
 }
