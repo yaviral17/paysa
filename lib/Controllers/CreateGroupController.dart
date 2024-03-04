@@ -42,7 +42,6 @@ class CreateGroupController extends GetxController {
           ? <String>[FirebaseAuth.instance.currentUser!.uid]
           : members.map((e) => e.uid).toList() +
               <String>[FirebaseAuth.instance.currentUser!.uid],
-      // [FirebaseAuth.instance.currentUser!.uid + 'admin'],
       admins: <String>[FirebaseAuth.instance.currentUser!.uid],
       category: groupCategoryController.text,
       icon:

@@ -85,4 +85,11 @@ class FireStoreRef {
       'groups': FieldValue.arrayUnion([group.id]),
     });
   }
+
+  //remove group from user's group list
+  static removeGroupFromUser(String groupId, uid) async {
+    await userCollection.doc(uid).update({
+      'groups': FieldValue.arrayRemove([groupId]),
+    });
+  }
 }

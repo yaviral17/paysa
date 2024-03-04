@@ -8,6 +8,7 @@ import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Controllers/GroupScreenController.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/utils/constants/colors.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 
 class GroupsScreen extends StatefulWidget {
   const GroupsScreen({super.key});
@@ -58,8 +59,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
                           color: TColors.primary.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             Icon(
                               Iconsax.search_normal,
                               color: TColors.primary,
@@ -125,6 +126,37 @@ class _GroupsScreenState extends State<GroupsScreen> {
                           radius: 30,
                           backgroundImage: NetworkImage(element.icon,
                               scale: 1.0, headers: <String, String>{}),
+                        ),
+                        trailing: PullDownButton(
+                          itemBuilder: (context) => [
+                            PullDownMenuItem(
+                              icon: (Icons.supervised_user_circle),
+                              title: 'Share',
+                              onTap: () {},
+                            ),
+                            const PullDownMenuDivider(),
+                            PullDownMenuItem(
+                              icon: (Icons.delete),
+                              title: 'delete',
+                              onTap: () {
+                                groupController.deleteGroup(element, context);
+                              },
+                            ),
+                            PullDownMenuItem(
+                              icon: (Icons.exit_to_app_rounded),
+                              title: 'leave',
+                              onTap: () {
+                                groupController.leaveGroup(element, context);
+                              },
+                            ),
+                          ],
+                          buttonBuilder: (context, showMenu) => IconButton(
+                            onPressed: showMenu,
+                            // constraints: BoxConstraints(maxWidth: 100),
+                            color: TColors.primary,
+                            padding: EdgeInsets.zero,
+                            icon: Icon(Icons.more_vert),
+                          ),
                         ),
                       );
                     },

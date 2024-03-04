@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -154,5 +156,101 @@ class GroupController extends GetxController {
     });
 
     log(groups.toString());
+  }
+
+  void deleteGroup(Group group, BuildContext context) async {
+    //check if current user is owner of the group
+    if (group.createdBy != FirebaseAuth.instance.currentUser!.uid) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text('You are not the owner of this group.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    //delete the group from user's group list
+    for (String uid in group.members) {
+      await FireStoreRef.removeGroupFromUser(group.id, uid);
+    }
+
+    FireStoreRef.groupCollection.doc(group.id).delete();
+    log(FireStoreRef.groupCollection.doc('members').toString());
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text('Group Deleted'),
+          content: const Text('The group has been deleted.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //leave group
+  void leaveGroup(Group group, BuildContext context) async {
+    //check if current user is owner of the group
+    if (group.createdBy == FirebaseAuth.instance.currentUser!.uid) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text(
+                'You are the owner of this group. You cannot leave the group.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    //delete the group from user's group list
+    await FireStoreRef.removeGroupFromUser(
+        group.id, FirebaseAuth.instance.currentUser!.uid);
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text('Group Left'),
+          content: const Text('You have left the group.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
