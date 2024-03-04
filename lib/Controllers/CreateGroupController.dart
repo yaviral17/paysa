@@ -40,7 +40,7 @@ class CreateGroupController extends GetxController {
       description: groupDescriptionController.text,
       members: members.length == 0
           ? <String>[FirebaseAuth.instance.currentUser!.uid]
-          : members.map((e) => e.email).toList() +
+          : members.map((e) => e.uid).toList() +
               <String>[FirebaseAuth.instance.currentUser!.uid],
       // [FirebaseAuth.instance.currentUser!.uid + 'admin'],
       admins: <String>[FirebaseAuth.instance.currentUser!.uid],
