@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:paysa/Views/Groups/GroupsScreen.dart';
+import 'package:paysa/Views/Home/GroupsScreen.dart';
 import 'package:paysa/Views/Profile/profile.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
