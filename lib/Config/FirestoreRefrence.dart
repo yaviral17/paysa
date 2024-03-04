@@ -14,11 +14,19 @@ class FireStoreRef {
       db.collection(users);
   static CollectionReference<Map<String, dynamic>> get groupCollection =>
       db.collection(groups);
+
   static addGroup(Group group) async {
     await groupCollection.doc(group.id).set(group.toJson());
-    await userCollection.doc(group.createdBy).update({
-      'groups': FieldValue.arrayUnion([group.id])
-    });
+
+    for (String member in group.members) {
+      await userCollection.doc(member).update({
+        'groups': FieldValue.arrayUnion([group.id])
+      });
+    }
+
+    // await userCollection.doc(group.createdBy).update({
+    //   'groups': FieldValue.arrayUnion([group.id])
+    // });
   }
 
   static getUserGroupList() async {
@@ -74,7 +82,7 @@ class FireStoreRef {
   static createGroup(Group group) async {
     await groupCollection.doc(group.id).set(group.toJson());
     await userCollection.doc(group.createdBy).update({
-      'groups': FieldValue.arrayUnion([group.id])
+      'groups': FieldValue.arrayUnion([group.id]),
     });
   }
 }
