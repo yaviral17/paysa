@@ -17,20 +17,24 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool keyboardisopened = MediaQuery.of(context).viewInsets.bottom == 0.0;
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          controller.createGroup(context);
-        },
-        label: Obx(
-          () => controller.isLoading.value
-              ? const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                )
-              : const Text('Create Group'),
+      floatingActionButton: Visibility(
+        visible: keyboardisopened,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            controller.createGroup(context);
+          },
+          label: Obx(
+            () => controller.isLoading.value
+                ? const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  )
+                : const Text('Create Group'),
+          ),
+          icon: const Icon(Icons.add),
+          backgroundColor: TColors.primary,
         ),
-        icon: const Icon(Icons.add),
-        backgroundColor: TColors.primary,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -40,8 +44,19 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 72,
+                height: 54,
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () => navigator?.pop(context),
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+              ),
+              const SizedBox(
+                height: 18,
+              ),
+
               // Group name
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -95,6 +110,21 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 height: TSizes.spaceBtwInputFields,
               ),
               // Add members
+
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {
+                    if (controller.addMember.text.contains('@gmail.com')) {
+                      return;
+                    }
+                    controller.addMember.text += '@gmail.com';
+                  },
+                  child: Chip(
+                    label: Text('@gmail.com'),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 56,
                 child: Row(
@@ -131,7 +161,13 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                         ),
                         minimumSize: const Size(72, 48),
                       ),
-                      child: const Text('Add'),
+                      child: Text(
+                        'Add',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.white),
+                      ),
                     ),
 
                     // Add button

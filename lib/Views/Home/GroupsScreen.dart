@@ -114,6 +114,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
                     ),
                     itemBuilder: (context, Group element) {
                       return ListTile(
+                        onTap: () {
+                          Get.toNamed('/group-page', arguments: element);
+                        },
                         title: Text(
                           element.name,
                           style:

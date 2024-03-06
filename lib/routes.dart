@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:paysa/Controllers/LoginController.dart';
 import 'package:paysa/Controllers/ProfileController.dart';
 import 'package:paysa/Controllers/UserData.dart';
+import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/Views/Auth/login.dart';
 import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
+import 'package:paysa/Views/GroupPage/GroupPage.dart';
 import 'package:paysa/Views/NavigationMenu.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 
@@ -24,6 +26,15 @@ class RouteGenerator {
       case '/create-group':
         {
           return MaterialPageRoute(builder: (_) => const CreateGroupScreen());
+        }
+
+      case '/group-page':
+        {
+          Group group = settings.arguments as Group;
+          return MaterialPageRoute(
+              builder: (_) => GroupPage(
+                    group: group,
+                  ));
         }
 
       default:

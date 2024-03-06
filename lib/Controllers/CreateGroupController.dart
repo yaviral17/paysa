@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 
 class CreateGroupController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isAddMemberLoading = false.obs;
   TextEditingController groupNameController = TextEditingController();
   TextEditingController groupDescriptionController = TextEditingController();
   TextEditingController groupCategoryController = TextEditingController();
@@ -19,6 +20,7 @@ class CreateGroupController extends GetxController {
 
   void createGroup(BuildContext context) async {
     isLoading.value = true;
+
     // create group
 
     if (groupNameController.text.trim().isEmpty) {
@@ -51,19 +53,21 @@ class CreateGroupController extends GetxController {
     await FireStoreRef.addGroup(group);
 
     isLoading.value = false;
+    Get.back();
   }
 
   void onPressAddButton(BuildContext context) async {
-    isLoading.value = true;
+    isAddMemberLoading.value = true;
     if (addMember.text.trim().isEmpty) {
       // add member
+
       showErrorToast(context, 'Please enter email of member to add');
-      isLoading.value = false;
+      isAddMemberLoading.value = false;
       return;
     }
     if (addMember.text.trim() == FirebaseAuth.instance.currentUser!.email) {
       showErrorToast(context, 'You cannot add yourself');
-      isLoading.value = false;
+      isAddMemberLoading.value = false;
       return;
     }
     Map<String, dynamic>? user =
@@ -71,20 +75,20 @@ class CreateGroupController extends GetxController {
 
     if (user == null) {
       showErrorToast(context, 'User not found');
-      isLoading.value = false;
+      isAddMemberLoading.value = false;
       return;
     }
     if (members
         .where((element) => element.email == addMember.text)
         .isNotEmpty) {
       showErrorToast(context, 'User already added');
-      isLoading.value = false;
+      isAddMemberLoading.value = false;
       return;
     }
     log(user.toString());
 
     members.add(UserModel.fromJson(user));
     addMember.clear();
-    isLoading.value = false;
+    isAddMemberLoading.value = false;
   }
 }
