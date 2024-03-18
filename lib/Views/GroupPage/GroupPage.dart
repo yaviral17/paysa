@@ -30,7 +30,7 @@ class GroupPage extends StatelessWidget {
             Column(
               children: [
                 Row(children: [
-                  Text(
+                  const Text(
                     "Group Name ",
                     style: TextStyle(fontSize: 24),
                   ),
