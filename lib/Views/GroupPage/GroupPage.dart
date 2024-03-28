@@ -37,23 +37,7 @@ class _GroupPageState extends State<GroupPage> {
     super.initState();
   }
 
-  final List<ChatMessage> chatMessages = [
-    ChatMessage(
-      id: "1",
-      createdBy: "You",
-      message: "Hello, how are you?",
-      timestamp: DateTime.now(),
-      isChat: true,
-    ),
-    ChatMessage(
-      id: "1",
-      createdBy: "l9HAU9uitCOlAAtGwlaaOQhKCxv1",
-      message: "I'm good, thank you!",
-      timestamp: DateTime.now().add(Duration(minutes: 5)),
-      isChat: true,
-    ),
-    // Add more chat messages as needed
-  ];
+  final List<ChatMessage> chatMessages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +170,7 @@ class _GroupPageState extends State<GroupPage> {
                                     // bottom: 2.0,
                                   ),
                                   child: ChatBubble(
-                                    senderName: message.createdBy,
+                                    senderName: message.createdByUserName,
                                     message: message.message,
                                     timestamp: message.timestamp,
                                     isYou: message.createdBy ==

@@ -71,6 +71,11 @@ class FireStoreRef {
     });
   }
 
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserDataByIdStream(
+      String id) {
+    return userCollection.doc(id).snapshots();
+  }
+
   static Future<Map<String, dynamic>?> getUserByEmail(String email) async {
     return await userCollection
         .where('email', isEqualTo: email)

@@ -15,36 +15,7 @@ class GroupPageController extends GetxController {
 
   RxList<File> attachments = <File>[].obs;
 
-  RxList<dynamic> tiles = [
-    ChatMessage(
-      id: "1",
-      createdBy: "You",
-      message: "Hello, how are you?",
-      timestamp: DateTime.now(),
-      isChat: true,
-    ),
-    ChatMessage(
-      id: "1",
-      createdBy: "l9HAU9uitCOlAAtGwlaaOQhKCxv1",
-      message: "I'm good, thank you!",
-      timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
-      isChat: true,
-    ),
-    Transaction(
-      id: "1",
-      createdBy: "l9HAU9uitCOlAAtGwlaaOQhKCxv1",
-      amount: 100,
-      timestamp: DateTime.now(),
-      isChat: false,
-      isSettled: false,
-      description: "Lunch",
-      paidBy: "l9HAU9uitCOlAAtGwlaaOQhKCxv1",
-      members: [
-        {"uid": "l9HAU9uitCOlAAtGwlaaOQhKCxv1", "paid": true},
-        {"uid": "PgUpuuGHMva4URqxU0s5eKxM3Mm2", "paid": false},
-      ],
-    ),
-  ].obs;
+  RxList<dynamic> tiles = [].obs;
   double owes = 0;
 
   void makeNewSplit() {
@@ -78,6 +49,7 @@ class GroupPageController extends GetxController {
     ChatMessage chatMessage = ChatMessage(
       id: Uuid().v1(),
       createdBy: FirebaseAuth.instance.currentUser!.uid,
+      createdByUserName: FirebaseAuth.instance.currentUser!.displayName!,
       message: chatController.text,
       timestamp: DateTime.now(),
       isChat: true,
