@@ -34,74 +34,86 @@ class ChatBubble extends StatelessWidget {
     return Row(
       mainAxisAlignment:
           isYou ? MainAxisAlignment.end : MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Column(
-          crossAxisAlignment:
-              !isYou ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-          children: [
-            Text(
-              getDateDifference(timestamp),
-              style: TextStyle(
-                fontSize: 10,
-                color: isYou ? TColors.primary : TColors.grey.withOpacity(0.6),
-                fontWeight: FontWeight.normal,
-              ),
+        if (isYou) ShowTimeStamp(),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 4),
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: isYou ? TColors.primary : TColors.darkerGrey,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(isYou ? 12 : 0),
+              topRight: Radius.circular(isYou ? 0 : 12),
+              bottomLeft: Radius.circular(12),
+              bottomRight: Radius.circular(12),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 4),
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isYou ? TColors.primary : TColors.darkerGrey,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(isYou ? 12 : 0),
-                  topRight: Radius.circular(isYou ? 0 : 12),
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment:
+                !isYou ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            children: [
+              Text(
+                isYou ? 'You' : senderName.split(' ').first,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isYou
+                      ? TColors.white.withOpacity(0.6)
+                      : TColors.grey.withOpacity(0.6),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment:
-                    !isYou ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    isYou ? 'You' : senderName.split(' ').first,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isYou
-                          ? TColors.white.withOpacity(0.6)
-                          : TColors.grey.withOpacity(0.6),
-                      fontWeight: FontWeight.bold,
-                    ),
+              // Text(
+              //   senderName,
+              //   style: TextStyle(
+              //     fontWeight: FontWeight.bold,
+              //     color: Colors.white,
+              //   ),
+              // ),
+              // SizedBox(height: 4),
+              Container(
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.7),
+                child: Text(
+                  message,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
                   ),
-                  // Text(
-                  //   senderName,
-                  //   style: TextStyle(
-                  //     fontWeight: FontWeight.bold,
-                  //     color: Colors.white,
-                  //   ),
-                  // ),
-                  // SizedBox(height: 4),
-                  Text(
-                    message,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                  // SizedBox(height: 4),
-                  // Text(
-                  //   timestamp.toString(),
-                  //   style: TextStyle(
-                  //     color: Colors.white,
-                  //     fontSize: 12,
-                  //   ),
-                  // ),
-                ],
+                ),
               ),
-            ),
-          ],
+              // SizedBox(height: 4),
+              // Text(
+              //   timestamp.toString(),
+              //   style: TextStyle(
+              //     color: Colors.white,
+              //     fontSize: 12,
+              //   ),
+              // ),
+            ],
+          ),
         ),
+        if (!isYou) ShowTimeStamp(),
+      ],
+    );
+  }
+
+  Row ShowTimeStamp() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(width: 8),
+        Text(
+          getDateDifference(timestamp),
+          style: TextStyle(
+            fontSize: 10,
+            color: isYou ? TColors.primary : TColors.grey.withOpacity(0.6),
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        SizedBox(width: 8),
       ],
     );
   }
