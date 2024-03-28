@@ -22,7 +22,7 @@ void showErrorToast(
         Text(title ?? "", style: TextStyle(color: titleColor ?? Colors.black)),
     toastPosition: position ?? Position.top,
     width: width,
-    displayTitle: displayTitle ?? false,
+    displayIcon: displayTitle ?? false,
     description:
         Text(message, style: TextStyle(color: messageColor ?? Colors.black)),
     animationType: AnimationType.fromRight,
@@ -53,7 +53,7 @@ void showSuccessToast(
         Text(title ?? "", style: TextStyle(color: titleColor ?? Colors.black)),
     toastPosition: position ?? Position.top,
     width: width,
-    displayTitle: displayTitle ?? false,
+    displayIcon: displayTitle ?? false,
     description:
         Text(message, style: TextStyle(color: messageColor ?? Colors.black)),
     animationType: AnimationType.fromRight,

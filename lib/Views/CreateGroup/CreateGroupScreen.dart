@@ -152,7 +152,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                     ElevatedButton(
                       onPressed: () => controller.onPressAddButton(context),
                       style: ElevatedButton.styleFrom(
-                        primary: TColors.primary,
+                        backgroundColor: TColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100),
                         ),

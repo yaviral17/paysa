@@ -36,8 +36,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
         onPressed: () async {
           Get.toNamed('/create-group');
         },
-        child: const Icon(Iconsax.add),
         backgroundColor: TColors.primary,
+        child: const Icon(Iconsax.add),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
