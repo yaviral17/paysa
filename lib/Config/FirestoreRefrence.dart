@@ -56,6 +56,11 @@ class FireStoreRef {
     return await groupCollection.doc(id).get().then((value) => value.data());
   }
 
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getGroupByIdStream(
+      String id) {
+    return groupCollection.doc(id).snapshots();
+  }
+
   static uploadUser(User user) {
     userCollection.doc(user.uid).set({
       "uid": user.uid,
@@ -118,9 +123,11 @@ class FireStoreRef {
     return convos;
   }
 
-  static Stream<DocumentSnapshot<Map<String, dynamic>>> getGroupStream(
-      String groupId) {
-    return groupCollection.doc(groupId).snapshots();
+  static Stream<DocumentSnapshot<Map<String, dynamic>>>
+      getUserGroupListStream() {
+    return userCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
   }
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getConvoStream(

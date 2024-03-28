@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -81,91 +82,206 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   ],
                 ),
               ),
-              FutureBuilder(
-                future: getGroups(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const CircularProgressIndicator();
-                  }
-                  return GroupedListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    elements: <Group>[
-                      ...List.from(snapshot.data as List<Group>),
-                    ],
-                    groupBy: (element) => element.category,
-                    groupSeparatorBuilder: (String category) => Container(
-                      margin: const EdgeInsets.only(
-                          top: 10, bottom: 10, left: 10, right: 10),
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: TColors.primary.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        category,
-                        textAlign: TextAlign.start,
-                        style:
-                            Theme.of(context).textTheme.headlineSmall!.copyWith(
+
+              StreamBuilder(
+                  stream: FireStoreRef.getUserGroupListStream(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const CircularProgressIndicator();
+                    }
+                    Map<String, dynamic> data =
+                        snapshot.requireData.data() ?? {};
+                    log("snapshot data: " + data.toString());
+                    if (data['groups'] == null) {
+                      return const Center(
+                        child: Text('No groups found'),
+                      );
+                    }
+
+                    groupController.groups.clear();
+                    for (String groupId in data['groups']) {
+                      FireStoreRef.getGroupByIdStream(groupId).listen((event) {
+                        log("event data: " + event.data().toString());
+                        if (event.data() != null) {
+                          groupController.groups
+                              .add(Group.fromJson(event.data()!));
+                        }
+                        // groupController.groups
+                        //     .add(Group.fromJson(event.data()));
+                      });
+                      // groupController.groups.add(Group.fromJson(groupData));
+                    }
+
+                    return Obx(
+                      () => GroupedListView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        elements: groupController.groups.value,
+                        groupBy: (element) => element.category,
+                        groupSeparatorBuilder: (String category) => Container(
+                          margin: const EdgeInsets.only(
+                              top: 10, bottom: 10, left: 10, right: 10),
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: TColors.primary.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            category,
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500,
                                 ),
-                      ),
-                    ),
-                    itemBuilder: (context, Group element) {
-                      return ListTile(
-                        onTap: () {
-                          Get.toNamed('/group-page', arguments: element);
-                        },
-                        title: Text(
-                          element.name,
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: TColors.primary,
-                                  ),
-                        ),
-                        subtitle: Text(element.description),
-                        leading: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(element.icon,
-                              scale: 1.0, headers: <String, String>{}),
-                        ),
-                        trailing: PullDownButton(
-                          itemBuilder: (context) => [
-                            PullDownMenuItem(
-                              icon: (Icons.supervised_user_circle),
-                              title: 'Share',
-                              onTap: () {},
-                            ),
-                            const PullDownMenuDivider(),
-                            PullDownMenuItem(
-                              icon: (Icons.delete),
-                              title: 'delete',
-                              onTap: () {
-                                groupController.deleteGroup(element, context);
-                              },
-                            ),
-                            PullDownMenuItem(
-                              icon: (Icons.exit_to_app_rounded),
-                              title: 'leave',
-                              onTap: () {
-                                groupController.leaveGroup(element, context);
-                              },
-                            ),
-                          ],
-                          buttonBuilder: (context, showMenu) => IconButton(
-                            onPressed: showMenu,
-                            // constraints: BoxConstraints(maxWidth: 100),
-                            color: TColors.primary,
-                            padding: EdgeInsets.zero,
-                            icon: Icon(Icons.more_vert),
                           ),
                         ),
-                      );
-                    },
-                  );
-                },
-              ),
+                        itemBuilder: (context, Group element) {
+                          return ListTile(
+                            onTap: () {
+                              Get.toNamed('/group-page', arguments: element);
+                            },
+                            title: Text(
+                              element.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                    color: TColors.primary,
+                                  ),
+                            ),
+                            subtitle: Text(element.description),
+                            leading: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(element.icon,
+                                  scale: 1.0, headers: <String, String>{}),
+                            ),
+                            trailing: PullDownButton(
+                              itemBuilder: (context) => [
+                                PullDownMenuItem(
+                                  icon: (Icons.supervised_user_circle),
+                                  title: 'Share',
+                                  onTap: () {},
+                                ),
+                                const PullDownMenuDivider(),
+                                PullDownMenuItem(
+                                  icon: (Icons.delete),
+                                  title: 'delete',
+                                  onTap: () {
+                                    groupController.deleteGroup(
+                                        element, context);
+                                  },
+                                ),
+                                PullDownMenuItem(
+                                  icon: (Icons.exit_to_app_rounded),
+                                  title: 'leave',
+                                  onTap: () {
+                                    groupController.leaveGroup(
+                                        element, context);
+                                  },
+                                ),
+                              ],
+                              buttonBuilder: (context, showMenu) => IconButton(
+                                onPressed: showMenu,
+                                // constraints: BoxConstraints(maxWidth: 100),
+                                color: TColors.primary,
+                                padding: EdgeInsets.zero,
+                                icon: Icon(Icons.more_vert),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }),
+
+              // FutureBuilder(
+              //   future: getGroups(),
+              //   builder: (context, snapshot) {
+              //     if (!snapshot.hasData) {
+              //       return const CircularProgressIndicator();
+              //     }
+              //     return GroupedListView(
+              //       shrinkWrap: true,
+              //       physics: const NeverScrollableScrollPhysics(),
+              //       elements: <Group>[
+              //         ...List.from(snapshot.data as List<Group>),
+              //       ],
+              //       groupBy: (element) => element.category,
+              //       groupSeparatorBuilder: (String category) => Container(
+              //         margin: const EdgeInsets.only(
+              //             top: 10, bottom: 10, left: 10, right: 10),
+              //         padding: const EdgeInsets.all(8.0),
+              //         decoration: BoxDecoration(
+              //           color: TColors.primary.withOpacity(0.5),
+              //           borderRadius: BorderRadius.circular(4),
+              //         ),
+              //         child: Text(
+              //           category,
+              //           textAlign: TextAlign.start,
+              //           style:
+              //               Theme.of(context).textTheme.headlineSmall!.copyWith(
+              //                     color: Colors.white,
+              //                     fontWeight: FontWeight.w500,
+              //                   ),
+              //         ),
+              //       ),
+              //       itemBuilder: (context, Group element) {
+              //         return ListTile(
+              //           onTap: () {
+              //             Get.toNamed('/group-page', arguments: element);
+              //           },
+              //           title: Text(
+              //             element.name,
+              //             style:
+              //                 Theme.of(context).textTheme.titleMedium!.copyWith(
+              //                       color: TColors.primary,
+              //                     ),
+              //           ),
+              //           subtitle: Text(element.description),
+              //           leading: CircleAvatar(
+              //             radius: 30,
+              //             backgroundImage: NetworkImage(element.icon,
+              //                 scale: 1.0, headers: <String, String>{}),
+              //           ),
+              //           trailing: PullDownButton(
+              //             itemBuilder: (context) => [
+              //               PullDownMenuItem(
+              //                 icon: (Icons.supervised_user_circle),
+              //                 title: 'Share',
+              //                 onTap: () {},
+              //               ),
+              //               const PullDownMenuDivider(),
+              //               PullDownMenuItem(
+              //                 icon: (Icons.delete),
+              //                 title: 'delete',
+              //                 onTap: () {
+              //                   groupController.deleteGroup(element, context);
+              //                 },
+              //               ),
+              //               PullDownMenuItem(
+              //                 icon: (Icons.exit_to_app_rounded),
+              //                 title: 'leave',
+              //                 onTap: () {
+              //                   groupController.leaveGroup(element, context);
+              //                 },
+              //               ),
+              //             ],
+              //             buttonBuilder: (context, showMenu) => IconButton(
+              //               onPressed: showMenu,
+              //               // constraints: BoxConstraints(maxWidth: 100),
+              //               color: TColors.primary,
+              //               padding: EdgeInsets.zero,
+              //               icon: Icon(Icons.more_vert),
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),
