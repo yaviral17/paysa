@@ -34,6 +34,7 @@ class _GroupPageState extends State<GroupPage> {
     // log("page reseted");
     // controller.fetchChat(widget.group.id);
     // controller.fetchData();
+    controller.group.value = widget.group;
     super.initState();
   }
 
@@ -250,7 +251,7 @@ class ChatBottomBar extends StatelessWidget {
                 // Create Split
                 IconButton(
                   onPressed: () {
-                    controller.makeNewSplit();
+                    controller.makeNewSplit(context);
                   },
                   icon: const Icon(
                     Icons.payments_sharp,
