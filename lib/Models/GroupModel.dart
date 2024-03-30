@@ -1,3 +1,5 @@
+import 'package:paysa/Models/UserModel.dart';
+
 class Group {
   String name;
   String description;
@@ -57,5 +59,14 @@ class Group {
       admins: [],
       members: [],
     );
+  }
+
+  static Future<List<UserModel>> getMembers(List<String> members) async {
+    List<UserModel> users = [];
+    for (String member in members) {
+      UserModel user = await UserModel.getUserbodelById(member);
+      users.add(user);
+    }
+    return users;
   }
 }

@@ -1,3 +1,5 @@
+import 'package:paysa/Config/FirestoreRefrence.dart';
+
 class UserModel {
   String uid;
   String name;
@@ -29,5 +31,10 @@ class UserModel {
       phone: json['phone'],
       profile: json['profile'],
     );
+  }
+
+  static Future<UserModel> getUserbodelById(String id) async {
+    Map<String, dynamic> data = await FireStoreRef.getuserByUid(id);
+    return UserModel.fromJson(data);
   }
 }

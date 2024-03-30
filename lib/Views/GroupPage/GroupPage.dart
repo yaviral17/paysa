@@ -14,6 +14,7 @@ import 'package:paysa/Views/Chats/TransactionBubble.dart';
 import 'package:paysa/Views/Transactions/Transactions.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
+import 'package:paysa/utils/widgets/cachedNetworkImageWidget.dart';
 
 class GroupPage extends StatefulWidget {
   GroupPage({super.key, required this.group});
@@ -53,9 +54,15 @@ class _GroupPageState extends State<GroupPage> {
             SizedBox(
               width: 150,
             ),
-            CircleAvatar(
-              backgroundImage: NetworkImage(widget.group.icon),
-            ),
+            PaysaNetworkImage(url: widget.group.icon, height: 50, width: 50),
+            // IconButton(
+            //   onPressed: () {
+            //     Get.to(() => Transactions(
+            //           group: widget.group,
+            //         ));
+            //   },
+            //   icon: const Icon(Icons.payments),
+            //
           ],
         ),
       ),
