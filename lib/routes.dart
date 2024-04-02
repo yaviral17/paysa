@@ -7,6 +7,7 @@ import 'package:paysa/Controllers/UserData.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/Views/Auth/login.dart';
 import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
+import 'package:paysa/Views/GroupPage/CreateSplitPage.dart';
 import 'package:paysa/Views/GroupPage/GroupPage.dart';
 import 'package:paysa/Views/NavigationMenu.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
@@ -36,7 +37,15 @@ class RouteGenerator {
                     group: group,
                   ));
         }
+      case '/create-split':
+        {
+          Group group = settings.arguments as Group;
 
+          return MaterialPageRoute(
+              builder: (_) => CreateSplitScreen(
+                    group: group,
+                  ));
+        }
       default:
         return _errorRoute();
     }

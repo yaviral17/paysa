@@ -1,9 +1,11 @@
 class Transaction {
   final String id;
   final double amount;
+  final String splitName;
   final String description;
   final String paidBy;
   final String createdBy;
+  final String createdByUserName;
   final bool isSettled;
   final bool isChat;
   final DateTime timestamp;
@@ -25,8 +27,10 @@ class Transaction {
     required this.paidBy,
     required this.members,
     required this.createdBy,
+    required this.createdByUserName,
     required this.isSettled,
     this.isChat = false,
+    required this.splitName,
     required this.timestamp,
   });
 
@@ -34,27 +38,31 @@ class Transaction {
     return {
       'id': id,
       'amount': amount,
+      'splitName': splitName,
       'description': description,
       'paidBy': paidBy,
       'members': members,
       'createdBy': createdBy,
+      'createdByUserName': createdByUserName,
       'isSettled': isSettled,
       'isChat': isChat,
-      'timestamp': timestamp,
+      'timestamp': timestamp.toIso8601String(),
     };
   }
 
   factory Transaction.fromJSon(Map<String, dynamic> data) {
     return Transaction(
       id: data['id'],
-      amount: data['amount'],
+      amount: double.parse(data['amount'].toString()),
+      splitName: data['splitName'],
       description: data['description'],
       paidBy: data['paidBy'],
       members: List<Map<String, dynamic>>.from(data['members']),
       createdBy: data['createdBy'],
+      createdByUserName: data['createdByUserName'],
       isSettled: data['isSettled'],
       isChat: data['isChat'],
-      timestamp: data['timestamp'],
+      timestamp: DateTime.parse(data['timestamp']),
     );
   }
 }

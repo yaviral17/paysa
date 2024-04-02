@@ -150,8 +150,8 @@ class _GroupPageState extends State<GroupPage> {
 
                     // get data from snapshot
                     // final data = snapshot.data as List<Map<String, dynamic>>;
-                    log("Snapshot data : \n" +
-                        snapshot.requireData.docs[0].data().toString());
+                    // log("Snapshot data : \n" +
+                    //     snapshot.requireData.docs[0].data().toString());
                     controller.tiles.clear();
                     for (final chat in snapshot.requireData.docs) {
                       if (chat['isChat']) {
@@ -258,7 +258,8 @@ class ChatBottomBar extends StatelessWidget {
                 // Create Split
                 IconButton(
                   onPressed: () {
-                    controller.makeNewSplit(context);
+                    Get.toNamed('/create-split', arguments: group);
+                    // controller.makeNewSplit(context);
                   },
                   icon: const Icon(
                     Icons.payments_sharp,

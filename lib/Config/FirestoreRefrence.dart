@@ -62,12 +62,16 @@ class FireStoreRef {
   }
 
   static uploadUser(User user) {
-    userCollection.doc(user.uid).set({
-      "uid": user.uid,
-      "name": user.displayName,
-      "email": user.email,
-      "phone": user.phoneNumber ?? "",
-      "profile": user.photoURL,
+    userCollection.doc(user.uid).get().then((value) {
+      if (!value.exists) {
+        userCollection.doc(user.uid).set({
+          "uid": user.uid,
+          "name": user.displayName,
+          "email": user.email,
+          "phone": user.phoneNumber ?? "",
+          "profile": user.photoURL,
+        });
+      }
     });
   }
 

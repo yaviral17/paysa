@@ -16,18 +16,18 @@ class ChatBubble extends StatelessWidget {
     required this.isYou,
   }) : super(key: key);
 
-  String getDateDifference(DateTime date) {
-    final Duration difference = DateTime.now().difference(date);
-    if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
-    } else {
-      return 'Just now';
-    }
-  }
+  // String getDateDifference(DateTime date) {
+  //   final Duration difference = DateTime.now().difference(date);
+  //   if (difference.inDays > 0) {
+  //     return '${difference.inDays}d ago';
+  //   } else if (difference.inHours > 0) {
+  //     return '${difference.inHours}h ago';
+  //   } else if (difference.inMinutes > 0) {
+  //     return '${difference.inMinutes}m ago';
+  //   } else {
+  //     return 'Just now';
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,16 +104,16 @@ class ChatBubble extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text(
-          getDateDifference(timestamp),
+          THelperFunctions.getDateDifference(timestamp),
           style: TextStyle(
             fontSize: 10,
             color: isYou ? TColors.primary : TColors.grey.withOpacity(0.6),
             fontWeight: FontWeight.normal,
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
       ],
     );
   }

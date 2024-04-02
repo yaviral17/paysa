@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:paysa/Views/Transactions/Transactions.dart';
 import 'package:paysa/utils/constants/colors.dart';
+import 'package:paysa/utils/helpers/helper_functions.dart';
 
 class TransactionBubble extends StatelessWidget {
   const TransactionBubble({
@@ -21,69 +22,225 @@ class TransactionBubble extends StatelessWidget {
     return Row(
       mainAxisAlignment:
           isYou ? MainAxisAlignment.end : MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        if (isYou) showTimeStamp(isYou),
         Container(
+          width: MediaQuery.of(context).size.width * 0.54,
           margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
           decoration: BoxDecoration(
             color: isYou ? TColors.primary : TColors.darkerGrey,
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              width: 2,
+              style: BorderStyle.solid,
+              strokeAlign: 1,
+              color: TColors.white,
+            ),
+            image: DecorationImage(
+              image: AssetImage('assets/images/money_bg.jpg'),
+              fit: BoxFit.cover,
+              opacity: 0.06,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Text(
+              //   transaction.createdByUserName,
+              //   style: TextStyle(
+              //     fontSize: 12,
+              //     color: isYou
+              //         ? TColors.white.withOpacity(0.6)
+              //         : TColors.grey.withOpacity(0.6),
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              // const SizedBox(height: 4),
+              // Split Name
+              Text(transaction.splitName,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: Colors.white,
+                      )),
+              const SizedBox(height: 4),
+              // Amount
+              Row(
+                children: [
+                  Text(
+                    "Total : ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    '₹ ${transaction.amount}',
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          color: TColors.primaryBackground,
+                        ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              // Description
               Text(
-                "Split of ${transaction.amount} in ${transaction.members.length} members ",
+                transaction.description,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
                   fontSize: 16,
-                ),
-              ),
-              Text(
-                transaction.createdBy,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 4),
-              Text(
-                "Total:${transaction.amount}",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                "${transaction.description}",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                transaction.timestamp.toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Color(0xFF464646),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32.0),
+              const SizedBox(height: 12),
+              ...List.generate(
+                transaction.members.length,
+                (index) => Container(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: TColors.white.withOpacity(0.3),
+                      ),
+                      bottom: BorderSide(
+                        color: TColors.white.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        transaction.members[index]['name'].split(' ').first,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        ' : ₹ ${transaction.members[index]['amount']}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Spacer(),
+                      Visibility(
+                        visible: transaction.members[index]['paid'],
+                        child: Text(
+                          'Paid',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: TColors.lightContainer,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                    ],
                   ),
                 ),
-                child: const Text("Settle up"),
               ),
+
+              Visibility(
+                visible: transaction.paidBy ==
+                    FirebaseAuth.instance.currentUser!.uid,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        TextButton(
+                          style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all(TColors.primary),
+                            backgroundColor: MaterialStateProperty.all(
+                              TColors.white,
+                            ),
+                            minimumSize:
+                                MaterialStateProperty.all(Size(100, 38)),
+                          ),
+                          onPressed: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => SettleUpScreen(
+                            //       transaction: transaction,
+                            //     ),
+                            //   ),
+                            // );
+                          },
+                          child: Text(
+                            "Settle Up",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  color: TColors.primary,
+                                  fontSize: 12,
+                                ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextButton(
+                            style: ButtonStyle(
+                              foregroundColor:
+                                  MaterialStateProperty.all(TColors.primary),
+                              backgroundColor: MaterialStateProperty.all(
+                                TColors.lightDarkBackground,
+                              ),
+                              // minimumSize: MaterialStateProperty.all(Size(60, 38)),
+                            ),
+                            onPressed: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => EditTransactionScreen(
+                              //       transaction: transaction,
+                              //     ),
+                              //   ),
+                              // );
+                            },
+                            child: Text("Edit",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                      color: TColors.white,
+                                      fontSize: 12,
+                                    )),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
             ],
           ),
         ),
+        if (!isYou) showTimeStamp(isYou),
+      ],
+    );
+  }
+
+  showTimeStamp(bool isYou) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(width: 8),
+        Text(
+          THelperFunctions.getDateDifference(transaction.timestamp),
+          style: TextStyle(
+            fontSize: 10,
+            color: isYou ? TColors.primary : TColors.grey.withOpacity(0.6),
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        const SizedBox(width: 8),
       ],
     );
   }

@@ -55,6 +55,19 @@ class THelperFunctions {
     );
   }
 
+  static String getDateDifference(DateTime date) {
+    final Duration difference = DateTime.now().difference(date);
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
   static void showAlert(String title, String message) {
     showDialog(
       context: Get.context!,
