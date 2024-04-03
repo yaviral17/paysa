@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:paysa/utils/theme/widget_themes/appbar_theme.dart';
 import 'package:paysa/utils/theme/widget_themes/bottom_sheet_theme.dart';
@@ -9,6 +10,49 @@ import 'package:paysa/utils/theme/widget_themes/text_field_theme.dart';
 import 'package:paysa/utils/theme/widget_themes/text_theme.dart';
 
 import '../constants/colors.dart';
+
+class TFlexTheme {
+  TFlexTheme._();
+
+  static ThemeData lightTheme = FlexThemeData.light(
+    scheme: FlexScheme.jungle,
+    surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
+    blendLevel: 7,
+    subThemesData: const FlexSubThemesData(
+      blendOnLevel: 10,
+      blendOnColors: false,
+      useTextTheme: true,
+      useM2StyleDividerInM3: true,
+      chipSchemeColor: SchemeColor.primary,
+      alignedDropdown: true,
+      useInputDecoratorThemeInDialogs: true,
+    ),
+    visualDensity: FlexColorScheme.comfortablePlatformDensity,
+    useMaterial3: true,
+    swapLegacyOnMaterial3: true,
+    // To use the Playground font, add GoogleFonts package and uncomment
+    // fontFamily: GoogleFonts.notoSans().fontFamily,
+  );
+
+  static ThemeData darkTheme = FlexThemeData.dark(
+    scheme: FlexScheme.jungle,
+    surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
+    blendLevel: 13,
+    subThemesData: const FlexSubThemesData(
+      blendOnLevel: 20,
+      useTextTheme: true,
+      useM2StyleDividerInM3: true,
+      chipSchemeColor: SchemeColor.primary,
+      alignedDropdown: true,
+      useInputDecoratorThemeInDialogs: true,
+    ),
+    visualDensity: FlexColorScheme.comfortablePlatformDensity,
+    useMaterial3: true,
+    swapLegacyOnMaterial3: true,
+    // To use the Playground font, add GoogleFonts package and uncomment
+    // fontFamily: GoogleFonts.notoSans().fontFamily,
+  );
+}
 
 class TAppTheme {
   TAppTheme._();

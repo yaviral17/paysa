@@ -58,6 +58,7 @@ dependencies:
   cloud_firestore: ^4.15.4
   pull_down_button: ^0.9.3 
   cached_network_image: ^3.3.1
+  flex_color_scheme: ^7.3.1
 
 dev_dependencies:
   flutter_test:
