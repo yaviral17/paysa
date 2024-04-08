@@ -49,8 +49,8 @@ class THelperFunctions {
     }
   }
 
-  static void showSnackBar(String message) {
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
+  static void showSnackBar(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
   }
@@ -84,6 +84,24 @@ class THelperFunctions {
         );
       },
     );
+  }
+
+  static void showMaterialSnakBar(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: TColors.primary,
+        behavior: SnackBarBehavior.floating,
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+
+  static String formateDateTime(DateTime dateTime, String format) {
+    return DateFormat(format).format(dateTime);
   }
 
   static Future<File?> startImageCrop(
