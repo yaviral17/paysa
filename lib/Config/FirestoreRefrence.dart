@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:paysa/Models/DailySpendingModel.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/utils/constants/cherryToast.dart';
 
@@ -9,6 +10,7 @@ class FireStoreRef {
   static String users = 'users';
   static String groups = 'groups';
   static String convo = 'convo';
+  static String dailySpendings = 'dailySpendings';
 
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static CollectionReference<Map<String, dynamic>> get userCollection =>
@@ -17,6 +19,10 @@ class FireStoreRef {
       db.collection(groups);
   static CollectionReference<Map<String, dynamic>> convoCollection(String id) =>
       db.collection(groups).doc(id).collection(convo);
+
+  static CollectionReference<Map<String, dynamic>> dailySpendingsCollection(
+          String id) =>
+      db.collection(users).doc(id).collection(dailySpendings);
 
   static addGroup(Group group) async {
     await groupCollection.doc(group.id).set(group.toJson());
@@ -146,5 +152,30 @@ class FireStoreRef {
 
   static createConvo(String groupId, Map<String, dynamic> convo) async {
     await convoCollection(groupId).doc(convo['id']).set(convo);
+  }
+
+  // get streamed my spendings list
+  static Stream<List<Map<String, dynamic>>> getMyDailySpendings() {
+    log(FirebaseAuth.instance.currentUser!.uid);
+    return dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .map((event) => event.docs.map((e) => e.data()).toList());
+  }
+
+  static Future<bool> removeDailySpendingById(String spendingId) async {
+    bool result = false;
+    await dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
+        .doc(spendingId)
+        .delete()
+        .then((value) => result = true)
+        .catchError((error) => result = false);
+    return result;
+  }
+
+  // add daily spending
+  static addDailySpending(DailySpendingModel spending) async {
+    await dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
+        .doc(spending.id)
+        .set(spending.toJson());
   }
 }
