@@ -124,15 +124,16 @@ class TransactionBubble extends StatelessWidget {
                         ),
                       ),
                       Spacer(),
-                      Visibility(
-                        visible: transaction.members[index]['paid'],
-                        child: Text(
-                          'Paid',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: TColors.lightContainer,
-                          ),
+                      Text(
+                        transaction.members[index]['paid']
+                            ? 'Paid ✔'
+                            : 'Not Paid ❌',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: transaction.members[index]['paid']
+                              ? TColors.lightContainer
+                              : Colors.red.shade400,
                         ),
                       ),
                       SizedBox(width: 8),
@@ -218,7 +219,9 @@ class TransactionBubble extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 4),
+              Text("Created By : ${transaction.createdByUserName}"),
+              const SizedBox(height: 4),
             ],
           ),
         ),
