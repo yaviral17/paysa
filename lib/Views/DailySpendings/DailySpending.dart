@@ -32,7 +32,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
 
   TextEditingController amountController = TextEditingController();
 
-  double maxY = 200.0;
+  RxDouble maxY = 200.0.obs;
 
   addDailySpendingBottomSheet(BuildContext context) {
     Get.bottomSheet(
@@ -49,29 +49,6 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
     );
   }
 
-  getMaxValue() {
-    Map<String, double> data = {};
-    for (DailySpendingModel dailySpending
-        in dailySpendingController.dailySpendings) {
-      String day =
-          THelperFunctions.formateDateTime(dailySpending.timestamp, "d M yyyy");
-
-      if (data[day] == null) {
-        data[day] = dailySpending.amount;
-      } else {
-        data[day] = data[day]! + dailySpending.amount;
-      }
-    }
-
-    for (var key in data.keys) {
-      log('Key: $key, Value: ${data[key]}');
-    }
-    dailySpendingController.data.value = data;
-
-    maxY = data.values.reduce(math.max);
-    log('Max Value: $maxY');
-  }
-
   // getMinValue() {}
   List<String> weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -79,7 +56,6 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getMaxValue();
   }
 
   @override
@@ -95,112 +71,130 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Add your widgets here
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                height: MediaQuery.of(context).size.height * 0.32,
-                margin: EdgeInsets.all(8),
-                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                child: Chart(
-                  duration: const Duration(milliseconds: 500),
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  layers: [
-                    ChartAxisLayer(
-                      settings: ChartAxisSettings(
-                        x: ChartAxisSettingsAxis(
-                          frequency: 1,
-                          max: 6.0,
-                          min: 0.0,
-                          textStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                            fontSize: 10.0,
+          child: StreamBuilder(
+            stream: FireStoreRef.getMyDailySpendings(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('An error occurred'),
+                );
+              }
+
+              List<Map<String, dynamic>> dailySpendings = snapshot.requireData;
+
+              List<DailySpendingModel> dailySpendingsModelList =
+                  DailySpendingModel.fromJsonList(dailySpendings);
+              dailySpendingController.dailySpendings.value =
+                  dailySpendingsModelList;
+
+              dailySpendingController.dailySpendings
+                  .sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+              if (dailySpendingsModelList.isEmpty) {
+                return const Center(
+                  child: Text('No Daily Spendings'),
+                );
+              }
+
+              Map<String, double> data = {};
+              for (DailySpendingModel dailySpending
+                  in dailySpendingController.dailySpendings) {
+                String day = THelperFunctions.formateDateTime(
+                    dailySpending.timestamp, "d M yyyy");
+
+                if (data[day] == null) {
+                  data[day] = dailySpending.amount;
+                } else {
+                  data[day] = data[day]! + dailySpending.amount;
+                }
+              }
+
+              for (var key in data.keys) {
+                log('Key: $key, Value: ${data[key]}');
+              }
+              dailySpendingController.data.value = data;
+
+              maxY.value = data.values.reduce(math.max);
+
+              return Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: TColors.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    margin: EdgeInsets.all(8),
+                    padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                    child: Chart(
+                      duration: const Duration(milliseconds: 500),
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      layers: [
+                        ChartAxisLayer(
+                          settings: ChartAxisSettings(
+                            x: ChartAxisSettingsAxis(
+                              frequency: 1,
+                              max: 6.0,
+                              min: 0.0,
+                              textStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            y: ChartAxisSettingsAxis(
+                              frequency: maxY.value / 6,
+                              max: maxY.value + (maxY.value / 6) * 2,
+                              min: 0,
+                              textStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          labelX: (value) => weekDays[DateTime.now()
+                                  .subtract(
+                                    Duration(days: value.toInt() - 6),
+                                  )
+                                  .weekday -
+                              1],
+                          labelY: (value) => value.toInt().toString(),
+                        ),
+                        ChartBarLayer(
+                          items: List.generate(
+                            7,
+                            (index) => ChartBarDataItem(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              value: dailySpendingController
+                                      .data[THelperFunctions.formateDateTime(
+                                    DateTime.now().subtract(
+                                      Duration(days: 6 - index),
+                                    ),
+                                    "d M yyyy",
+                                  )] ??
+                                  0.0,
+                              x: (index).toDouble(),
+                            ),
+                          ),
+                          settings: const ChartBarSettings(
+                            thickness: 18.0,
+                            radius: BorderRadius.only(
+                              topLeft: Radius.circular(4.0),
+                              topRight: Radius.circular(4.0),
+                            ),
                           ),
                         ),
-                        y: ChartAxisSettingsAxis(
-                          frequency: maxY / 6,
-                          max: maxY,
-                          min: 0,
-                          textStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                            fontSize: 10.0,
-                          ),
-                        ),
-                      ),
-                      labelX: (value) => weekDays[DateTime.now()
-                              .subtract(
-                                Duration(days: value.toInt() - 6),
-                              )
-                              .weekday -
-                          1],
-                      labelY: (value) => value.toInt().toString(),
+                      ],
                     ),
-                    ChartBarLayer(
-                      items: List.generate(
-                        7,
-                        (index) => ChartBarDataItem(
-                          color: TColors.accent,
-                          value: dailySpendingController
-                                  .data[THelperFunctions.formateDateTime(
-                                DateTime.now().subtract(
-                                  Duration(days: 6 - index),
-                                ),
-                                "d M yyyy",
-                              )] ??
-                              0.0,
-                          x: (index).toDouble(),
-                        ),
-                      ),
-                      settings: const ChartBarSettings(
-                        thickness: 18.0,
-                        radius: BorderRadius.only(
-                          topLeft: Radius.circular(4.0),
-                          topRight: Radius.circular(4.0),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              StreamBuilder(
-                stream: FireStoreRef.getMyDailySpendings(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  if (snapshot.hasError) {
-                    return const Center(
-                      child: Text('An error occurred'),
-                    );
-                  }
-
-                  List<Map<String, dynamic>> dailySpendings =
-                      snapshot.requireData;
-
-                  List<DailySpendingModel> dailySpendingsModelList =
-                      DailySpendingModel.fromJsonList(dailySpendings);
-                  dailySpendingController.dailySpendings.value =
-                      dailySpendingsModelList;
-
-                  dailySpendingController.dailySpendings
-                      .sort((a, b) => b.timestamp.compareTo(a.timestamp));
-
-                  if (dailySpendingsModelList.isEmpty) {
-                    return const Center(
-                      child: Text('No Daily Spendings'),
-                    );
-                  }
-                  getMaxValue();
-
-                  return GroupedListView(
+                  ),
+                  GroupedListView(
                     shrinkWrap: true,
                     elements: <DailySpendingModel>[
                       ...dailySpendingController.dailySpendings
@@ -209,23 +203,55 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                       element.timestamp,
                     ),
                     sort: false,
-                    groupSeparatorBuilder: (String groupByValue) => Center(
+                    groupSeparatorBuilder: (String groupByValue) => Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Ink(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                         decoration: BoxDecoration(
-                          color: TColors.textWhite.withOpacity(0.1),
+                          color: TColors.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(45),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 4.0,
-                        ),
-                        child: Text(
-                          groupByValue,
-                          style:
-                              Theme.of(context).textTheme.headline6!.copyWith(
-                                    color: TColors.textWhite.withOpacity(0.7),
-                                    fontSize: 14,
-                                  ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                groupByValue,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                // total spending of the day
+                                '₹${dailySpendingController.dailySpendings.where((element) => THelperFunctions.getDayDifference(
+                                      element.timestamp,
+                                    ) == groupByValue).map((e) => e.amount).reduce((value, element) => value + element)}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -271,200 +297,206 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                           ]),
                         ],
                         buttonBuilder: (context, showMenu) {
-                          return ListTile(
-                            onTap: () {
-                              // show menu
-                              showMenu();
-                            },
-                            style: ListTileStyle.list,
-                            leading: CircleAvatar(
-                              child: Image.asset(
-                                element.categoryIcon,
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 18.0),
+                            child: ListTile(
+                              onLongPress: () {
+                                // show menu
+                                showMenu();
+                              },
+                              style: ListTileStyle.list,
+                              leading: CircleAvatar(
+                                child: Image.asset(
+                                  element.categoryIcon,
+                                ),
                               ),
-                            ),
-                            title: Text(
-                              element.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge!
-                                  .copyWith(
-                                    color: TColors.primary,
+                              title: Text(
+                                element.title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                      color: TColors.light,
+                                    ),
+                              ),
+                              subtitle: Text(
+                                element.description,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(
+                                      color: Colors.white.withOpacity(0.6),
+                                    ),
+                              ),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  SizedBox(
+                                    height: 8.0,
                                   ),
-                            ),
-                            subtitle: Text(
-                              element.description,
-                              style:
-                                  Theme.of(context).textTheme.caption!.copyWith(
-                                        color: Colors.white.withOpacity(0.6),
-                                      ),
-                            ),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                  height: 8.0,
-                                ),
-                                Text(
-                                  "₹${element.amount}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall!
-                                      .copyWith(
-                                        color: TColors.primary,
-                                      ),
-                                ),
-                                SizedBox(height: 4.0),
-                                Text(
-                                  THelperFunctions.formateDateTime(
-                                      element.timestamp, 'dd MMM  h:mm a'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(
-                                        color: Colors.white.withOpacity(0.6),
-                                      ),
-                                ),
-                              ],
+                                  Text(
+                                    "₹${element.amount}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(
+                                          color: TColors.accent,
+                                        ),
+                                  ),
+                                  SizedBox(height: 4.0),
+                                  Text(
+                                    THelperFunctions.formateDateTime(
+                                        element.timestamp, 'dd MMM  h:mm a'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption!
+                                        .copyWith(
+                                          color: Colors.white.withOpacity(0.6),
+                                        ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
                       );
                     },
-                  );
+                  ),
+                ],
+              );
 
-                  // return Column(
-                  //   children: [
-                  //     ...List.generate(
-                  //       dailySpendingController.dailySpendings.length,
-                  //       (index) {
-                  //         log(dailySpendingController
-                  //             .dailySpendings[index].categoryIcon);
-                  //         return PullDownButton(
-                  //           itemBuilder: (context) => [
-                  //             PullDownMenuActionsRow.small(items: [
-                  //               PullDownMenuItem(
-                  //                 icon: Icons.edit,
-                  //                 title: 'Edit',
-                  //                 onTap: () {
-                  //                   titleController.text =
-                  //                       dailySpendingController
-                  //                           .dailySpendings[index].title;
-                  //                   descriptionController.text =
-                  //                       dailySpendingController
-                  //                           .dailySpendings[index].description;
-                  //                   amountController.text =
-                  //                       dailySpendingController
-                  //                           .dailySpendings[index].amount
-                  //                           .toString();
-                  //                   Get.bottomSheet(
-                  //                     backgroundColor: Colors.transparent,
-                  //                     isScrollControlled: true,
-                  //                     AddDailySpendingSheetDesign(
-                  //                       id: dailySpendingController
-                  //                           .dailySpendings[index].id,
-                  //                       timestamp: dailySpendingController
-                  //                           .dailySpendings[index].timestamp,
-                  //                       category: dailySpendingController
-                  //                           .dailySpendings[index].category,
-                  //                       titleController: titleController,
-                  //                       descriptionController:
-                  //                           descriptionController,
-                  //                       amountController: amountController,
-                  //                       fromEdit: true,
-                  //                     ),
-                  //                   );
-                  //                 },
-                  //               ),
-                  //               PullDownMenuItem(
-                  //                 icon: (Icons.delete),
-                  //                 iconColor: Colors.red,
-                  //                 isDestructive: true,
-                  //                 title: 'Delete',
-                  //                 onTap: () async {
-                  //                   await dailySpendingController
-                  //                       .removeDailySpending(
-                  //                           dailySpendingController
-                  //                               .dailySpendings[index]);
-                  //                 },
-                  //               ),
-                  //             ]),
-                  //           ],
-                  //           buttonBuilder: (context, showMenu) {
-                  //             return ListTile(
-                  //               onLongPress: () {
-                  //                 // show menu
-                  //                 showMenu();
-                  //               },
-                  //               style: ListTileStyle.list,
-                  //               leading: CircleAvatar(
-                  //                 child: Image.asset(
-                  //                   dailySpendingController
-                  //                       .dailySpendings[index].categoryIcon,
-                  //                 ),
-                  //               ),
-                  //               title: Text(
-                  //                 dailySpendingController
-                  //                     .dailySpendings[index].title,
-                  //                 style: Theme.of(context)
-                  //                     .textTheme
-                  //                     .labelLarge!
-                  //                     .copyWith(
-                  //                       color: TColors.primary,
-                  //                     ),
-                  //               ),
-                  //               subtitle: Text(
-                  //                 dailySpendingController
-                  //                     .dailySpendings[index].description,
-                  //                 style: Theme.of(context)
-                  //                     .textTheme
-                  //                     .caption!
-                  //                     .copyWith(
-                  //                       color: Colors.white.withOpacity(0.6),
-                  //                     ),
-                  //               ),
-                  //               trailing: Column(
-                  //                 mainAxisAlignment: MainAxisAlignment.center,
-                  //                 crossAxisAlignment: CrossAxisAlignment.end,
-                  //                 children: [
-                  //                   SizedBox(
-                  //                     height: 8.0,
-                  //                   ),
-                  //                   Text(
-                  //                     "₹${dailySpendingController.dailySpendings[index].amount}",
-                  //                     style: Theme.of(context)
-                  //                         .textTheme
-                  //                         .titleSmall!
-                  //                         .copyWith(
-                  //                           color: TColors.primary,
-                  //                         ),
-                  //                   ),
-                  //                   SizedBox(height: 4.0),
-                  //                   Text(
-                  //                     THelperFunctions.formateDateTime(
-                  //                         dailySpendingController
-                  //                             .dailySpendings[index].timestamp,
-                  //                         'dd MMM  h:mm a'),
-                  //                     style: Theme.of(context)
-                  //                         .textTheme
-                  //                         .caption!
-                  //                         .copyWith(
-                  //                           color:
-                  //                               Colors.white.withOpacity(0.6),
-                  //                         ),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //             );
-                  //           },
-                  //         );
-                  //       },
-                  //     ),
-                  //   ],
-                  // );
-                },
-              ),
-            ],
+              // return Column(
+              //   children: [
+              //     ...List.generate(
+              //       dailySpendingController.dailySpendings.length,
+              //       (index) {
+              //         log(dailySpendingController
+              //             .dailySpendings[index].categoryIcon);
+              //         return PullDownButton(
+              //           itemBuilder: (context) => [
+              //             PullDownMenuActionsRow.small(items: [
+              //               PullDownMenuItem(
+              //                 icon: Icons.edit,
+              //                 title: 'Edit',
+              //                 onTap: () {
+              //                   titleController.text =
+              //                       dailySpendingController
+              //                           .dailySpendings[index].title;
+              //                   descriptionController.text =
+              //                       dailySpendingController
+              //                           .dailySpendings[index].description;
+              //                   amountController.text =
+              //                       dailySpendingController
+              //                           .dailySpendings[index].amount
+              //                           .toString();
+              //                   Get.bottomSheet(
+              //                     backgroundColor: Colors.transparent,
+              //                     isScrollControlled: true,
+              //                     AddDailySpendingSheetDesign(
+              //                       id: dailySpendingController
+              //                           .dailySpendings[index].id,
+              //                       timestamp: dailySpendingController
+              //                           .dailySpendings[index].timestamp,
+              //                       category: dailySpendingController
+              //                           .dailySpendings[index].category,
+              //                       titleController: titleController,
+              //                       descriptionController:
+              //                           descriptionController,
+              //                       amountController: amountController,
+              //                       fromEdit: true,
+              //                     ),
+              //                   );
+              //                 },
+              //               ),
+              //               PullDownMenuItem(
+              //                 icon: (Icons.delete),
+              //                 iconColor: Colors.red,
+              //                 isDestructive: true,
+              //                 title: 'Delete',
+              //                 onTap: () async {
+              //                   await dailySpendingController
+              //                       .removeDailySpending(
+              //                           dailySpendingController
+              //                               .dailySpendings[index]);
+              //                 },
+              //               ),
+              //             ]),
+              //           ],
+              //           buttonBuilder: (context, showMenu) {
+              //             return ListTile(
+              //               onLongPress: () {
+              //                 // show menu
+              //                 showMenu();
+              //               },
+              //               style: ListTileStyle.list,
+              //               leading: CircleAvatar(
+              //                 child: Image.asset(
+              //                   dailySpendingController
+              //                       .dailySpendings[index].categoryIcon,
+              //                 ),
+              //               ),
+              //               title: Text(
+              //                 dailySpendingController
+              //                     .dailySpendings[index].title,
+              //                 style: Theme.of(context)
+              //                     .textTheme
+              //                     .labelLarge!
+              //                     .copyWith(
+              //                       color: TColors.primary,
+              //                     ),
+              //               ),
+              //               subtitle: Text(
+              //                 dailySpendingController
+              //                     .dailySpendings[index].description,
+              //                 style: Theme.of(context)
+              //                     .textTheme
+              //                     .caption!
+              //                     .copyWith(
+              //                       color: Colors.white.withOpacity(0.6),
+              //                     ),
+              //               ),
+              //               trailing: Column(
+              //                 mainAxisAlignment: MainAxisAlignment.center,
+              //                 crossAxisAlignment: CrossAxisAlignment.end,
+              //                 children: [
+              //                   SizedBox(
+              //                     height: 8.0,
+              //                   ),
+              //                   Text(
+              //                     "₹${dailySpendingController.dailySpendings[index].amount}",
+              //                     style: Theme.of(context)
+              //                         .textTheme
+              //                         .titleSmall!
+              //                         .copyWith(
+              //                           color: TColors.primary,
+              //                         ),
+              //                   ),
+              //                   SizedBox(height: 4.0),
+              //                   Text(
+              //                     THelperFunctions.formateDateTime(
+              //                         dailySpendingController
+              //                             .dailySpendings[index].timestamp,
+              //                         'dd MMM  h:mm a'),
+              //                     style: Theme.of(context)
+              //                         .textTheme
+              //                         .caption!
+              //                         .copyWith(
+              //                           color:
+              //                               Colors.white.withOpacity(0.6),
+              //                         ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             );
+              //           },
+              //         );
+              //       },
+              //     ),
+              //   ],
+              // );
+            },
           ),
         ),
       ),

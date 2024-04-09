@@ -71,9 +71,9 @@ class THelperFunctions {
   static String getDayDifference(DateTime date) {
     final Duration difference = DateTime.now().difference(date);
     if (difference.inDays == 0) {
-      return "today";
+      return "Today";
     } else if (difference.inDays == 1) {
-      return 'yesterday';
+      return 'Yesterday';
     } else {
       return THelperFunctions.formateDateTime(date, "d MMM yyyy");
     }
