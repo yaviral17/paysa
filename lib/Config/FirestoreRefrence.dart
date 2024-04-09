@@ -178,4 +178,10 @@ class FireStoreRef {
         .doc(spending.id)
         .set(spending.toJson());
   }
+
+  static updateDailySpending(DailySpendingModel spending) async {
+    await dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
+        .doc(spending.id)
+        .update(spending.toJson());
+  }
 }
