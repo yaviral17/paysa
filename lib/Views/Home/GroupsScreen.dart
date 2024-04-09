@@ -89,9 +89,10 @@ class _GroupsScreenState extends State<GroupsScreen> {
                     if (!snapshot.hasData) {
                       return const CircularProgressIndicator();
                     }
+
                     Map<String, dynamic> data =
                         snapshot.requireData.data() ?? {};
-                    log("snapshot data: " + data.toString());
+                    // log("snapshot data: " + data.toString());
                     if (data['groups'] == null) {
                       return const Center(
                         child: Text('No groups found'),

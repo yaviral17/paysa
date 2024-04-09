@@ -54,7 +54,12 @@ class _GroupPageState extends State<GroupPage> {
             SizedBox(
               width: 150,
             ),
-            PaysaNetworkImage(url: widget.group.icon, height: 50, width: 50),
+            PaysaNetworkImage(
+              url: widget.group.icon,
+              height: 50,
+              width: 50,
+              borderRadius: BorderRadius.circular(45),
+            ),
             // IconButton(
             //   onPressed: () {
             //     Get.to(() => Transactions(

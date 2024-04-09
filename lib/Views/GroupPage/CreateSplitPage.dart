@@ -99,6 +99,14 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                                 controller: controller.amountController,
                                 keyboardType: TextInputType.number,
                                 onChanged: (value) {
+                                  if (double.parse(value) < 0) {
+                                    controller.amountController.text = '0';
+                                  }
+                                  if (double.parse(value) > 1000000) {
+                                    controller.amountController.text =
+                                        '1000000';
+                                  }
+
                                   // split equally
                                   splitEqually();
                                 },
@@ -172,13 +180,23 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   child: controller.paidBy.value == null
-                                      ? Text('Select')
+                                      ? Text(
+                                          'Select',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(color: Colors.white),
+                                        )
                                       : Text(
                                           controller.paidBy.value!.uid ==
                                                   FirebaseAuth
                                                       .instance.currentUser!.uid
                                               ? 'You'
                                               : controller.paidBy.value!.name,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(color: Colors.white),
                                         ),
                                 ),
                               );
