@@ -33,14 +33,16 @@ class DailySpendingController extends GetxController {
   ].obs;
 
   void addDailySpending({
+    required String id,
     required String title,
     required String description,
     required double amount,
     required String category,
+    required DateTime timestamp,
   }) async {
     DailySpendingModel dailySpending = DailySpendingModel(
-      id: Uuid().v1(),
-      timestamp: DateTime.now(),
+      id: id,
+      timestamp: timestamp,
       amount: amount,
       category: category,
       title: title,
@@ -57,6 +59,18 @@ class DailySpendingController extends GetxController {
       Get.snackbar(
         'Error',
         'Failed to remove daily spending',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+  }
+
+  Future<void> updateDailySpending(DailySpendingModel dailySpending) async {
+    bool isConfirmed = await FireStoreRef.updateDailySpending(dailySpending);
+    if (!(isConfirmed)) {
+      Get.snackbar(
+        'Error',
+        'Failed to update daily spending',
         snackPosition: SnackPosition.BOTTOM,
       );
       return;

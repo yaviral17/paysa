@@ -68,6 +68,17 @@ class THelperFunctions {
     }
   }
 
+  static String getDayDifference(DateTime date) {
+    final Duration difference = DateTime.now().difference(date);
+    if (difference.inDays == 0) {
+      return "today";
+    } else if (difference.inDays == 1) {
+      return 'yesterday';
+    } else {
+      return THelperFunctions.formateDateTime(date, "d MMM yyyy");
+    }
+  }
+
   static void showAlert(String title, String message) {
     showDialog(
       context: Get.context!,

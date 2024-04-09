@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:mrx_charts/mrx_charts.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Controllers/DailySpendingsController.dart';
@@ -12,6 +13,7 @@ import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:pull_down_button/pull_down_button.dart';
+import 'package:uuid/uuid.dart';
 
 class DailySpendingScreen extends StatelessWidget {
   DailySpendingScreen({super.key});
@@ -28,12 +30,17 @@ class DailySpendingScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       AddDailySpendingSheetDesign(
+        id: Uuid().v1(),
+        timestamp: DateTime.now(),
+        category: DailySpendingModel.DailySpendingCategories[0],
         titleController: titleController,
         descriptionController: descriptionController,
         amountController: amountController,
       ),
     );
   }
+
+  List<String> weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   @override
   Widget build(BuildContext context) {
@@ -47,182 +54,359 @@ class DailySpendingScreen extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Add your widgets here
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              height: MediaQuery.of(context).size.height * 0.32,
-              margin: EdgeInsets.all(8),
-              padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Chart(
-                duration: const Duration(milliseconds: 500),
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                layers: [
-                  ChartAxisLayer(
-                    settings: ChartAxisSettings(
-                      x: ChartAxisSettingsAxis(
-                        frequency: 1,
-                        max: 5.0,
-                        min: 0.0,
-                        textStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.6),
-                          fontSize: 10.0,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Add your widgets here
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                height: MediaQuery.of(context).size.height * 0.32,
+                margin: EdgeInsets.all(8),
+                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                child: Chart(
+                  duration: const Duration(milliseconds: 500),
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  layers: [
+                    ChartAxisLayer(
+                      settings: ChartAxisSettings(
+                        x: ChartAxisSettingsAxis(
+                          frequency: 1,
+                          max: 6.0,
+                          min: 0.0,
+                          textStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.6),
+                            fontSize: 10.0,
+                          ),
+                        ),
+                        y: ChartAxisSettingsAxis(
+                          frequency: 100.0,
+                          max: 400.0,
+                          min: 0.0,
+                          textStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.6),
+                            fontSize: 10.0,
+                          ),
                         ),
                       ),
-                      y: ChartAxisSettingsAxis(
-                        frequency: 100.0,
-                        max: 400.0,
-                        min: 0.0,
-                        textStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.6),
-                          fontSize: 10.0,
+                      labelX: (value) => weekDays[value.toInt()],
+                      labelY: (value) => value.toInt().toString(),
+                    ),
+                    ChartBarLayer(
+                      items: List.generate(
+                        7,
+                        (index) => ChartBarDataItem(
+                          color: TColors.accent,
+                          value: 200,
+                          x: (index).toDouble(),
+                        ),
+                      ),
+                      settings: const ChartBarSettings(
+                        thickness: 18.0,
+                        radius: BorderRadius.only(
+                          topLeft: Radius.circular(4.0),
+                          topRight: Radius.circular(4.0),
                         ),
                       ),
                     ),
-                    labelX: (value) => value.toInt().toString(),
-                    labelY: (value) => value.toInt().toString(),
-                  ),
-                  ChartBarLayer(
-                    items: List.generate(
-                      6,
-                      (index) => ChartBarDataItem(
-                        color: TColors.accent,
-                        value: 200,
-                        x: (index).toDouble(),
+                  ],
+                ),
+              ),
+
+              StreamBuilder(
+                stream: FireStoreRef.getMyDailySpendings(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text('An error occurred'),
+                    );
+                  }
+
+                  List<Map<String, dynamic>> dailySpendings =
+                      snapshot.requireData;
+
+                  List<DailySpendingModel> dailySpendingsModelList =
+                      DailySpendingModel.fromJsonList(dailySpendings);
+                  dailySpendingController.dailySpendings.value =
+                      dailySpendingsModelList;
+
+                  dailySpendingController.dailySpendings.value
+                      .sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+                  return GroupedListView(
+                    shrinkWrap: true,
+                    elements: <DailySpendingModel>[
+                      ...dailySpendingController.dailySpendings
+                    ],
+                    groupBy: (element) => THelperFunctions.getDayDifference(
+                      element.timestamp,
+                    ),
+                    sort: false,
+                    groupSeparatorBuilder: (String groupByValue) => Center(
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          color: TColors.textWhite.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(45),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                          vertical: 4.0,
+                        ),
+                        child: Text(
+                          groupByValue,
+                          style:
+                              Theme.of(context).textTheme.headline6!.copyWith(
+                                    color: TColors.textWhite.withOpacity(0.7),
+                                    fontSize: 14,
+                                  ),
+                        ),
                       ),
                     ),
-                    settings: const ChartBarSettings(
-                      thickness: 4.0,
-                      radius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            StreamBuilder(
-              stream: FireStoreRef.getMyDailySpendings(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                if (snapshot.hasError) {
-                  return const Center(
-                    child: Text('An error occurred'),
-                  );
-                }
-
-                List<Map<String, dynamic>> dailySpendings =
-                    snapshot.requireData;
-
-                List<DailySpendingModel> dailySpendingsModelList =
-                    DailySpendingModel.fromJsonList(dailySpendings);
-                dailySpendingController.dailySpendings.value =
-                    dailySpendingsModelList;
-
-                dailySpendingController.dailySpendings.value
-                    .sort((a, b) => b.timestamp.compareTo(a.timestamp));
-
-                return Column(
-                  children: [
-                    ...List.generate(
-                      dailySpendingController.dailySpendings.length,
-                      (index) {
-                        log(dailySpendingController
-                            .dailySpendings[index].categoryIcon);
-                        return PullDownButton(
-                          itemBuilder: (context) => [
+                    itemBuilder: (context, element) {
+                      return PullDownButton(
+                        itemBuilder: (context) => [
+                          PullDownMenuActionsRow.small(items: [
+                            PullDownMenuItem(
+                              icon: Icons.edit,
+                              title: 'Edit',
+                              onTap: () {
+                                titleController.text = element.title;
+                                descriptionController.text =
+                                    element.description;
+                                amountController.text =
+                                    element.amount.toString();
+                                Get.bottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  isScrollControlled: true,
+                                  AddDailySpendingSheetDesign(
+                                    id: element.id,
+                                    timestamp: element.timestamp,
+                                    category: element.category,
+                                    titleController: titleController,
+                                    descriptionController:
+                                        descriptionController,
+                                    amountController: amountController,
+                                    fromEdit: true,
+                                  ),
+                                );
+                              },
+                            ),
                             PullDownMenuItem(
                               icon: (Icons.delete),
+                              iconColor: Colors.red,
+                              isDestructive: true,
                               title: 'Delete',
                               onTap: () async {
                                 await dailySpendingController
-                                    .removeDailySpending(dailySpendingController
-                                        .dailySpendings[index]);
+                                    .removeDailySpending(element);
                               },
                             ),
-                          ],
-                          buttonBuilder: (context, showMenu) {
-                            return ListTile(
-                              onLongPress: () {
-                                // show menu
-                                showMenu();
-                              },
-                              style: ListTileStyle.list,
-                              leading: CircleAvatar(
-                                child: Image.asset(
-                                  dailySpendingController
-                                      .dailySpendings[index].categoryIcon,
+                          ]),
+                        ],
+                        buttonBuilder: (context, showMenu) {
+                          return ListTile(
+                            onLongPress: () {
+                              // show menu
+                              showMenu();
+                            },
+                            style: ListTileStyle.list,
+                            leading: CircleAvatar(
+                              child: Image.asset(
+                                element.categoryIcon,
+                              ),
+                            ),
+                            title: Text(
+                              element.title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge!
+                                  .copyWith(
+                                    color: TColors.primary,
+                                  ),
+                            ),
+                            subtitle: Text(
+                              element.description,
+                              style:
+                                  Theme.of(context).textTheme.caption!.copyWith(
+                                        color: Colors.white.withOpacity(0.6),
+                                      ),
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  height: 8.0,
                                 ),
-                              ),
-                              title: Text(
-                                dailySpendingController
-                                    .dailySpendings[index].title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(
-                                      color: TColors.primary,
-                                    ),
-                              ),
-                              subtitle: Text(
-                                dailySpendingController
-                                    .dailySpendings[index].description,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption!
-                                    .copyWith(
-                                      color: Colors.white.withOpacity(0.6),
-                                    ),
-                              ),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  SizedBox(
-                                    height: 8.0,
-                                  ),
-                                  Text(
-                                    "₹${dailySpendingController.dailySpendings[index].amount}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(
-                                          color: TColors.primary,
-                                        ),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    THelperFunctions.formateDateTime(
-                                        dailySpendingController
-                                            .dailySpendings[index].timestamp,
-                                        'dd MMM  h:mm a'),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .caption!
-                                        .copyWith(
-                                          color: Colors.white.withOpacity(0.6),
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
+                                Text(
+                                  "₹${element.amount}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                        color: TColors.primary,
+                                      ),
+                                ),
+                                SizedBox(height: 4.0),
+                                Text(
+                                  THelperFunctions.formateDateTime(
+                                      element.timestamp, 'dd MMM  h:mm a'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
+                                      .copyWith(
+                                        color: Colors.white.withOpacity(0.6),
+                                      ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+
+                  // return Column(
+                  //   children: [
+                  //     ...List.generate(
+                  //       dailySpendingController.dailySpendings.length,
+                  //       (index) {
+                  //         log(dailySpendingController
+                  //             .dailySpendings[index].categoryIcon);
+                  //         return PullDownButton(
+                  //           itemBuilder: (context) => [
+                  //             PullDownMenuActionsRow.small(items: [
+                  //               PullDownMenuItem(
+                  //                 icon: Icons.edit,
+                  //                 title: 'Edit',
+                  //                 onTap: () {
+                  //                   titleController.text =
+                  //                       dailySpendingController
+                  //                           .dailySpendings[index].title;
+                  //                   descriptionController.text =
+                  //                       dailySpendingController
+                  //                           .dailySpendings[index].description;
+                  //                   amountController.text =
+                  //                       dailySpendingController
+                  //                           .dailySpendings[index].amount
+                  //                           .toString();
+                  //                   Get.bottomSheet(
+                  //                     backgroundColor: Colors.transparent,
+                  //                     isScrollControlled: true,
+                  //                     AddDailySpendingSheetDesign(
+                  //                       id: dailySpendingController
+                  //                           .dailySpendings[index].id,
+                  //                       timestamp: dailySpendingController
+                  //                           .dailySpendings[index].timestamp,
+                  //                       category: dailySpendingController
+                  //                           .dailySpendings[index].category,
+                  //                       titleController: titleController,
+                  //                       descriptionController:
+                  //                           descriptionController,
+                  //                       amountController: amountController,
+                  //                       fromEdit: true,
+                  //                     ),
+                  //                   );
+                  //                 },
+                  //               ),
+                  //               PullDownMenuItem(
+                  //                 icon: (Icons.delete),
+                  //                 iconColor: Colors.red,
+                  //                 isDestructive: true,
+                  //                 title: 'Delete',
+                  //                 onTap: () async {
+                  //                   await dailySpendingController
+                  //                       .removeDailySpending(
+                  //                           dailySpendingController
+                  //                               .dailySpendings[index]);
+                  //                 },
+                  //               ),
+                  //             ]),
+                  //           ],
+                  //           buttonBuilder: (context, showMenu) {
+                  //             return ListTile(
+                  //               onLongPress: () {
+                  //                 // show menu
+                  //                 showMenu();
+                  //               },
+                  //               style: ListTileStyle.list,
+                  //               leading: CircleAvatar(
+                  //                 child: Image.asset(
+                  //                   dailySpendingController
+                  //                       .dailySpendings[index].categoryIcon,
+                  //                 ),
+                  //               ),
+                  //               title: Text(
+                  //                 dailySpendingController
+                  //                     .dailySpendings[index].title,
+                  //                 style: Theme.of(context)
+                  //                     .textTheme
+                  //                     .labelLarge!
+                  //                     .copyWith(
+                  //                       color: TColors.primary,
+                  //                     ),
+                  //               ),
+                  //               subtitle: Text(
+                  //                 dailySpendingController
+                  //                     .dailySpendings[index].description,
+                  //                 style: Theme.of(context)
+                  //                     .textTheme
+                  //                     .caption!
+                  //                     .copyWith(
+                  //                       color: Colors.white.withOpacity(0.6),
+                  //                     ),
+                  //               ),
+                  //               trailing: Column(
+                  //                 mainAxisAlignment: MainAxisAlignment.center,
+                  //                 crossAxisAlignment: CrossAxisAlignment.end,
+                  //                 children: [
+                  //                   SizedBox(
+                  //                     height: 8.0,
+                  //                   ),
+                  //                   Text(
+                  //                     "₹${dailySpendingController.dailySpendings[index].amount}",
+                  //                     style: Theme.of(context)
+                  //                         .textTheme
+                  //                         .titleSmall!
+                  //                         .copyWith(
+                  //                           color: TColors.primary,
+                  //                         ),
+                  //                   ),
+                  //                   SizedBox(height: 4.0),
+                  //                   Text(
+                  //                     THelperFunctions.formateDateTime(
+                  //                         dailySpendingController
+                  //                             .dailySpendings[index].timestamp,
+                  //                         'dd MMM  h:mm a'),
+                  //                     style: Theme.of(context)
+                  //                         .textTheme
+                  //                         .caption!
+                  //                         .copyWith(
+                  //                           color:
+                  //                               Colors.white.withOpacity(0.6),
+                  //                         ),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             );
+                  //           },
+                  //         );
+                  //       },
+                  //     ),
+                  //   ],
+                  // );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -230,16 +414,24 @@ class DailySpendingScreen extends StatelessWidget {
 }
 
 class AddDailySpendingSheetDesign extends StatefulWidget {
-  const AddDailySpendingSheetDesign({
+  AddDailySpendingSheetDesign({
     super.key,
     required this.titleController,
     required this.descriptionController,
     required this.amountController,
+    required this.id,
+    required this.timestamp,
+    this.fromEdit = false,
+    required this.category,
   });
 
   final TextEditingController titleController;
   final TextEditingController descriptionController;
   final TextEditingController amountController;
+  final bool fromEdit;
+  final DateTime timestamp;
+  final String id;
+  String category;
 
   @override
   State<AddDailySpendingSheetDesign> createState() =>
@@ -252,8 +444,6 @@ class _AddDailySpendingSheetDesignState
 
   final DailySpendingController dailySpendingController =
       Get.put(DailySpendingController());
-
-  String selectedIcon = DailySpendingModel.DailySpendingCategories[0];
 
   @override
   Widget build(BuildContext context) {
@@ -297,7 +487,7 @@ class _AddDailySpendingSheetDesignState
               child: CircleAvatar(
                 radius: 54.0,
                 child: Image.asset(
-                  "assets/expanses_category_icons/ic_$selectedIcon.png",
+                  "assets/expanses_category_icons/ic_${widget.category}.png",
                 ),
               ),
             ),
@@ -355,7 +545,7 @@ class _AddDailySpendingSheetDesignState
                       return GestureDetector(
                         onTap: () {
                           setState(() {
-                            selectedIcon = DailySpendingModel
+                            widget.category = DailySpendingModel
                                 .DailySpendingCategories[index];
                           });
                         },
@@ -403,12 +593,27 @@ class _AddDailySpendingSheetDesignState
                   );
                   return;
                 }
-
+                if (widget.fromEdit) {
+                  dailySpendingController.updateDailySpending(
+                    DailySpendingModel(
+                      id: widget.id,
+                      timestamp: widget.timestamp,
+                      amount: double.parse(widget.amountController.text),
+                      category: widget.category,
+                      title: widget.titleController.text,
+                      description: widget.descriptionController.text,
+                    ),
+                  );
+                  Get.back();
+                  return;
+                }
                 dailySpendingController.addDailySpending(
+                  id: widget.id,
+                  timestamp: widget.timestamp,
                   title: widget.titleController.text,
                   description: widget.descriptionController.text,
                   amount: double.parse(widget.amountController.text),
-                  category: selectedIcon,
+                  category: widget.category,
                 );
                 Get.back();
               },
