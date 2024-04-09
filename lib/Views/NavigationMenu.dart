@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/Views/DailySpendings/DailySpending.dart';
 import 'package:paysa/Views/Home/GroupsScreen.dart';
 import 'package:paysa/Views/Profile/profile.dart';
 import 'package:paysa/utils/constants/colors.dart';
@@ -38,8 +39,12 @@ class _NavigationMenuState extends State<NavigationMenu> {
           ),
           SalomonBottomBarItem(
             icon: Icon(Iconsax.chart_1),
-            title: Text('Insights'),
+            title: Text('Daily Spendings'),
           ),
+          // SalomonBottomBarItem(
+          //   icon: Icon(Iconsax.chart_1),
+          //   title: Text('Monthly Insights'),
+          // ),
           SalomonBottomBarItem(
             icon: Icon(Iconsax.user),
             title: Text('Profile'),
@@ -52,11 +57,12 @@ class _NavigationMenuState extends State<NavigationMenu> {
           physics: const NeverScrollableScrollPhysics(),
           children: [
             const GroupsScreen(),
-            Container(
-              child: Center(
-                child: Text('Insight'),
-              ),
-            ),
+            DailySpendingScreen(),
+            // Container(
+            //   child: Center(
+            //     child: Text('Insight'),
+            //   ),
+            // ),
             ProfileScreen(),
           ],
         ),
