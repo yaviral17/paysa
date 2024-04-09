@@ -115,6 +115,11 @@ class THelperFunctions {
     return DateFormat(format).format(dateTime);
   }
 
+  static DateTime getDateTimeFromFormatedString(
+      String dateTime, String format) {
+    return DateFormat(format).parse(dateTime);
+  }
+
   static Future<File?> startImageCrop(
       XFile imageFile, BuildContext context) async {
     File imageTemporary = File(imageFile.path);
@@ -261,5 +266,13 @@ class THelperFunctions {
       wrappedList.add(Row(children: rowChildren));
     }
     return wrappedList;
+  }
+
+  static AESEncription(String text) {
+    return text;
+  }
+
+  static AESDecription(String text) {
+    return text;
   }
 }

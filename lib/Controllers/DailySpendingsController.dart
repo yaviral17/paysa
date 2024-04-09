@@ -32,6 +32,8 @@ class DailySpendingController extends GetxController {
     ),
   ].obs;
 
+  RxMap<String, double> data = RxMap<String, double>();
+
   void addDailySpending({
     required String id,
     required String title,

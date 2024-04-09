@@ -15,15 +15,24 @@ import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:uuid/uuid.dart';
 
-class DailySpendingScreen extends StatelessWidget {
+class DailySpendingScreen extends StatefulWidget {
   DailySpendingScreen({super.key});
 
+  @override
+  State<DailySpendingScreen> createState() => _DailySpendingScreenState();
+}
+
+class _DailySpendingScreenState extends State<DailySpendingScreen> {
   final DailySpendingController dailySpendingController =
       DailySpendingController();
 
   TextEditingController titleController = TextEditingController();
+
   TextEditingController descriptionController = TextEditingController();
+
   TextEditingController amountController = TextEditingController();
+
+  double maxY = 200.0;
 
   addDailySpendingBottomSheet(BuildContext context) {
     Get.bottomSheet(
@@ -40,7 +49,38 @@ class DailySpendingScreen extends StatelessWidget {
     );
   }
 
+  getMaxValue() {
+    Map<String, double> data = {};
+    for (DailySpendingModel dailySpending
+        in dailySpendingController.dailySpendings) {
+      String day =
+          THelperFunctions.formateDateTime(dailySpending.timestamp, "d M yyyy");
+
+      if (data[day] == null) {
+        data[day] = dailySpending.amount;
+      } else {
+        data[day] = data[day]! + dailySpending.amount;
+      }
+    }
+
+    for (var key in data.keys) {
+      log('Key: $key, Value: ${data[key]}');
+    }
+    dailySpendingController.data.value = data;
+
+    maxY = data.values.reduce(math.max);
+    log('Max Value: $maxY');
+  }
+
+  // getMinValue() {}
   List<String> weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getMaxValue();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,16 +122,21 @@ class DailySpendingScreen extends StatelessWidget {
                           ),
                         ),
                         y: ChartAxisSettingsAxis(
-                          frequency: 100.0,
-                          max: 400.0,
-                          min: 0.0,
+                          frequency: maxY / 6,
+                          max: maxY,
+                          min: 0,
                           textStyle: TextStyle(
                             color: Colors.white.withOpacity(0.6),
                             fontSize: 10.0,
                           ),
                         ),
                       ),
-                      labelX: (value) => weekDays[value.toInt()],
+                      labelX: (value) => weekDays[DateTime.now()
+                              .subtract(
+                                Duration(days: value.toInt() - 6),
+                              )
+                              .weekday -
+                          1],
                       labelY: (value) => value.toInt().toString(),
                     ),
                     ChartBarLayer(
@@ -99,7 +144,14 @@ class DailySpendingScreen extends StatelessWidget {
                         7,
                         (index) => ChartBarDataItem(
                           color: TColors.accent,
-                          value: 200,
+                          value: dailySpendingController
+                                  .data[THelperFunctions.formateDateTime(
+                                DateTime.now().subtract(
+                                  Duration(days: 6 - index),
+                                ),
+                                "d M yyyy",
+                              )] ??
+                              0.0,
                           x: (index).toDouble(),
                         ),
                       ),
@@ -138,8 +190,15 @@ class DailySpendingScreen extends StatelessWidget {
                   dailySpendingController.dailySpendings.value =
                       dailySpendingsModelList;
 
-                  dailySpendingController.dailySpendings.value
+                  dailySpendingController.dailySpendings
                       .sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+                  if (dailySpendingsModelList.isEmpty) {
+                    return const Center(
+                      child: Text('No Daily Spendings'),
+                    );
+                  }
+                  getMaxValue();
 
                   return GroupedListView(
                     shrinkWrap: true,
@@ -213,7 +272,7 @@ class DailySpendingScreen extends StatelessWidget {
                         ],
                         buttonBuilder: (context, showMenu) {
                           return ListTile(
-                            onLongPress: () {
+                            onTap: () {
                               // show menu
                               showMenu();
                             },
