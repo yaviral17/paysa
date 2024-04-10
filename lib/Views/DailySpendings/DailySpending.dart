@@ -49,8 +49,14 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
     );
   }
 
-  // getMinValue() {}
-  List<String> weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  double roundOfValueFromFirstDigit(double value) {
+    log(value.toString());
+    double firstDigit = double.parse(value.toString()[0]) + 1;
+    double numberOfDigits = value.toInt().toString().length.toDouble();
+    double generateNumber = (firstDigit * math.pow(10, numberOfDigits - 1));
+    log(generateNumber.toString());
+    return generateNumber;
+  }
 
   @override
   void initState() {
@@ -60,6 +66,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log(roundOfValueFromFirstDigit(1234.0).toString());
     return Scaffold(
       appBar: TAppBar(
         title: const Text('Daily Spendings'),
@@ -120,7 +127,9 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
               }
               dailySpendingController.data.value = data;
 
-              maxY.value = data.values.reduce(math.max);
+              maxY.value =
+                  roundOfValueFromFirstDigit(data.values.reduce(math.max));
+              log("hi---------------");
 
               return Column(
                 children: [
@@ -149,8 +158,8 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                               ),
                             ),
                             y: ChartAxisSettingsAxis(
-                              frequency: maxY.value / 6,
-                              max: maxY.value + (maxY.value / 6) * 2,
+                              frequency: maxY.value / 5,
+                              max: maxY.value,
                               min: 0,
                               textStyle: TextStyle(
                                 color: Theme.of(context).colorScheme.tertiary,
@@ -159,29 +168,31 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                               ),
                             ),
                           ),
-                          labelX: (value) => weekDays[DateTime.now()
-                                  .subtract(
-                                    Duration(days: value.toInt() - 6),
-                                  )
-                                  .weekday -
-                              1],
+                          labelX: (value) => THelperFunctions.formateDateTime(
+                            DateTime.now().subtract(
+                              Duration(days: 6 - value.toInt()),
+                            ),
+                            'd MMM',
+                          ),
                           labelY: (value) => value.toInt().toString(),
                         ),
                         ChartBarLayer(
                           items: List.generate(
                             7,
-                            (index) => ChartBarDataItem(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              value: dailySpendingController
-                                      .data[THelperFunctions.formateDateTime(
-                                    DateTime.now().subtract(
-                                      Duration(days: 6 - index),
-                                    ),
-                                    "d M yyyy",
-                                  )] ??
-                                  0.0,
-                              x: (index).toDouble(),
-                            ),
+                            (index) {
+                              return ChartBarDataItem(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                value: dailySpendingController
+                                        .data[THelperFunctions.formateDateTime(
+                                      DateTime.now().subtract(
+                                        Duration(days: 6 - index),
+                                      ),
+                                      'd M yyyy',
+                                    )] ??
+                                    0.0,
+                                x: (index).toDouble(),
+                              );
+                            },
                           ),
                           settings: const ChartBarSettings(
                             thickness: 18.0,
