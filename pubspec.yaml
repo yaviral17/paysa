@@ -48,7 +48,7 @@ dependencies:
   cherry_toast: ^1.8.0
   iconsax: ^0.0.8
   get: ^4.6.6
-  lottie: ^3.0.0
+  lottie: ^3.1.0
   salomon_bottom_bar: ^3.3.2
   grouped_list: ^5.1.2
   firebase_core: ^2.25.4
@@ -90,6 +90,7 @@ flutter:
   assets:
     - assets/images/
     - assets/expanses_category_icons/
+    - assets/lottie/
     # - assets/icons/
 
 

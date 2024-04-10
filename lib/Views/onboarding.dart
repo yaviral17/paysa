@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:lottie/lottie.dart';
 import 'package:paysa/utils/constants/colors.dart';
+import 'package:paysa/utils/constants/sizes.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -12,27 +15,9 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final List<OnBoardData> boardData = [
-    OnBoardData(
-      title: 'Welcome to Paysa',
-      // description: 'Description 1',
-      image: 'assets/images/onboarding1.png',
-    ),
-    OnBoardData(
-      title: 'All Your Expenses at One Place',
-      description: 'Description 2',
-      image: 'assets/images/onboarding2.png',
-    ),
-    OnBoardData(
-      title: 'Title 3',
-      description: 'Description 3',
-      image: 'assets/images/onboarding3.png',
-    ),
-  ];
-
   int _pageIndex = 0;
   late PageController _pageController;
-  Timer? _timer;
+  bool _lastPage = false;
 
   @override
   void initState() {
@@ -40,129 +25,205 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.initState();
 
     _pageController = PageController(initialPage: _pageIndex);
-
-    // _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-    //   if (_pageIndex < 3) {
-    //     _pageIndex++;
-    //   } else {
-    //     _pageIndex = 0;
-    //   }
-
-    //   _pageController.animateToPage(
-    //     _pageIndex,
-    //     duration: const Duration(milliseconds: 1000),
-    //     curve: Curves.easeIn,
-    //   );
-    // });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _timer!.cancel();
     _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              onPageChanged: (value) {
-                setState(() {
-                  _pageIndex = value;
-                });
-              },
-              itemCount: boardData.length,
-              controller: _pageController,
-              itemBuilder: (context, index) => OnBoardContent(
-                title: boardData[index].title,
-                description: boardData[index].description,
-                image: boardData[index].image,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...List.generate(
-                  boardData.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: DotIndicator(
-                      isActive: index == _pageIndex,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: TColors.primary,
+        body: Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  ...List.generate(
+                    OnBoardData.onBoardData.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: DotIndicator(
+                        isActive: index == _pageIndex,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          // next and skip button here
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50.0),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: TColors.primaryBackground.withOpacity(0.1),
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                        border: Border.all(
-                          width: 1.5,
-                          color: TColors.primaryBackground.withOpacity(0.2),
+                  Spacer(),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: TColors.primaryBackground.withOpacity(0.1),
+                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                          border: Border.all(
+                            width: 1.5,
+                            color: TColors.primaryBackground.withOpacity(0.2),
+                          ),
                         ),
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(50.0),
-                        onTap: () {
-                          if (_pageIndex < boardData.length - 1) {
-                            _pageIndex++;
-                          } else {
-                            _pageIndex = 0;
-                          }
-
-                          _pageController.animateToPage(
-                            _pageIndex,
-                            duration: const Duration(milliseconds: 350),
-                            curve: Curves.easeIn,
-                          );
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text(
-                            'Next',
-                            style: TextStyle(
-                              color: TColors.textWhite,
-                              fontWeight: FontWeight.bold,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(50.0),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/login');
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: Text(
+                              'Skip',
+                              style: TextStyle(
+                                color: TColors.textWhite,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  child: Text(
-                    'Skip',
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: PageView.builder(
+                onPageChanged: (value) {
+                  setState(() {
+                    _pageIndex = value;
+                    if (_pageIndex == OnBoardData.onBoardData.length - 1) {
+                      _lastPage = true;
+                    } else {
+                      _lastPage = false;
+                    }
+                  });
+                },
+                itemCount: OnBoardData.onBoardData.length,
+                controller: _pageController,
+                itemBuilder: (context, index) => OnBoardContent(
+                  title: OnBoardData.onBoardData[index].title,
+                  description: OnBoardData.onBoardData[index].description,
+                  image: OnBoardData.onBoardData[index].image,
+                ),
+              ),
+            ),
+
+            // next and skip button here
+            _lastPage
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                            child: Container(
+                              width: TSizes.displayWidth(context) * 0.4,
+                              decoration: BoxDecoration(
+                                color:
+                                    TColors.primaryBackground.withOpacity(0.1),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50.0)),
+                                border: Border.all(
+                                  width: 1.5,
+                                  color: TColors.primaryBackground
+                                      .withOpacity(0.2),
+                                ),
+                              ),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(50.0),
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/login');
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Done',
+                                    style: TextStyle(
+                                      color: TColors.textWhite,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                            child: Container(
+                              width: TSizes.displayWidth(context) * 0.4,
+                              decoration: BoxDecoration(
+                                color:
+                                    TColors.primaryBackground.withOpacity(0.1),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50.0)),
+                                border: Border.all(
+                                  width: 1.5,
+                                  color: TColors.primaryBackground
+                                      .withOpacity(0.2),
+                                ),
+                              ),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(50.0),
+                                onTap: () {
+                                  if (_pageIndex <
+                                      OnBoardData.onBoardData.length - 1) {
+                                    _pageIndex++;
+                                  } else {
+                                    _pageIndex = 0;
+                                  }
+
+                                  _pageController.animateToPage(
+                                    _pageIndex,
+                                    duration: const Duration(milliseconds: 350),
+                                    curve: Curves.easeIn,
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Next',
+                                    style: TextStyle(
+                                      color: TColors.textWhite,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -178,6 +239,24 @@ class OnBoardData {
     this.description = '',
     required this.image,
   });
+
+  static List<OnBoardData> onBoardData = [
+    OnBoardData(
+      title: 'Paysa',
+      description: ' A Smart Way to Manage Your Expenses',
+      image: 'assets/lottie/WateringPlant.json',
+    ),
+    OnBoardData(
+      title: ' Expense Tracker',
+      description: 'All Your Expenses at One Place',
+      image: 'assets/lottie/Anim1.json',
+    ),
+    OnBoardData(
+      title: ' Split Bills',
+      description: 'Split Bills with Friends',
+      image: 'assets/lottie/Anim2.json',
+    ),
+  ];
 }
 
 class OnBoardContent extends StatelessWidget {
@@ -195,13 +274,23 @@ class OnBoardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Spacer(),
+        // const Spacer(),
+        SizedBox(height: 50),
+
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.4,
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: Center(child: Lottie.asset(image, fit: BoxFit.cover)),
+        ),
+
+        Spacer(),
         Text(
           title,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: 40,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -217,9 +306,7 @@ class OnBoardContent extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const Spacer(),
-        Image.asset(image),
-        const Spacer(),
+        Spacer(),
       ],
     );
   }
@@ -241,7 +328,7 @@ class DotIndicator extends StatelessWidget {
       width: isActive ? 24 : 8,
       decoration: BoxDecoration(
         color: isActive ? TColors.primary : Colors.white,
-        border: isActive ? null : Border.all(color: TColors.primary),
+        border: Border.all(color: TColors.white, width: 1.5),
         borderRadius: const BorderRadius.all(
           Radius.circular(12),
         ),
