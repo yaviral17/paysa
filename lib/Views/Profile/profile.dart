@@ -67,6 +67,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
+                          //add logout button
+                          GestureDetector(
+                            onTap: () async {
+                              await FirebaseAuth.instance.signOut();
+                              await GoogleSignIn().signOut();
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(8),
+                              height: TSizes.appBarHeight,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.logout),
+                                  Text('Logout'),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       )
                     ],

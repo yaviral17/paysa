@@ -10,6 +10,7 @@ import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
 import 'package:paysa/Views/GroupPage/CreateSplitPage.dart';
 import 'package:paysa/Views/GroupPage/GroupPage.dart';
 import 'package:paysa/Views/NavigationMenu.dart';
+import 'package:paysa/Views/onboarding.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 
 class RouteGenerator {
@@ -19,10 +20,14 @@ class RouteGenerator {
       case '/':
         {
           if (userData.user.value == null) {
-            return MaterialPageRoute(builder: (_) => const LoginScreen());
+            return MaterialPageRoute(builder: (_) => const OnboardingScreen());
           } else {
             return MaterialPageRoute(builder: (_) => const NavigationMenu());
           }
+        }
+      case '/login':
+        {
+          return MaterialPageRoute(builder: (_) => const LoginScreen());
         }
       case '/create-group':
         {
