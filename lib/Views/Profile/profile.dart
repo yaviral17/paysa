@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +7,10 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:paysa/Controllers/ProfileController.dart';
 import 'package:paysa/Controllers/UserData.dart';
+import 'package:paysa/Models/menuTileModel.dart';
+import 'package:paysa/Views/Profile/Widgets/customMenuTile.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
+import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -67,29 +71,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
-                          //add logout button
-                          GestureDetector(
-                            onTap: () async {
-                              await FirebaseAuth.instance.signOut();
-                              await GoogleSignIn().signOut();
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.all(8),
-                              height: TSizes.appBarHeight,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.logout),
-                                  Text('Logout'),
-                                ],
-                              ),
-                            ),
-                          ),
                         ],
                       )
                     ],
@@ -99,20 +80,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             ...List.generate(
               4,
-              (index) => MenuOptionsTile(),
+              (index) => MenuOptionsTile(
+                //change the number of tiles
+                tileText: MenuTileData.menuTiles[index].title,
+                icon: MenuTileData.menuTiles[index].icon,
+                onTap: MenuTileData.menuTiles[index].onTap,
+              ),
             ),
           ],
         ),
       ),
     );
-  }
-}
-
-class MenuOptionsTile extends StatelessWidget {
-  const MenuOptionsTile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

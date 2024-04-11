@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -24,8 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: TColors.primary,
         body: Container(
           decoration: BoxDecoration(
-            // backgroundBlendMode: BlendMode.lighten,
-
             image: DecorationImage(
               image: AssetImage('assets/images/bg_login23.jpg'),
               opacity: 0.1,
@@ -33,9 +32,22 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 60),
+              Center(
+                child: Text(
+                  "Sign In to Paysa!",
+                  // "Lets start \n and\n get going!",
+
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.bold,
+                    color: TColors.textWhite.withOpacity(0.9),
+                  ),
+                ),
+              ),
+
               //add lottie animation here
               SizedBox(
                 height: 400,
@@ -51,68 +63,26 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               // Spacer(),
 
-              Column(
-                children: [
-                  Center(
-                    child: Text(
-                      "Lets in and get going!",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold,
-                        color: TColors.black,
-                      ),
-                    ),
-                  ),
-
-                  // Sign In with google button
-
-                  // GestureDetector(
-                  //   onTap: () async {
-                  //     await loginController.signInWithGoogle();
-                  //   },
-                  //   child: Container(
-                  //     margin: const EdgeInsets.all(8),
-                  //     height: TSizes.appBarHeight,
-                  //     width: (TSizes.buttonWidth * 3) - 20,
-                  //     decoration: BoxDecoration(
-                  //       color: TColors.textWhite,
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //     child: loginController.isLoading.value
-                  //         ? const Center(
-                  //             child: CircularProgressIndicator(),
-                  //           )
-                  //         : Padding(
-                  //             padding: const EdgeInsets.all(12.0),
-                  //             child: const Row(
-                  //               mainAxisAlignment: MainAxisAlignment.center,
-                  //               children: [
-                  //                 Text(
-                  //                   'Sign in with Google',
-                  //                   style: TextStyle(
-                  //                     color: TColors.textPrimary,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //                 ),
-                  //                 SizedBox(
-                  //                   width: 10,
-                  //                 ),
-                  //                 Image(
-                  //                   image:
-                  //                       AssetImage('assets/images/google.png'),
-                  //                   height: 20,
-                  //                   width: 20,
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //   ),
-                  // ),
-                ],
+              Divider(
+                color: TColors.textWhite.withOpacity(0.8),
+                thickness: 2,
+                indent: 10,
+                endIndent: 10,
               ),
-              SizedBox(
-                height: 40,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Center(
+                  child: Text(
+                    'What do you think would be the best way to sign in?\nOf course, Google!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: TColors.textWhite.withOpacity(0.8),
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
               ),
             ],
           ),
@@ -128,22 +98,26 @@ class _LoginScreenState extends State<LoginScreen> {
             height: TSizes.appBarHeight,
             width: (TSizes.buttonWidth * 3) - 20,
             decoration: BoxDecoration(
-              color: TColors.textWhite,
+              color: TColors.primaryBackground.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: TColors.primaryBackground.withOpacity(0.2),
+                width: 2,
+              ),
             ),
             child: loginController.isLoading.value
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: const Row(
+                : const Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           'Sign in with Google',
                           style: TextStyle(
-                            color: TColors.textPrimary,
+                            color: TColors.primaryBackground,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
