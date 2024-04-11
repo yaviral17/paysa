@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Controllers/ProfileController.dart';
 import 'package:paysa/Views/NavigationMenu.dart';
+import 'package:paysa/Views/onboarding.dart';
 import 'package:paysa/routes.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/theme/theme.dart';
@@ -30,6 +32,20 @@ class _AppState extends State<App> {
       darkTheme: TFlexTheme.darkTheme,
       theme: TFlexTheme.lightTheme,
       themeMode: ThemeMode.dark,
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasData) {
+            return const NavigationMenu();
+          }
+          return const OnboardingScreen();
+        },
+      ),
     );
   }
 }
