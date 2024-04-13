@@ -8,12 +8,14 @@ class MenuOptionsTile extends StatelessWidget {
   final String tileText;
   final IconData icon;
   final void Function()? onTap;
+  final Color? bgColor;
 
   MenuOptionsTile({
     super.key,
     required this.tileText,
     required this.icon,
     this.onTap,
+    this.bgColor,
   });
 
   @override
@@ -25,7 +27,7 @@ class MenuOptionsTile extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         width: TSizes.displayWidth(context),
         decoration: BoxDecoration(
-          color: TColors.accent.withOpacity(0.1),
+          color: bgColor ?? bgColor!.withOpacity(0.1),
           // Theme.of(context).colorScheme.primary.withOpacity(0.05),
           borderRadius: BorderRadius.circular(20),
         ),

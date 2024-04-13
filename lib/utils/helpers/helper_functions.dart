@@ -97,6 +97,15 @@ class THelperFunctions {
     );
   }
 
+  static hideBottomBlackStrip() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [
+        SystemUiOverlay.top, // Shows Status bar and hides Navigation bar
+      ],
+    );
+  }
+
   static void showMaterialSnakBar(String message, BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

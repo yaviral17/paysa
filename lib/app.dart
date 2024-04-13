@@ -25,6 +25,8 @@ class _AppState extends State<App> {
 
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      useInheritedMediaQuery: true,
+
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
       title: 'Paysa',
@@ -32,20 +34,20 @@ class _AppState extends State<App> {
       darkTheme: TFlexTheme.darkTheme,
       theme: TFlexTheme.lightTheme,
       themeMode: ThemeMode.dark,
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasData) {
-            return const NavigationMenu();
-          }
-          return const OnboardingScreen();
-        },
-      ),
+      // home: StreamBuilder(
+      //   stream: FirebaseAuth.instance.authStateChanges(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return const Center(
+      //         child: CircularProgressIndicator(),
+      //       );
+      //     }
+      //     if (snapshot.hasData) {
+      //       return const NavigationMenu();
+      //     }
+      //     return const OnboardingScreen();
+      //   },
+      // ),
     );
   }
 }

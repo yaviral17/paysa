@@ -11,6 +11,7 @@ class FireStoreRef {
   static String groups = 'groups';
   static String convo = 'convo';
   static String dailySpendings = 'dailySpendings';
+  static String splitSessions = "split-session";
 
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static CollectionReference<Map<String, dynamic>> get userCollection =>

@@ -18,13 +18,22 @@ void showErrorToast(
   Cubic? animationCurve,
 }) {
   CherryToast.error(
-    title:
-        Text(title ?? "", style: TextStyle(color: titleColor ?? Colors.black)),
+    title: Text(message,
+        style: TextStyle(
+          color: titleColor ?? Colors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        )),
+    // iconWidget: Icon(
+    //   Icons.error,
+    //   color: Colors.red,
+    // ),
     toastPosition: position ?? Position.top,
     width: width,
-    displayIcon: displayTitle ?? false,
-    description:
-        Text(message, style: TextStyle(color: messageColor ?? Colors.black)),
+
+    displayIcon: displayTitle ?? true,
+    // description: Text(title ?? "",
+    //     style: TextStyle(color: messageColor ?? Colors.black)),
     animationType: AnimationType.fromRight,
     animationDuration: duration!,
     autoDismiss: true,
@@ -49,13 +58,17 @@ void showSuccessToast(
   Cubic? animationCurve,
 }) {
   CherryToast.success(
-    title:
-        Text(title ?? "", style: TextStyle(color: titleColor ?? Colors.black)),
+    title: Text(message,
+        style: TextStyle(
+          color: titleColor ?? Colors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        )),
     toastPosition: position ?? Position.top,
     width: width,
-    displayIcon: displayTitle ?? false,
-    description:
-        Text(message, style: TextStyle(color: messageColor ?? Colors.black)),
+    displayIcon: displayTitle ?? true,
+    // description:
+    //     Text(message, style: TextStyle(color: messageColor ?? Colors.black)),
     animationType: AnimationType.fromRight,
     animationDuration: duration!,
     autoDismiss: true,

@@ -2,35 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Models/DailySpendingModel.dart';
+import 'package:paysa/Models/SplitModel.dart';
 import 'package:uuid/uuid.dart';
 
 class DailySpendingController extends GetxController {
-  RxList<DailySpendingModel> dailySpendings = <DailySpendingModel>[
-    DailySpendingModel(
-      id: Uuid().v1(),
-      timestamp: DateTime.now(),
-      amount: 0.0,
-      category: 'Food',
-      title: 'Breakfast',
-      description: 'Bought breakfast from the local bakery',
-    ),
-    DailySpendingModel(
-      id: Uuid().v1(),
-      timestamp: DateTime.now(),
-      amount: 0.0,
-      category: 'car',
-      title: 'Transportation',
-      description: 'Took the bus to work today and back home in the evening ',
-    ),
-    DailySpendingModel(
-      id: Uuid().v1(),
-      timestamp: DateTime.now(),
-      amount: 0.0,
-      category: 'entertainment',
-      title: 'Movie',
-      description: 'Watched a movie with friends',
-    ),
-  ].obs;
+  RxList<DailySpendingModel> dailySpendings = <DailySpendingModel>[].obs;
 
   RxMap<String, double> data = RxMap<String, double>();
 
@@ -41,6 +17,9 @@ class DailySpendingController extends GetxController {
     required double amount,
     required String category,
     required DateTime timestamp,
+    required List<Split> splits,
+    required bool isSplit,
+    required String paidBy,
   }) async {
     DailySpendingModel dailySpending = DailySpendingModel(
       id: id,
@@ -49,6 +28,9 @@ class DailySpendingController extends GetxController {
       category: category,
       title: title,
       description: description,
+      splits: splits,
+      isSplit: isSplit,
+      paidBy: paidBy,
     );
 
     await FireStoreRef.addDailySpending(dailySpending);

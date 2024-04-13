@@ -4,6 +4,7 @@ import 'package:paysa/Views/DailySpendings/DailySpending.dart';
 import 'package:paysa/Views/Home/GroupsScreen.dart';
 import 'package:paysa/Views/Profile/profile.dart';
 import 'package:paysa/utils/constants/colors.dart';
+import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class NavigationMenu extends StatefulWidget {
@@ -19,40 +20,40 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: SalomonBottomBar(
-        currentIndex: selectedIndex,
-        // enableFeedback: false,
+    return SafeArea(
+      child: Scaffold(
+        bottomNavigationBar: SalomonBottomBar(
+          currentIndex: selectedIndex,
+          // enableFeedback: false,
 
-        selectedItemColor: TColors.primary,
-        onTap: (int index) {
-          setState(() {
-            selectedIndex = index;
-            pageController.jumpToPage(index);
-          });
-        },
+          selectedItemColor: TColors.primary,
+          onTap: (int index) {
+            setState(() {
+              selectedIndex = index;
+              pageController.jumpToPage(index);
+            });
+          },
 
-        items: <SalomonBottomBarItem>[
-          SalomonBottomBarItem(
-            icon: Icon(Iconsax.chart),
-            title: Text('Groups'),
-          ),
-          SalomonBottomBarItem(
-            icon: Icon(Iconsax.chart_1),
-            title: Text('Daily Spendings'),
-          ),
-          // SalomonBottomBarItem(
-          //   icon: Icon(Iconsax.chart_1),
-          //   title: Text('Monthly Insights'),
-          // ),
-          SalomonBottomBarItem(
-            icon: Icon(Iconsax.user),
-            title: Text('Profile'),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: PageView(
+          items: <SalomonBottomBarItem>[
+            SalomonBottomBarItem(
+              icon: Icon(Iconsax.chart),
+              title: Text('Groups'),
+            ),
+            SalomonBottomBarItem(
+              icon: Icon(Iconsax.chart_1),
+              title: Text('Daily Spendings'),
+            ),
+            // SalomonBottomBarItem(
+            //   icon: Icon(Iconsax.chart_1),
+            //   title: Text('Monthly Insights'),
+            // ),
+            SalomonBottomBarItem(
+              icon: Icon(Iconsax.user),
+              title: const Text('Profile'),
+            ),
+          ],
+        ),
+        body: PageView(
           controller: pageController,
           physics: const NeverScrollableScrollPhysics(),
           children: [
@@ -63,7 +64,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
             //     child: Text('Insight'),
             //   ),
             // ),
-            ProfileScreen(),
+            const ProfileScreen(),
           ],
         ),
       ),

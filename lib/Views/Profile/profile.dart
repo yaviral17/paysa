@@ -2,9 +2,11 @@ import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/ProfileController.dart';
 import 'package:paysa/Controllers/UserData.dart';
 import 'package:paysa/Models/menuTileModel.dart';
@@ -12,6 +14,7 @@ import 'package:paysa/Views/Profile/Widgets/customMenuTile.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
+import 'package:paysa/utils/helpers/helper_functions.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -25,9 +28,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // THelperFunctions.hideBottomBlackStrip();
     return Scaffold(
       appBar: TAppBar(
         title: Text('Profile'),
+        showBackArrow: false,
       ),
       body: SafeArea(
         child: Column(
@@ -37,8 +42,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               margin: EdgeInsets.all(20),
               width: TSizes.displayWidth(context),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                color: TColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: TColors.light.withOpacity(0.5),
+                ),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -78,14 +86,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            ...List.generate(
-              4,
-              (index) => MenuOptionsTile(
-                //change the number of tiles
-                tileText: MenuTileData.menuTiles[index].title,
-                icon: MenuTileData.menuTiles[index].icon,
-                onTap: MenuTileData.menuTiles[index].onTap,
-              ),
+            SizedBox(
+              height: TSizes.xl,
+            ),
+            MenuOptionsTile(
+              tileText: "My Profile",
+              icon: Iconsax.user_edit,
+              bgColor: TColors.primary.withOpacity(0.1),
+              onTap: () {},
+            ),
+            MenuOptionsTile(
+              tileText: "Change Password",
+              icon: Iconsax.password_check,
+              bgColor: TColors.primary.withOpacity(0.1),
+              onTap: () {},
+            ),
+            MenuOptionsTile(
+              tileText: "Privacy Policy",
+              icon: Iconsax.security_card,
+              bgColor: TColors.primary.withOpacity(0.1),
+              onTap: () {},
+            ),
+            Spacer(),
+            MenuOptionsTile(
+              tileText: "Log Out",
+              icon: Iconsax.logout,
+              bgColor: TColors.error.withOpacity(0.1),
+              onTap: () {
+                showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: Text("Log Out"),
+                        content: Text("Are you sure you want to log out?"),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: Text("Cancel"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            child: Text("Log Out"),
+                            onPressed: () {
+                              FirebaseAuth.instance.signOut();
+                              GoogleSignIn().signOut();
+                              Get.offAllNamed('/login');
+                            },
+                          ),
+                        ],
+                      );
+                    });
+              },
+            ),
+            const SizedBox(
+              height: TSizes.xl,
             ),
           ],
         ),

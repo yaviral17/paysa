@@ -9,6 +9,7 @@ import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Controllers/GroupScreenController.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/utils/constants/colors.dart';
+import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class GroupsScreen extends StatefulWidget {
@@ -32,6 +33,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // THelperFunctions.hideBottomBlackStrip();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

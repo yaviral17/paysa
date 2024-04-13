@@ -5,6 +5,7 @@ import 'package:paysa/Controllers/LoginController.dart';
 import 'package:paysa/Controllers/ProfileController.dart';
 import 'package:paysa/Controllers/UserData.dart';
 import 'package:paysa/Models/GroupModel.dart';
+import 'package:paysa/Views/AddSpending/AddSpending.dart';
 import 'package:paysa/Views/Auth/login.dart';
 import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
 import 'package:paysa/Views/GroupPage/CreateSplitPage.dart';
@@ -56,6 +57,12 @@ class RouteGenerator {
               builder: (_) => CreateSplitScreen(
                     group: group,
                   ));
+        }
+      case '/add-spending':
+        {
+          AddDailySpendingScreen screen =
+              settings.arguments as AddDailySpendingScreen;
+          return MaterialPageRoute(builder: (_) => screen);
         }
       default:
         return _errorRoute();
