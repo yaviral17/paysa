@@ -9,8 +9,6 @@ class DailySpendingModel {
   String category;
   String title;
   String description;
-  List<Split> splits;
-  String paidBy;
 
   DailySpendingModel({
     required this.id,
@@ -19,9 +17,7 @@ class DailySpendingModel {
     required this.category,
     required this.title,
     required this.description,
-    this.splits = const [],
     required this.isSplit,
-    required this.paidBy,
   });
 
   factory DailySpendingModel.fromJson(Map<String, dynamic> json) {
@@ -32,9 +28,7 @@ class DailySpendingModel {
       category: json['category'],
       title: json['title'],
       description: json['description'],
-      splits: json['splits'] == null ? [] : Split.fromJsonList(json['splits']),
       isSplit: json['isSplit'] ?? false,
-      paidBy: json['paidBy'] ?? FirebaseAuth.instance.currentUser!.uid,
     );
   }
 
@@ -46,9 +40,7 @@ class DailySpendingModel {
       'category': category,
       'title': title,
       'description': description,
-      'splits': Split.toJsonList(splits),
       'isSplit': isSplit,
-      'paidBy': paidBy,
     };
   }
 

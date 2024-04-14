@@ -284,4 +284,33 @@ class THelperFunctions {
   static AESDecription(String text) {
     return text;
   }
+
+  // show date time dialog box and return date and time in DateTime format
+  static Future<DateTime?> showDateTimeDialog(BuildContext context) async {
+    DateTime? selectedDate = DateTime.now();
+    TimeOfDay selectedTime = TimeOfDay.now();
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2020, 8),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      selectedDate = picked;
+    }
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (pickedTime != null) {
+      selectedTime = pickedTime;
+    }
+    return DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,16 +32,8 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   bool showMore = false;
   List<Split> splits = [];
 
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController amountController = TextEditingController();
-  String category = DailySpendingModel.DailySpendingCategories[0];
-  String id = const Uuid().v4();
-  DateTime timestamp = DateTime.now();
-  bool fromEdit = false;
-
-  final DailySpendingController dailySpendingController =
-      Get.put(DailySpendingController());
+  // final DailySpendingController dailySpendingController =
+  //     Get.put(DailySpendingController());
   PageController pageController = PageController();
   AddSpendingController addSpendingController =
       Get.put(AddSpendingController());
@@ -301,25 +294,28 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 
             // Title
             SpendingFeildWidget(
-              titleController: titleController,
+              textController: addSpendingController.titleController,
               hint: 'Enter Title',
               lable: 'Title',
+              keyboardType: TextInputType.text,
             ),
             const SizedBox(height: 20),
 
             // Description
             SpendingFeildWidget(
-              titleController: titleController,
+              textController: addSpendingController.descriptionController,
               hint: 'Enter Description',
               lable: 'Description',
+              keyboardType: TextInputType.text,
             ),
             const SizedBox(height: 20),
 
             // Amount
             SpendingFeildWidget(
-              titleController: titleController,
+              textController: addSpendingController.amountController,
               hint: 'Enter Amount',
               lable: 'Amount',
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 20),
 
@@ -349,17 +345,11 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                   GestureDetector(
                     onTap: () async {
                       // pick date and time
-                      DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2015, 8),
-                        lastDate: DateTime(2101),
-                      );
+                      DateTime? picked =
+                          await THelperFunctions.showDateTimeDialog(context);
 
                       if (picked != null) {
-                        setState(() {
-                          timestamp = picked;
-                        });
+                        addSpendingController.timestamp = picked;
                       }
                     },
                     child: Container(
@@ -375,7 +365,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            timestamp.toString().split(' ')[0],
+                            THelperFunctions.getFormattedDate(
+                              addSpendingController.timestamp ?? DateTime.now(),
+                              format: 'dd MMM yyyy : hh:mm a',
+                            ),
                             style: TextStyle(
                               color: TColors.textWhite,
                               fontSize: 18,
@@ -399,13 +392,14 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 
             GestureDetector(
               onTap: () async {
-                if (titleController.text.isEmpty ||
-                    descriptionController.text.isEmpty ||
-                    amountController.text.isEmpty) {
+                if (addSpendingController.titleController.text.isEmpty ||
+                    addSpendingController.descriptionController.text.isEmpty ||
+                    addSpendingController.amountController.text.isEmpty) {
                   showErrorToast(context, "Please fill all the fields");
                   return;
                 }
-                if (double.parse(amountController.text) <= 0) {
+                if (double.parse(addSpendingController.amountController.text) <=
+                    0) {
                   showErrorToast(context, "Amount cannot be 0 or negative");
                   return;
                 }
@@ -413,7 +407,11 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                   showErrorToast(context, "Please select a category");
                   return;
                 }
-                if (timestamp.isAfter(DateTime.now())) {
+                if (addSpendingController.timestamp == null) {
+                  showErrorToast(context, "Please select a date");
+                  return;
+                }
+                if (addSpendingController.timestamp!.isAfter(DateTime.now())) {
                   showErrorToast(context, "Date cannot be in future");
                   return;
                 }
@@ -423,27 +421,19 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                     return;
                   }
                 }
-                // if (widget.fromEdit) {
-                //   await dailySpendingController.updateDailySpending(
-                //     id: id,
-                //     title: titleController.text,
-                //     description: descriptionController.text,
-                //     amount: double.parse(amountController.text),
-                //     category: addSpendingController.category.value,
-                //     timestamp: timestamp,
-                //     splits: splits,
-                //   );
-                // } else {
-                //   await dailySpendingController.addDailySpending(
-                //     id: id,
-                //     title: titleController.text,
-                //     description: descriptionController.text,
-                //     amount: double.parse(amountController.text),
-                //     category: addSpendingController.category.value,
-                //     timestamp: timestamp,
-                //     splits: splits,
-                //   );
-                // }
+                if (!widget.fromEdit) {
+                  addSpendingController.addDailySpending(
+                    id: const Uuid().v1(),
+                    title: addSpendingController.titleController.text,
+                    description:
+                        addSpendingController.descriptionController.text,
+                    amount: double.parse(
+                        addSpendingController.amountController.text),
+                    category: addSpendingController.category.value,
+                    timestamp: addSpendingController.timestamp!,
+                    isSplit: addSpendingController.isSplit.value,
+                  );
+                }
                 Get.back();
               },
               child: Container(
@@ -486,14 +476,16 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 class SpendingFeildWidget extends StatelessWidget {
   const SpendingFeildWidget({
     super.key,
-    required this.titleController,
+    required this.textController,
     required this.hint,
     required this.lable,
+    required this.keyboardType,
   });
 
-  final TextEditingController titleController;
+  final TextEditingController textController;
   final String hint;
   final String lable;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -519,7 +511,8 @@ class SpendingFeildWidget extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           TextField(
-            controller: titleController,
+            controller: textController,
+            keyboardType: keyboardType,
             style: const TextStyle(
               color: TColors.textWhite,
             ),
