@@ -196,7 +196,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
         SpendingFieldWidget(
           textController: addSpendingController.titleController,
           hint: 'Enter Title',
-          lable: 'Title',
+          label: 'Title',
           keyboardType: TextInputType.text,
         ),
         const SizedBox(height: 20),
@@ -205,7 +205,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
         SpendingFieldWidget(
           textController: addSpendingController.descriptionController,
           hint: 'Enter Description',
-          lable: 'Description',
+          label: 'Description',
           keyboardType: TextInputType.text,
         ),
         const SizedBox(height: 20),
@@ -214,7 +214,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
         SpendingFieldWidget(
           textController: addSpendingController.amountController,
           hint: 'Enter Amount',
-          lable: 'Amount',
+          label: 'Amount',
           keyboardType: TextInputType.number,
         ),
         const SizedBox(height: 20),
@@ -550,13 +550,13 @@ class SpendingFieldWidget extends StatelessWidget {
     super.key,
     required this.textController,
     required this.hint,
-    required this.lable,
+    required this.label,
     required this.keyboardType,
   });
 
   final TextEditingController textController;
   final String hint;
-  final String lable;
+  final String label;
   final TextInputType keyboardType;
 
   @override
@@ -566,7 +566,7 @@ class SpendingFieldWidget extends StatelessWidget {
         color: TColors.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: TColors.light.withOpacity(0.2),
+          color: TColors.white.withOpacity(0.2),
         ),
       ),
       padding: const EdgeInsets.all(20),
@@ -574,7 +574,7 @@ class SpendingFieldWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            lable,
+            label,
             style: TextStyle(
               color: TColors.textWhite,
               fontSize: 20,

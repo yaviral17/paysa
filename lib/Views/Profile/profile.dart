@@ -16,6 +16,7 @@ import 'package:paysa/utils/appbar/appbar.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -124,9 +125,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               tileText: "Privacy Policy",
               icon: Iconsax.security_card,
               bgColor: TColors.primary.withOpacity(0.1),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed('/privacy-policy');
+              },
             ),
-            Spacer(),
+            // Spacer(),
             MenuOptionsTile(
               tileText: "Log Out",
               icon: Iconsax.logout,
@@ -160,6 +163,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(
               height: TSizes.xl,
+            ),
+
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Developed with ❤:",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(fontStyle: FontStyle.normal),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          String url = "https://www.linkedin.com/in/yaviral17/";
+                          var urllaunchable = await canLaunchUrl(Uri.parse(
+                              url)); //canLaunch is from url_launcher package
+                          if (urllaunchable) {
+                            await launchUrl(Uri.parse(
+                                url)); //launch is from url_launcher package to launch URL
+                          } else {
+                            print("URL can't be launched.");
+                          }
+                        },
+                        child: Text(
+                          "@yaviral17  |",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(color: TColors.primary),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          String url =
+                              "https://www.linkedin.com/in/nikhil-singh-168ab7246";
+                          var urllaunchable = await canLaunchUrl(Uri.parse(
+                              url)); //canLaunch is from url_launcher package
+                          if (urllaunchable) {
+                            await launchUrl(Uri.parse(
+                                url)); //launch is from url_launcher package to launch URL
+                          } else {
+                            print("URL can't be launched.");
+                          }
+                        },
+                        child: Text(
+                          "  @nikhil",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(color: TColors.primary),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    "App Version : v1.0.1",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontStyle: FontStyle.normal,
+                          fontSize: TSizes.displayWidth(context) * 0.025,
+                        ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

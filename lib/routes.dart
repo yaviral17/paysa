@@ -1,8 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paysa/Controllers/LoginController.dart';
-import 'package:paysa/Controllers/ProfileController.dart';
 import 'package:paysa/Controllers/UserData.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/Views/AddSpending/AddSpending.dart';
@@ -11,6 +8,7 @@ import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
 import 'package:paysa/Views/GroupPage/CreateSplitPage.dart';
 import 'package:paysa/Views/GroupPage/GroupPage.dart';
 import 'package:paysa/Views/NavigationMenu.dart';
+import 'package:paysa/Views/Profile/Settings/privacyPolicy.dart';
 import 'package:paysa/Views/Profile/profileScreen.dart';
 import 'package:paysa/Views/onboarding.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
@@ -63,6 +61,10 @@ class RouteGenerator {
           AddDailySpendingScreen screen =
               settings.arguments as AddDailySpendingScreen;
           return MaterialPageRoute(builder: (_) => screen);
+        }
+      case '/privacy-policy':
+        {
+          return MaterialPageRoute(builder: (_) => const PrivacyPolicy());
         }
       default:
         return _errorRoute();
