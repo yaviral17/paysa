@@ -104,11 +104,43 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
             }
 
             List<Map<String, dynamic>> dailySpendings = snapshot.requireData;
+            List<DailySpendingModel> dailySpendingsModelList = [];
+            dailySpendingController.dailySpendings.clear();
+            for (var spending in dailySpendings) {
+              if (!(spending['isSplit'] ?? false)) {
+                DailySpendingModel dailySpending =
+                    DailySpendingModel.fromJson(spending);
+                dailySpendingsModelList.add(dailySpending);
+              }
+            }
 
-            List<DailySpendingModel> dailySpendingsModelList =
-                DailySpendingModel.fromJsonList(dailySpendings);
+            for (var spending in dailySpendings) {
+              if (spending['isSplit'] ?? false) {
+                log("list test ${spending.toString()}");
+                Map<String, dynamic> splitObj = {};
+                FireStoreRef.getSplitDataById(spending['id']).listen((event) {
+                  log("event${event.toString()}");
+                  if (event == null) {
+                    log("event is null");
+                    return;
+                  }
+                  splitObj = event;
+
+                  DailySpendingModel modelObj =
+                      DailySpendingModel.fromJson(splitObj);
+                  log("dailySpendingModel${modelObj.toJson().toString()}");
+                  log("list test ${dailySpendingsModelList.length}");
+                  dailySpendingsModelList.add(modelObj);
+                  log("list test ${dailySpendingsModelList.length}");
+                });
+              }
+            }
+
+            //  dailySpendingsModelList =
+            //     DailySpendingModel.fromJsonList(dailySpendings);
             dailySpendingController.dailySpendings.value =
                 dailySpendingsModelList;
+            log("list test " + dailySpendingsModelList.length.toString());
 
             dailySpendingController.dailySpendings
                 .sort((a, b) => b.timestamp.compareTo(a.timestamp));
@@ -274,6 +306,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                     ),
                   ),
                   itemBuilder: (context, element) {
+                    log("list test " + element.title);
                     return PullDownButton(
                       itemBuilder: (context) => [
                         PullDownMenuActionsRow.small(items: [

@@ -49,4 +49,15 @@ class UserModel {
     }
     return UserModel.fromJson(data);
   }
+
+  //empty
+  static UserModel empty() {
+    return UserModel(
+      uid: '',
+      name: '',
+      email: '',
+      phone: '',
+      profile: '',
+    );
+  }
 }

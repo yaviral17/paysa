@@ -83,7 +83,7 @@ class TAppTheme {
     primaryColor: TColors.primary,
     textTheme: TTextTheme.darkTextTheme,
     chipTheme: TChipTheme.darkChipTheme,
-    scaffoldBackgroundColor: TColors.darkBackground,
+    scaffoldBackgroundColor: TColors.dark,
     colorScheme: ColorScheme.dark(primary: TColors.primary),
     appBarTheme: TAppBarTheme.darkAppBarTheme,
     checkboxTheme: TCheckboxTheme.darkCheckboxTheme,

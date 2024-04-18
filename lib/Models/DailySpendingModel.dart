@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:paysa/Models/SplitModel.dart';
 
@@ -9,6 +11,8 @@ class DailySpendingModel {
   String category;
   String title;
   String description;
+  String? paidy;
+  List<Split>? splits;
 
   DailySpendingModel({
     required this.id,
@@ -18,17 +22,25 @@ class DailySpendingModel {
     required this.title,
     required this.description,
     required this.isSplit,
+    this.paidy,
+    this.splits,
   });
 
   factory DailySpendingModel.fromJson(Map<String, dynamic> json) {
+    // log('DailySpendingModel.fromJson: ${json.toString()}');
     return DailySpendingModel(
       id: json['id'],
       timestamp: DateTime.parse(json['timestamp']),
       amount: double.parse(json['amount'].toString()),
-      category: json['category'],
-      title: json['title'],
-      description: json['description'],
+      category:
+          json['category'] ?? DailySpendingModel.DailySpendingCategories[0],
+      title: json['title'] ?? "",
+      description: json['description'] ?? "",
       isSplit: json['isSplit'] ?? false,
+      paidy: json['paidy'],
+      splits: json['splits'] != null
+          ? Split.fromJsonList(json['splits'].cast<Map<String, dynamic>>())
+          : null,
     );
   }
 
@@ -41,6 +53,8 @@ class DailySpendingModel {
       'title': title,
       'description': description,
       'isSplit': isSplit,
+      'paidy': paidy,
+      'splits': splits != null ? Split.toJsonList(splits!) : null,
     };
   }
 

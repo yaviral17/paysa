@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:paysa/Models/DailySpendingModel.dart';
+import 'package:paysa/Models/DailySpendingSplitModel.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/utils/constants/cherryToast.dart';
 
@@ -12,6 +13,7 @@ class FireStoreRef {
   static String convo = 'convo';
   static String dailySpendings = 'dailySpendings';
   static String splitSessions = "split-session";
+  static String splits = "splits";
 
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static CollectionReference<Map<String, dynamic>> get userCollection =>
@@ -20,6 +22,11 @@ class FireStoreRef {
       db.collection(groups);
   static CollectionReference<Map<String, dynamic>> convoCollection(String id) =>
       db.collection(groups).doc(id).collection(convo);
+
+  static CollectionReference<Map<String, dynamic>> get splitSessionCollection =>
+      db.collection(splitSessions);
+  static CollectionReference<Map<String, dynamic>> get splitsCollection =>
+      db.collection(splits);
 
   static CollectionReference<Map<String, dynamic>> dailySpendingsCollection(
           String id) =>
@@ -99,7 +106,7 @@ class FireStoreRef {
     });
   }
 
-  static getuserByUid(String uid) async {
+  static Future getuserByUid(String uid) async {
     return await userCollection.doc(uid).get().then((value) => value.data());
   }
 
@@ -185,4 +192,27 @@ class FireStoreRef {
         .doc(spending.id)
         .update(spending.toJson());
   }
+
+  static addSplitData(DailySpendingModel data) async {
+    await splitsCollection.doc(data.id).set(data.toJson());
+    await dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
+        .doc(data.id)
+        .set({
+      'id': data.id,
+      'isSplit': true,
+    });
+  }
+
+  static Stream<Map<String, dynamic>?> getSplitDataById(String id) {
+    return splitsCollection.doc(id).snapshots().map((event) => event.data());
+  }
+
+  // static Stream<List<Map<String, dynamic>>> getDailySpendingListWithSplits(
+  //     String groupId) {
+  //   List spendings = [];
+  // dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
+  //     .where('isSplit', isEqualTo: true)
+  //     .snapshots()
+  //     .map((event) => event.docs.map((e) => e.data()).toList());
+  // }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Models/DailySpendingModel.dart';
+import 'package:paysa/Models/DailySpendingSplitModel.dart';
 import 'package:paysa/Models/SplitModel.dart';
+import 'package:paysa/Models/UserModel.dart';
 import 'package:uuid/uuid.dart';
 
 class AddSpendingController extends GetxController {
@@ -14,6 +16,9 @@ class AddSpendingController extends GetxController {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   DateTime? timestamp = DateTime.now();
+  Rx<UserModel> paidBy = Rx(UserModel.empty());
+  RxList<Split> splits = <Split>[].obs;
+  RxList<UserModel> users = <UserModel>[].obs;
 
   void addDailySpending({
     required String id,
@@ -35,5 +40,21 @@ class AddSpendingController extends GetxController {
     );
 
     await FireStoreRef.addDailySpending(dailySpending);
+  }
+
+  Future<void> addSplit() async {
+    DailySpendingModel model = DailySpendingModel(
+      id: const Uuid().v1(),
+      amount: double.parse(amountController.text),
+      category: category.value,
+      description: descriptionController.text,
+      isSplit: true,
+      timestamp: timestamp!,
+      title: titleController.text,
+      splits: splits.toList(),
+      paidy: paidBy.value.uid,
+    );
+
+    await FireStoreRef.addSplitData(model);
   }
 }

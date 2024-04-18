@@ -2,13 +2,11 @@ class Split {
   final String uid;
   final bool paid;
   final double amount;
-  final bool urgent;
 
   Split({
     required this.uid,
     required this.paid,
     required this.amount,
-    required this.urgent,
   });
 
   Map<String, dynamic> toJSon() {
@@ -16,7 +14,6 @@ class Split {
       'uid': uid,
       'paid': paid,
       'amount': amount,
-      'urgent': urgent,
     };
   }
 
@@ -25,7 +22,6 @@ class Split {
       uid: data['uid'],
       paid: data['paid'],
       amount: double.parse(data['amount'].toString()),
-      urgent: data['urgent'],
     );
   }
 
@@ -33,13 +29,11 @@ class Split {
     String? uid,
     bool? paid,
     double? amount,
-    bool? urgent,
   }) {
     return Split(
       uid: uid ?? this.uid,
       paid: paid ?? this.paid,
       amount: amount ?? this.amount,
-      urgent: urgent ?? this.urgent,
     );
   }
 
