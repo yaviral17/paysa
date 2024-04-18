@@ -386,7 +386,9 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
           children: [
             const SizedBox(height: 20),
 
+            //all fields needed for spending in one widget
             _basicNeeds(),
+
             const SizedBox(height: 20),
 
             // Split Members

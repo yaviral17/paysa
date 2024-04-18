@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 
@@ -34,16 +36,24 @@ class MenuOptionsTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              tileText,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            Flexible(
+              child: SizedBox(
+                width: TSizes.displayWidth(context) * 0.6,
+                child: Text(
+                  tileText,
+                  // + 'dsfdsfsfdsfdgfdgfdhhghdfdjgfdjgfdjgfd',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ),
             ),
             Icon(
               icon,
-              size: 30,
+              size: TSizes.displayWidth(context) * 0.075,
             ),
           ],
         ),

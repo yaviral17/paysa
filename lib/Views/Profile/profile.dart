@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconsax/iconsax.dart';
@@ -64,19 +65,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            user.user.value!.displayName!,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                          Flexible(
+                            child: SizedBox(
+                              width: TSizes.displayWidth(context) * 0.5,
+                              child: Text(
+                                user.user.value!.displayName!,
+                                // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
                             ),
                           ),
                           SizedBox(height: 2),
-                          Text(
-                            user.user.value!.email!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.secondary,
+                          Flexible(
+                            child: SizedBox(
+                              width: TSizes.displayWidth(context) * 0.5,
+                              child: Text(
+                                user.user.value!.email!,
+                                // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
+
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                maxLines: 1,
+                              ),
                             ),
                           ),
                         ],
