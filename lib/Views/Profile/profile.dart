@@ -119,7 +119,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               tileText: "Change Password",
               icon: Iconsax.password_check,
               bgColor: TColors.primary.withOpacity(0.1),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed('/change-password');
+              },
             ),
             MenuOptionsTile(
               tileText: "Privacy Policy",

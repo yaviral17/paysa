@@ -8,6 +8,7 @@ import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
 import 'package:paysa/Views/GroupPage/CreateSplitPage.dart';
 import 'package:paysa/Views/GroupPage/GroupPage.dart';
 import 'package:paysa/Views/NavigationMenu.dart';
+import 'package:paysa/Views/Profile/Settings/changePassword.dart';
 import 'package:paysa/Views/Profile/Settings/privacyPolicy.dart';
 import 'package:paysa/Views/Profile/profileScreen.dart';
 import 'package:paysa/Views/onboarding.dart';
@@ -65,6 +66,12 @@ class RouteGenerator {
       case '/privacy-policy':
         {
           return MaterialPageRoute(builder: (_) => const PrivacyPolicy());
+        }
+
+      case '/change-password':
+        {
+          return MaterialPageRoute(
+              builder: (_) => const ChangePasswordScreen());
         }
       default:
         return _errorRoute();
