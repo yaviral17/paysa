@@ -1,5 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/Config/FirestoreRefrence.dart';
+import 'package:paysa/Controllers/DailySpendingsController.dart';
+import 'package:paysa/Models/DailySpendingModel.dart';
 import 'package:paysa/Views/DailySpendings/DailySpending.dart';
 import 'package:paysa/Views/Home/GroupsScreen.dart';
 import 'package:paysa/Views/Profile/profile.dart';
@@ -17,6 +23,35 @@ class NavigationMenu extends StatefulWidget {
 class _NavigationMenuState extends State<NavigationMenu> {
   int selectedIndex = 0;
   PageController pageController = PageController();
+
+  DailySpendingController dailySpendingsController =
+      Get.put(DailySpendingController());
+
+  @override
+  void initState() {
+    super.initState();
+
+    fetchSplits();
+  }
+
+  fetchSplits() async {
+    log('Fetching Splits');
+    List<Map<String, dynamic>> lst =
+        await FireStoreRef.fetchSplitsFromDailySpending(true);
+    log('Fetched Splits ${lst.toString()}');
+    for (Map<String, dynamic> item in lst) {
+      log('Adding Daily Spending');
+
+      Map<String, dynamic>? data =
+          await FireStoreRef.fetchSplitDataById(item['id']);
+      if (data != null) {
+        dailySpendingsController.dailySplits
+            .add(DailySpendingModel.fromJson(data));
+      }
+
+      log('Daily Spending Added ${dailySpendingsController.dailySplits.map((element) => element.toJson().toString())}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

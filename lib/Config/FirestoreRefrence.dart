@@ -107,6 +107,7 @@ class FireStoreRef {
   }
 
   static Future getuserByUid(String uid) async {
+    // await Future.delayed(const Duration(seconds: 2));
     return await userCollection.doc(uid).get().then((value) => value.data());
   }
 
@@ -207,6 +208,26 @@ class FireStoreRef {
     return splitsCollection.doc(id).snapshots().map((event) => event.data());
   }
 
+  static Future<Map<String, dynamic>?> fetchSplitDataById(String id) async {
+    return await splitsCollection.doc(id).get().then((value) => value.data());
+  }
+
+  static Future<List<Map<String, dynamic>>> fetchSplitsFromDailySpending(
+      bool isSplit) async {
+    List<Map<String, dynamic>> lst = [];
+    var data =
+        await dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
+            .where('isSplit', isEqualTo: isSplit)
+            .get()
+            .then((value) {
+      for (var item in value.docs) {
+        lst.add(item.data());
+        log(item.data().toString());
+      }
+    });
+
+    return lst;
+  }
   // static Stream<List<Map<String, dynamic>>> getDailySpendingListWithSplits(
   //     String groupId) {
   //   List spendings = [];

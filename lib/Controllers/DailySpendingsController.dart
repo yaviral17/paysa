@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 
 class DailySpendingController extends GetxController {
   RxList<DailySpendingModel> dailySpendings = <DailySpendingModel>[].obs;
+  RxList<DailySpendingModel> dailySplits = <DailySpendingModel>[].obs;
 
   RxMap<String, double> data = RxMap<String, double>();
 
