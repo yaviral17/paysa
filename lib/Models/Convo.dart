@@ -15,18 +15,19 @@ class Convo {
     this.audio,
     this.image,
     required this.type,
+    this.split,
   });
 
   factory Convo.fromJson(Map<String, dynamic> json) {
     return Convo(
-      id: json['id'],
-      sender: json['sender'],
-      message: json['message'],
-      timestamp: DateTime.parse(json['timestamp']),
-      audio: json['audio'],
-      image: json['image'],
-      type: json['type'],
-    );
+        id: json['id'],
+        sender: json['sender'],
+        message: json['message'],
+        timestamp: DateTime.parse(json['timestamp']),
+        audio: json['audio'],
+        image: json['image'],
+        type: json['type'],
+        split: json['split']);
   }
 
   Map<String, dynamic> toJson() {
@@ -38,6 +39,7 @@ class Convo {
       'audio': audio,
       'image': image,
       'type': type,
+      'split': split,
     };
   }
 

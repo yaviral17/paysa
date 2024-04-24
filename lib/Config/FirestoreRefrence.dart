@@ -204,53 +204,84 @@ class FireStoreRef {
   static addSplitData(DailySpendingModel data) async {
     await splitsCollection.doc(data.id).set(data.toJson());
 
-    SessionsModel newSession = SessionsModel(
-      id: const Uuid().v1(),
-      title: "${data.title} ₹${data.amount}",
-      members: List.generate(
-          data.splits!.length, (index) => data.splits![index].uid),
-      convoAndTags: [
-        // TODO
-      ],
-      timestamp: DateTime.now(),
-    );
-
-    for (Split split in data.splits!) {
-      await dailySpendingsCollection(split.uid).doc(data.id).set({
+    for (Split element in data.splits!) {
+      dailySpendingsCollection(element.uid).doc(data.id).set({
         'id': data.id,
         'isSplit': true,
       });
-
-      List<String> sessionIds = await getUserSessionsList(split.uid);
-      if (sessionIds.isEmpty) {
-        await userCollection.doc(split.uid).update({
-          'sessions': FieldValue.arrayUnion([newSession.id])
-        });
-        await createSessions(newSession);
-      } else {
-        for (String id in sessionIds) {
-          SessionsModel session = SessionsModel.fromJson(await getSessions(id));
-          if (session.members.contains(split.uid)) {
-            await sessionsCollection.doc(id).update({
-              'convoAndTags': FieldValue.arrayUnion([
-                Convo(
-                  id: data.id,
-                  sender: FirebaseAuth.instance.currentUser!.uid,
-                  message: data.title,
-                  timestamp: data.timestamp,
-                  type: 'split',
-                ).toJson()
-              ]),
-            });
-          } else {
-            await userCollection.doc(split.uid).update({
-              'sessions': FieldValue.arrayUnion([newSession.id])
-            });
-            await createSessions(newSession);
-          }
-        }
+      if (element.uid == data.paidy!) {
+        continue;
       }
+      if (await checkIfSessionExists(data.paidy! + element.uid)) {
+        await sessionsCollection.doc(data.paidy! + element.uid).update({
+          'convoAndTags': FieldValue.arrayUnion([
+            Convo(
+              id: data.id,
+              sender: FirebaseAuth.instance.currentUser!.uid,
+              message: data.title,
+              timestamp: data.timestamp,
+              type: 'split',
+            ).toJson()
+          ]),
+        });
+        continue;
+      }
+      if (await checkIfSessionExists(element.uid + data.paidy!)) {
+        await sessionsCollection.doc(element.uid + data.paidy!).update({
+          'convoAndTags': FieldValue.arrayUnion([
+            Convo(
+              id: data.id,
+              sender: FirebaseAuth.instance.currentUser!.uid,
+              message: data.title,
+              timestamp: data.timestamp,
+              type: 'split',
+            ).toJson()
+          ]),
+        });
+        continue;
+      }
+      SessionsModel newSession = SessionsModel(
+          id: data.paidy! + element.uid,
+          members: [data.paidy!, element.uid],
+          timestamp: data.timestamp,
+          title: data.title +
+              " on " +
+              [
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday',
+              ][data.timestamp.day],
+          convoAndTags: [
+            Convo(
+              id: Uuid().v1(),
+              sender: FirebaseAuth.instance.currentUser!.uid,
+              message:
+                  "${FirebaseAuth.instance.currentUser!.displayName!.split(' ').first} added new split",
+              timestamp: data.timestamp,
+              type: 'split',
+            ),
+          ]);
+
+      await userCollection
+          .doc(element.uid)
+          .update({'sessions': FieldValue.arrayUnion([])});
+      await createSessions(newSession);
     }
+  }
+
+  static checkIfSessionExists(String id) async {
+    bool present = false;
+    await sessionsCollection.doc(id).get().then((value) {
+      if (value.data() != null) {
+        present = true;
+      }
+      log(present.toString());
+    });
+    return present;
   }
 
   static Future<List<String>> getUserSessionsList(String id) async {
