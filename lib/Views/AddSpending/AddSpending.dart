@@ -73,15 +73,17 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
     return Scaffold(
       extendBody: true,
       appBar: TAppBar(
-        title: Obx(() => Text(addSpendingController.isSplit.value
-            ? 'Add Split'
-            : 'Add Spending')),
+        title: Obx(() => Text(
+              addSpendingController.isSplit.value
+                  ? 'Add Split'
+                  : 'Add Spending',
+            )),
         showBackArrow: true,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          color: TColors.primaryDark,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.9),
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
@@ -360,7 +362,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                   child: Text(
                     widget.fromEdit ? 'Update Spending' : 'Add Spending',
                     style: TextStyle(
-                      color: TColors.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -528,8 +530,8 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                 child: Center(
                   child: Text(
                     widget.fromEdit ? 'Update Split' : 'Add Split',
-                    style: const TextStyle(
-                      color: TColors.primary,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),

@@ -42,7 +42,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      backgroundColor: TColors.primary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                     SizedBox(height: 20),
 

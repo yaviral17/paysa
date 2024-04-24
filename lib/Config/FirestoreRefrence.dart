@@ -2,17 +2,23 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:paysa/Models/Convo.dart';
 import 'package:paysa/Models/DailySpendingModel.dart';
 import 'package:paysa/Models/DailySpendingSplitModel.dart';
 import 'package:paysa/Models/GroupModel.dart';
+import 'package:paysa/Models/SessionsModel.dart';
+import 'package:paysa/Models/SplitModel.dart';
+import 'package:paysa/Models/UserModel.dart';
 import 'package:paysa/utils/constants/cherryToast.dart';
+import 'package:uuid/uuid.dart';
 
 class FireStoreRef {
   static String users = 'users';
   static String groups = 'groups';
   static String convo = 'convo';
   static String dailySpendings = 'dailySpendings';
-  static String splitSessions = "split-session";
+  static String sessions = "sessions";
   static String splits = "splits";
 
   static FirebaseFirestore db = FirebaseFirestore.instance;
@@ -23,8 +29,8 @@ class FireStoreRef {
   static CollectionReference<Map<String, dynamic>> convoCollection(String id) =>
       db.collection(groups).doc(id).collection(convo);
 
-  static CollectionReference<Map<String, dynamic>> get splitSessionCollection =>
-      db.collection(splitSessions);
+  static CollectionReference<Map<String, dynamic>> get sessionsCollection =>
+      db.collection(sessions);
   static CollectionReference<Map<String, dynamic>> get splitsCollection =>
       db.collection(splits);
 
@@ -76,15 +82,16 @@ class FireStoreRef {
   }
 
   static uploadUser(User user) {
+    UserModel usr = UserModel(
+      uid: user.uid,
+      name: user.displayName!,
+      email: user.email!,
+      phone: "",
+      profile: user.photoURL!,
+    );
     userCollection.doc(user.uid).get().then((value) {
       if (!value.exists) {
-        userCollection.doc(user.uid).set({
-          "uid": user.uid,
-          "name": user.displayName,
-          "email": user.email,
-          "phone": user.phoneNumber ?? "",
-          "profile": user.photoURL,
-        });
+        userCollection.doc(user.uid).set(usr.toJson());
       }
     });
   }
@@ -196,12 +203,64 @@ class FireStoreRef {
 
   static addSplitData(DailySpendingModel data) async {
     await splitsCollection.doc(data.id).set(data.toJson());
-    await dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
-        .doc(data.id)
-        .set({
-      'id': data.id,
-      'isSplit': true,
+
+    SessionsModel newSession = SessionsModel(
+      id: const Uuid().v1(),
+      title: "${data.title} ₹${data.amount}",
+      members: List.generate(
+          data.splits!.length, (index) => data.splits![index].uid),
+      convoAndTags: [
+        // TODO
+      ],
+      timestamp: DateTime.now(),
+    );
+
+    for (Split split in data.splits!) {
+      await dailySpendingsCollection(split.uid).doc(data.id).set({
+        'id': data.id,
+        'isSplit': true,
+      });
+
+      List<String> sessionIds = await getUserSessionsList(split.uid);
+      if (sessionIds.isEmpty) {
+        await userCollection.doc(split.uid).update({
+          'sessions': FieldValue.arrayUnion([newSession.id])
+        });
+        await createSessions(newSession);
+      } else {
+        for (String id in sessionIds) {
+          SessionsModel session = SessionsModel.fromJson(await getSessions(id));
+          if (session.members.contains(split.uid)) {
+            await sessionsCollection.doc(id).update({
+              'convoAndTags': FieldValue.arrayUnion([
+                Convo(
+                  id: data.id,
+                  sender: FirebaseAuth.instance.currentUser!.uid,
+                  message: data.title,
+                  timestamp: data.timestamp,
+                  type: 'split',
+                ).toJson()
+              ]),
+            });
+          } else {
+            await userCollection.doc(split.uid).update({
+              'sessions': FieldValue.arrayUnion([newSession.id])
+            });
+            await createSessions(newSession);
+          }
+        }
+      }
+    }
+  }
+
+  static Future<List<String>> getUserSessionsList(String id) async {
+    List<String> sessions = [];
+    await userCollection.doc(id).get().then((value) {
+      if (value.exists) {
+        sessions = List.from((value.data() ?? {})['sessions'] ?? []);
+      }
     });
+    return sessions;
   }
 
   static Stream<Map<String, dynamic>?> getSplitDataById(String id) {
@@ -228,6 +287,19 @@ class FireStoreRef {
 
     return lst;
   }
+
+  static createSessions(SessionsModel sessions) async {
+    await sessionsCollection.doc(sessions.id).set(sessions.toJson());
+  }
+
+  static getSessions(String id) async {
+    return await sessionsCollection.doc(id).get().then((value) => value.data());
+  }
+
+  static getUserDataAsStreamByUid(String uid) {
+    return userCollection.doc(uid).get().asStream();
+  }
+
   // static Stream<List<Map<String, dynamic>>> getDailySpendingListWithSplits(
   //     String groupId) {
   //   List spendings = [];

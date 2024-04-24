@@ -178,7 +178,7 @@ class TransactionBubble extends StatelessWidget {
                                 .textTheme
                                 .titleMedium!
                                 .copyWith(
-                                  color: TColors.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontSize: 12,
                                 ),
                           ),

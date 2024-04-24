@@ -65,7 +65,7 @@ class SpendingsIconWidget extends StatelessWidget {
                           addSpendingController.category.value.capitalize!,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: TColors.primary,
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: TSizes.displayWidth(context) * 0.04,
                           ),

@@ -135,7 +135,7 @@ class _GroupPageState extends State<GroupPage> {
                   ),
                 ),
                 Divider(
-                  color: TColors.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   thickness: 2,
                 ),
 
@@ -248,7 +248,7 @@ class ChatBottomBar extends StatelessWidget {
           width: TSizes.displayWidth(context) * 0.98,
           height: 0,
           decoration: BoxDecoration(
-            color: TColors.primary,
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -256,7 +256,7 @@ class ChatBottomBar extends StatelessWidget {
             width: TSizes.displayWidth(context),
             height: TSizes.appBarHeight,
             decoration: BoxDecoration(
-              color: TColors.primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             child: Row(
               children: [

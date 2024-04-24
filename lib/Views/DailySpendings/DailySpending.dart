@@ -302,9 +302,9 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                             child: Container(
                               padding: const EdgeInsets.all(4),
                               width: TSizes.displayWidth(context) * 0.4,
-                              height: TSizes.displayWidth(context) * 0.09,
+                              height: TSizes.displayWidth(context) * 0.1,
                               decoration: BoxDecoration(
-                                color: TColors.primary,
+                                color: Theme.of(context).colorScheme.primary,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                             ),
@@ -336,7 +336,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
       child: Ink(
-        height: TSizes.displayWidth(context) * 0.09,
+        // height: TSizes.displayWidth(context) * 0.1,
         padding: const EdgeInsets.all(4),
         width: TSizes.displayWidth(context) * 0.4,
         decoration: BoxDecoration(

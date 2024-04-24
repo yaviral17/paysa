@@ -140,7 +140,9 @@ class AddSplitWidget extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           CircleAvatar(
-                                            backgroundColor: TColors.primary,
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             child: IconButton(
                                               onPressed: () {
                                                 double amount = double.parse(
@@ -235,7 +237,9 @@ class AddSplitWidget extends StatelessWidget {
                                             ),
                                           ),
                                           CircleAvatar(
-                                            backgroundColor: TColors.primary,
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             child: IconButton(
                                               onPressed: () {
                                                 double amount = double.parse(
@@ -272,7 +276,9 @@ class AddSplitWidget extends StatelessWidget {
                                               onChanged: (value) {
                                                 paid.value = value;
                                               },
-                                              activeColor: TColors.primary,
+                                              activeColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               activeTrackColor: TColors.primary
                                                   .withOpacity(0.5),
                                             ),
@@ -389,17 +395,20 @@ class AddSplitWidget extends StatelessWidget {
                                   return Row(
                                     children: [
                                       CircleAvatar(
-                                        radius: 20,
+                                        radius:
+                                            TSizes.displayWidth(context) * 0.04,
                                         backgroundImage: NetworkImage(
                                           usr.profile,
                                         ),
                                       ),
                                       const SizedBox(width: 10),
-                                      Text(
-                                        usr.name,
-                                        style: const TextStyle(
-                                          color: TColors.textWhite,
-                                          fontSize: 18,
+                                      Flexible(
+                                        child: Text(
+                                          usr.name,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium,
                                         ),
                                       ),
                                     ],

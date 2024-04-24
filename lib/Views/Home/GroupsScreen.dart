@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Controllers/GroupScreenController.dart';
 import 'package:paysa/Models/GroupModel.dart';
+import 'package:paysa/Models/SessionsModel.dart';
+import 'package:paysa/Models/UserModel.dart';
 import 'package:paysa/utils/constants/colors.dart';
+import 'package:paysa/utils/constants/sizes.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
@@ -31,262 +35,189 @@ class _GroupsScreenState extends State<GroupsScreen> {
     return groups;
   }
 
+  Future<SessionsModel> fetchSession(String id) async {
+    Map<String, dynamic> ssn = await FireStoreRef.getSessions(id);
+    return SessionsModel.fromJson(ssn);
+  }
+
   @override
   Widget build(BuildContext context) {
     // THelperFunctions.hideBottomBlackStrip();
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          Get.toNamed('/create-group');
-        },
-        backgroundColor: TColors.primary,
-        child: const Icon(Iconsax.add),
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // search text field
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: TColors.primary.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Iconsax.search_normal,
-                              color: TColors.primary,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Search',
-                              style: TextStyle(
-                                color: TColors.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          child: StreamBuilder(
+            stream: FireStoreRef.getUserDataByIdStream(
+              FirebaseAuth.instance.currentUser!.uid,
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: SizedBox(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
 
-              StreamBuilder(
-                  stream: FireStoreRef.getUserGroupListStream(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const CircularProgressIndicator();
-                    }
+              if (snapshot.hasError) {
+                return Text("Something Went Wrong");
+              }
 
-                    Map<String, dynamic> data =
-                        snapshot.requireData.data() ?? {};
-                    // log("snapshot data: " + data.toString());
-                    if (data['groups'] == null) {
-                      return const Center(
-                        child: Text('No groups found'),
-                      );
-                    }
+              List<String> sessions = [];
 
-                    groupController.groups.clear();
-                    for (String groupId in data['groups']) {
-                      FireStoreRef.getGroupByIdStream(groupId).listen((event) {
-                        log("event data: " + event.data().toString());
-                        if (event.data() != null) {
-                          groupController.groups
-                              .add(Group.fromJson(event.data()!));
-                        }
-                        // groupController.groups
-                        //     .add(Group.fromJson(event.data()));
-                      });
-                      // groupController.groups.add(Group.fromJson(groupData));
-                    }
+              bool condition = (snapshot.requireData['sessions'] ?? []).isEmpty;
 
-                    return Obx(
-                      () => GroupedListView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        elements: groupController.groups.value,
-                        groupBy: (element) => element.category,
-                        groupSeparatorBuilder: (String category) => Container(
-                          margin: const EdgeInsets.only(
-                              top: 10, bottom: 10, left: 10, right: 10),
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            color: TColors.primary.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            category,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall!
-                                .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                        ),
-                        itemBuilder: (context, Group element) {
-                          return ListTile(
-                            onTap: () {
-                              Get.toNamed('/group-page', arguments: element);
-                            },
-                            title: Text(
-                              element.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                    color: TColors.primary,
-                                  ),
-                            ),
-                            subtitle: Text(element.description),
-                            leading: CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(element.icon,
-                                  scale: 1.0, headers: <String, String>{}),
-                            ),
-                            trailing: PullDownButton(
-                              itemBuilder: (context) => [
-                                PullDownMenuItem(
-                                  icon: (Icons.supervised_user_circle),
-                                  title: 'Share',
-                                  onTap: () {},
-                                ),
-                                const PullDownMenuDivider(),
-                                PullDownMenuItem(
-                                  icon: (Icons.delete),
-                                  title: 'delete',
-                                  onTap: () {
-                                    groupController.deleteGroup(
-                                        element, context);
-                                  },
-                                ),
-                                PullDownMenuItem(
-                                  icon: (Icons.exit_to_app_rounded),
-                                  title: 'leave',
-                                  onTap: () {
-                                    groupController.leaveGroup(
-                                        element, context);
-                                  },
-                                ),
-                              ],
-                              buttonBuilder: (context, showMenu) => IconButton(
-                                onPressed: showMenu,
-                                // constraints: BoxConstraints(maxWidth: 100),
-                                color: TColors.primary,
-                                padding: EdgeInsets.zero,
-                                icon: Icon(Icons.more_vert),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }),
+              if (condition) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  child: Text("No Sessions Avilable"),
+                );
+              }
 
-              // FutureBuilder(
-              //   future: getGroups(),
-              //   builder: (context, snapshot) {
-              //     if (!snapshot.hasData) {
-              //       return const CircularProgressIndicator();
-              //     }
-              //     return GroupedListView(
-              //       shrinkWrap: true,
-              //       physics: const NeverScrollableScrollPhysics(),
-              //       elements: <Group>[
-              //         ...List.from(snapshot.data as List<Group>),
-              //       ],
-              //       groupBy: (element) => element.category,
-              //       groupSeparatorBuilder: (String category) => Container(
-              //         margin: const EdgeInsets.only(
-              //             top: 10, bottom: 10, left: 10, right: 10),
-              //         padding: const EdgeInsets.all(8.0),
-              //         decoration: BoxDecoration(
-              //           color: TColors.primary.withOpacity(0.5),
-              //           borderRadius: BorderRadius.circular(4),
-              //         ),
-              //         child: Text(
-              //           category,
-              //           textAlign: TextAlign.start,
-              //           style:
-              //               Theme.of(context).textTheme.headlineSmall!.copyWith(
-              //                     color: Colors.white,
-              //                     fontWeight: FontWeight.w500,
-              //                   ),
-              //         ),
-              //       ),
-              //       itemBuilder: (context, Group element) {
-              //         return ListTile(
-              //           onTap: () {
-              //             Get.toNamed('/group-page', arguments: element);
-              //           },
-              //           title: Text(
-              //             element.name,
-              //             style:
-              //                 Theme.of(context).textTheme.titleMedium!.copyWith(
-              //                       color: TColors.primary,
-              //                     ),
-              //           ),
-              //           subtitle: Text(element.description),
-              //           leading: CircleAvatar(
-              //             radius: 30,
-              //             backgroundImage: NetworkImage(element.icon,
-              //                 scale: 1.0, headers: <String, String>{}),
-              //           ),
-              //           trailing: PullDownButton(
-              //             itemBuilder: (context) => [
-              //               PullDownMenuItem(
-              //                 icon: (Icons.supervised_user_circle),
-              //                 title: 'Share',
-              //                 onTap: () {},
-              //               ),
-              //               const PullDownMenuDivider(),
-              //               PullDownMenuItem(
-              //                 icon: (Icons.delete),
-              //                 title: 'delete',
-              //                 onTap: () {
-              //                   groupController.deleteGroup(element, context);
-              //                 },
-              //               ),
-              //               PullDownMenuItem(
-              //                 icon: (Icons.exit_to_app_rounded),
-              //                 title: 'leave',
-              //                 onTap: () {
-              //                   groupController.leaveGroup(element, context);
-              //                 },
-              //               ),
-              //             ],
-              //             buttonBuilder: (context, showMenu) => IconButton(
-              //               onPressed: showMenu,
-              //               // constraints: BoxConstraints(maxWidth: 100),
-              //               color: TColors.primary,
-              //               padding: EdgeInsets.zero,
-              //               icon: Icon(Icons.more_vert),
-              //             ),
-              //           ),
-              //         );
-              //       },
-              //     );
-              //   },
-              // ),
-            ],
+              return ScreenUI(snapshot.requireData['sessions']);
+            },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget ScreenUI(List sessionsIdList) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+      ),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          TextField(
+            decoration: InputDecoration(
+              hintText: "Search",
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              prefixIcon: const Icon(
+                Iconsax.search_normal,
+              ),
+              fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              // focusColor: Theme.of(context).colorScheme.onBackground,
+            ),
+          ),
+          SizedBox(
+            height: TSizes.displayHeight(context) * 0.02,
+          ),
+          ...List.generate(
+            sessionsIdList.length,
+            (index) => FutureBuilder(
+              future: fetchSession(sessionsIdList[index]),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  snapshot.error!.printError();
+                  return Text("Something Went wrong");
+                }
+
+                List<UserModel> users = [];
+
+                log(snapshot.requireData.toString());
+                return Container(
+                  height: TSizes.displayHeight(context) * 0.12,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircularCachedNetworkimage(
+                          url: snapshot.requireData.icon,
+                          width: TSizes.displayWidth(context) * 0.2,
+                        ),
+                      ),
+                      SizedBox(
+                        width: TSizes.displayWidth(context) * 0.04,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            snapshot.requireData.title.capitalizeFirst ?? "",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          Text(
+                            "${THelperFunctions.getDateDifference(snapshot.requireData.timestamp)}",
+                          ),
+                          // Text("₹ ${snapshot.requireData.}")
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CircularCachedNetworkimage extends StatelessWidget {
+  String url;
+  Widget? placeholder;
+  Widget? onError;
+  double? width;
+  double? height;
+
+  CircularCachedNetworkimage({
+    super.key,
+    required this.url,
+    this.placeholder,
+    this.height,
+    this.width,
+    this.onError,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: CachedNetworkImage(
+          imageUrl: url,
+          placeholder: (context, url) =>
+              placeholder ?? const CircularProgressIndicator(),
+          errorWidget: (context, url, error) =>
+              onError ??
+              Image.asset(
+                "assets/images/ic_session.png",
+              ),
+          errorListener: (value) {
+            value.printError();
+            value.printInfo();
+          },
         ),
       ),
     );

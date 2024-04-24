@@ -61,7 +61,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
           currentIndex: selectedIndex,
           // enableFeedback: false,
 
-          selectedItemColor: TColors.primary,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
           onTap: (int index) {
             setState(() {
               selectedIndex = index;

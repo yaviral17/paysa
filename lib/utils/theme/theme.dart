@@ -14,8 +14,10 @@ import '../constants/colors.dart';
 class TFlexTheme {
   TFlexTheme._();
 
+  static FlexScheme theme = FlexScheme.blueM3;
+
   static ThemeData lightTheme = FlexThemeData.light(
-    scheme: FlexScheme.jungle,
+    scheme: theme,
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
     blendLevel: 7,
     subThemesData: const FlexSubThemesData(
@@ -35,7 +37,7 @@ class TFlexTheme {
   );
 
   static ThemeData darkTheme = FlexThemeData.dark(
-    scheme: FlexScheme.jungle,
+    scheme: theme,
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
     blendLevel: 13,
     subThemesData: const FlexSubThemesData(

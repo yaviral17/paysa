@@ -110,7 +110,7 @@ class THelperFunctions {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: TColors.primary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         behavior: SnackBarBehavior.floating,
         action: SnackBarAction(
           label: 'OK',
@@ -153,7 +153,7 @@ class THelperFunctions {
           toolbarColor: TColors.darkBackground,
           cropGridColor: TColors.darkBackground,
           statusBarColor: TColors.lightDarkBackground,
-          cropFrameColor: TColors.primary,
+          cropFrameColor: Theme.of(context).colorScheme.primary,
           showCropGrid: false,
           toolbarWidgetColor: TColors.light,
           backgroundColor: TColors.darkBackground,
