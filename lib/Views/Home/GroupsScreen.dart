@@ -25,6 +25,7 @@ class GroupsScreen extends StatefulWidget {
 
 class _GroupsScreenState extends State<GroupsScreen> {
   GroupController groupController = Get.put(GroupController());
+  List<SessionsModel> mySessions = [];
 
   Future<List<Group>> getGroups() async {
     List<Group>? groups = await FireStoreRef.getUserGroupList();
@@ -37,6 +38,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   Future<SessionsModel> fetchSession(String id) async {
     Map<String, dynamic> ssn = await FireStoreRef.getSessions(id);
+
     return SessionsModel.fromJson(ssn);
   }
 
@@ -60,13 +62,16 @@ class _GroupsScreenState extends State<GroupsScreen> {
               if (snapshot.hasError) {
                 return Text("Something Went Wrong");
               }
-
-              List<SessionsModel> sessions = [];
+              mySessions = [];
               for (Map<String, dynamic> session in snapshot.requireData) {
-                sessions.add(SessionsModel.fromJson(session));
+                SessionsModel object = SessionsModel.fromJson(session);
+                if (object.members
+                    .contains(FirebaseAuth.instance.currentUser!.uid)) {
+                  mySessions.add(object);
+                }
               }
 
-              return ScreenUI(sessions);
+              return ScreenUI(mySessions);
             },
           ),
         ),
@@ -109,6 +114,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
           ...List.generate(
             sessionsIdList.length,
             (index) => Container(
+              margin: const EdgeInsets.only(
+                bottom: 12,
+              ),
               height: TSizes.displayHeight(context) * 0.12,
               width: double.infinity,
               decoration: BoxDecoration(
