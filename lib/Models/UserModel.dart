@@ -8,14 +8,13 @@ class UserModel {
   String email;
   String phone;
   String profile;
-  List<String> sessions;
+
   UserModel({
     required this.uid,
     required this.name,
     required this.email,
     required this.phone,
     required this.profile,
-    this.sessions = const [],
   });
   Map<String, dynamic> toJson() {
     return {
@@ -24,7 +23,6 @@ class UserModel {
       'email': email,
       'phone': phone,
       'profile': profile,
-      'sessions': sessions,
     };
   }
 
@@ -35,9 +33,6 @@ class UserModel {
       email: json['email'],
       phone: json['phone'],
       profile: json['profile'],
-      sessions: json['sessions'] == null
-          ? []
-          : json['sessions'].cast<String>().toList(),
     );
   }
 

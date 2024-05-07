@@ -14,6 +14,7 @@ import 'package:paysa/Models/SplitModel.dart';
 import 'package:paysa/Models/UserModel.dart';
 import 'package:paysa/Views/AddSpending/Widgets/addSplitWidget.dart';
 import 'package:paysa/Views/AddSpending/Widgets/spendingIconWidget.dart';
+import 'package:paysa/Views/DailySpendings/DailySpending.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 import 'package:paysa/utils/constants/cherryToast.dart';
 import 'package:paysa/utils/constants/colors.dart';
@@ -347,7 +348,11 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                     isSplit: addSpendingController.isSplit.value,
                   );
                 }
-                Get.back();
+                Get.to(
+                  () => const DailySpendingScreen(),
+                  transition: Transition.cupertinoDialog,
+                  popGesture: true,
+                );
               },
               child: Container(
                 padding: const EdgeInsets.all(20),
@@ -516,7 +521,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                   return;
                 }
                 addSpendingController.addSplit();
-                Get.back();
+                Navigator.pop(context);
               },
               child: Container(
                 padding: const EdgeInsets.all(20),

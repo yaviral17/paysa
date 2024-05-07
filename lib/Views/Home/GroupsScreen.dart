@@ -47,9 +47,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: StreamBuilder(
-            stream: FireStoreRef.getUserDataByIdStream(
-              FirebaseAuth.instance.currentUser!.uid,
-            ),
+            stream: FireStoreRef.getSessionsListStream(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -63,21 +61,12 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 return Text("Something Went Wrong");
               }
 
-              List<String> sessions = [];
-
-              bool condition = (snapshot.requireData['sessions'] ?? []).isEmpty;
-
-              if (condition) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 16,
-                  ),
-                  child: Text("No Sessions Avilable"),
-                );
+              List<SessionsModel> sessions = [];
+              for (Map<String, dynamic> session in snapshot.requireData) {
+                sessions.add(SessionsModel.fromJson(session));
               }
 
-              return ScreenUI(snapshot.requireData['sessions']);
+              return ScreenUI(sessions);
             },
           ),
         ),
@@ -85,7 +74,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
     );
   }
 
-  Widget ScreenUI(List sessionsIdList) {
+  Widget ScreenUI(List<SessionsModel> sessionsIdList) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 8,
@@ -119,61 +108,41 @@ class _GroupsScreenState extends State<GroupsScreen> {
           ),
           ...List.generate(
             sessionsIdList.length,
-            (index) => FutureBuilder(
-              future: fetchSession(sessionsIdList[index]),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                if (snapshot.hasError) {
-                  snapshot.error!.printError();
-                  return Text("Something Went wrong");
-                }
-
-                List<UserModel> users = [];
-
-                log(snapshot.requireData.toString());
-                return Container(
-                  height: TSizes.displayHeight(context) * 0.12,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
+            (index) => Container(
+              height: TSizes.displayHeight(context) * 0.12,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularCachedNetworkimage(
+                      url: sessionsIdList[index].icon,
+                      width: TSizes.displayWidth(context) * 0.2,
+                    ),
                   ),
-                  child: Row(
+                  SizedBox(
+                    width: TSizes.displayWidth(context) * 0.04,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CircularCachedNetworkimage(
-                          url: snapshot.requireData.icon,
-                          width: TSizes.displayWidth(context) * 0.2,
-                        ),
+                      Text(
+                        sessionsIdList[index].title.capitalizeFirst ?? "",
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      SizedBox(
-                        width: TSizes.displayWidth(context) * 0.04,
+                      Text(
+                        "${THelperFunctions.getDateDifference(sessionsIdList[index].timestamp)}",
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            snapshot.requireData.title.capitalizeFirst ?? "",
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          Text(
-                            "${THelperFunctions.getDateDifference(snapshot.requireData.timestamp)}",
-                          ),
-                          // Text("₹ ${snapshot.requireData.}")
-                        ],
-                      ),
+                      // Text("₹ ${snapshot.requireData.}")
                     ],
                   ),
-                );
-              },
+                ],
+              ),
             ),
           ),
         ],

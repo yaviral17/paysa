@@ -171,11 +171,17 @@ class FireStoreRef {
   }
 
   // get streamed my spendings list
-  static Stream<List<Map<String, dynamic>>> getMyDailySpendings() {
+  static Stream<List<Map<String, dynamic>>> getMyDailySpendingsStream() {
     log(FirebaseAuth.instance.currentUser!.uid);
     return dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
         .snapshots()
         .map((event) => event.docs.map((e) => e.data()).toList());
+  }
+
+  static Future<List<Map<String, dynamic>>> getMyDailySpendings() {
+    return dailySpendingsCollection(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
   }
 
   static Future<bool> removeDailySpendingById(String spendingId) async {
@@ -202,47 +208,37 @@ class FireStoreRef {
   }
 
   static addSplitData(DailySpendingModel data) async {
+    // create a split
     await splitsCollection.doc(data.id).set(data.toJson());
-
-    for (Split element in data.splits!) {
-      dailySpendingsCollection(element.uid).doc(data.id).set({
+    // add daily spending data in all users's collection
+    for (Split split in data.splits!) {
+      await dailySpendingsCollection(split.uid).doc(data.id).set({
         'id': data.id,
         'isSplit': true,
       });
-      if (element.uid == data.paidy!) {
+    }
+    // now make a sessions if not exists
+    List<String> sessionIds = await getSessionIdsList();
+
+    for (Split split in data.splits!) {
+      if (split.uid == data.paidy) {
         continue;
       }
-      if (await checkIfSessionExists(data.paidy! + element.uid)) {
-        await sessionsCollection.doc(data.paidy! + element.uid).update({
-          'convoAndTags': FieldValue.arrayUnion([
-            Convo(
-              id: data.id,
-              sender: FirebaseAuth.instance.currentUser!.uid,
-              message: data.title,
-              timestamp: data.timestamp,
-              type: 'split',
-            ).toJson()
-          ]),
+      if (sessionIds.contains("${data.paidy}-${split.uid}")) {
+        await sessionsCollection.doc("${data.paidy}-${split.uid}").update({
+          'splits': FieldValue.arrayUnion([data.id]),
         });
         continue;
       }
-      if (await checkIfSessionExists(element.uid + data.paidy!)) {
-        await sessionsCollection.doc(element.uid + data.paidy!).update({
-          'convoAndTags': FieldValue.arrayUnion([
-            Convo(
-              id: data.id,
-              sender: FirebaseAuth.instance.currentUser!.uid,
-              message: data.title,
-              timestamp: data.timestamp,
-              type: 'split',
-            ).toJson()
-          ]),
+      if (sessionIds.contains("${split.uid}-${data.paidy}")) {
+        await sessionsCollection.doc("${split.uid}-${data.paidy}").update({
+          'splits': FieldValue.arrayUnion([data.id]),
         });
         continue;
       }
       SessionsModel newSession = SessionsModel(
-          id: data.paidy! + element.uid,
-          members: [data.paidy!, element.uid],
+          id: data.paidy! + split.uid,
+          members: [data.paidy!, split.uid],
           timestamp: data.timestamp,
           title: data.title +
               " on " +
@@ -254,7 +250,7 @@ class FireStoreRef {
                 'Friday',
                 'Saturday',
                 'Sunday',
-              ][data.timestamp.day],
+              ][data.timestamp.weekday - 1],
           convoAndTags: [
             Convo(
               id: Uuid().v1(),
@@ -265,23 +261,65 @@ class FireStoreRef {
               type: 'split',
             ),
           ]);
-
-      await userCollection
-          .doc(element.uid)
-          .update({'sessions': FieldValue.arrayUnion([])});
-      await createSessions(newSession);
+      await sessionsCollection
+          .doc("${data.paidy}-${split.uid}")
+          .set(newSession.toJson());
     }
+    // if (!sessionExists) {
+    //   for (Split split in data.splits!) {
+    //     SessionsModel newSession = SessionsModel(
+    //         id: data.paidy! + splits.uid,
+    //         members: [data.paidy!, splits.uid],
+    //         timestamp: data.timestamp,
+    //         title: data.title +
+    //             " on " +
+    //             [
+    //               'Monday',
+    //               'Tuesday',
+    //               'Wednesday',
+    //               'Thursday',
+    //               'Friday',
+    //               'Saturday',
+    //               'Sunday',
+    //             ][data.timestamp.day],
+    //         convoAndTags: [
+    //           Convo(
+    //             id: Uuid().v1(),
+    //             sender: FirebaseAuth.instance.currentUser!.uid,
+    //             message:
+    //                 "${FirebaseAuth.instance.currentUser!.displayName!.split(' ').first} added new split",
+    //             timestamp: data.timestamp,
+    //             type: 'split',
+    //           ),
+    //         ]);
+    //   }
+    // } else {
+    //   for (Split split in data.splits!) {
+    //     await sessionsCollection.doc("${data.paidy}-${split.uid}").update({
+    //       'splits': FieldValue.arrayUnion([data.id]),
+    //     });
+    //   }
+    // }
   }
 
-  static checkIfSessionExists(String id) async {
-    bool present = false;
-    await sessionsCollection.doc(id).get().then((value) {
-      if (value.data() != null) {
-        present = true;
+  static Future<List<String>> getSessionIdsList() async {
+    QuerySnapshot querySnapshot = await sessionsCollection.get();
+    List<String> documentIds = querySnapshot.docs.map((doc) => doc.id).toList();
+    return documentIds;
+  }
+
+  static checkIfSessionExists(String u1id, String u2id) async {
+    List<String> sessionIds = await getUserSessionsList(u1id);
+    bool result = false;
+    for (String id in sessionIds) {
+      log(id);
+      log("${id.contains(u2id)} ${id.contains(u1id)}");
+      if (id.contains(u2id) && id.contains(u1id)) {
+        result = true;
+        break;
       }
-      log(present.toString());
-    });
-    return present;
+    }
+    return result;
   }
 
   static Future<List<String>> getUserSessionsList(String id) async {
@@ -294,8 +332,12 @@ class FireStoreRef {
     return sessions;
   }
 
-  static Stream<Map<String, dynamic>?> getSplitDataById(String id) {
+  static Stream<Map<String, dynamic>?> getSplitDataByIdStream(String id) {
     return splitsCollection.doc(id).snapshots().map((event) => event.data());
+  }
+
+  static Future<Map<String, dynamic>?> getSplitDataById(String id) async {
+    return await splitsCollection.doc(id).get().then((value) => value.data());
   }
 
   static Future<Map<String, dynamic>?> fetchSplitDataById(String id) async {
@@ -325,6 +367,12 @@ class FireStoreRef {
 
   static getSessions(String id) async {
     return await sessionsCollection.doc(id).get().then((value) => value.data());
+  }
+
+  static Stream<List<Map<String, dynamic>>> getSessionsListStream() {
+    return sessionsCollection
+        .snapshots()
+        .map((event) => event.docs.map((e) => e.data()).toList());
   }
 
   static getUserDataAsStreamByUid(String uid) {
