@@ -113,43 +113,51 @@ class _GroupsScreenState extends State<GroupsScreen> {
           ),
           ...List.generate(
             sessionsIdList.length,
-            (index) => Container(
-              margin: const EdgeInsets.only(
-                bottom: 12,
-              ),
-              height: TSizes.displayHeight(context) * 0.12,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircularCachedNetworkimage(
-                      url: sessionsIdList[index].icon,
-                      width: TSizes.displayWidth(context) * 0.2,
+            (index) => GestureDetector(
+              onTap: () {
+                Get.toNamed(
+                  '/group-page',
+                  arguments: sessionsIdList[index],
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.only(
+                  bottom: 12,
+                ),
+                height: TSizes.displayHeight(context) * 0.12,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircularCachedNetworkimage(
+                        url: sessionsIdList[index].icon,
+                        width: TSizes.displayWidth(context) * 0.2,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: TSizes.displayWidth(context) * 0.04,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        sessionsIdList[index].title.capitalizeFirst ?? "",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      Text(
-                        "${THelperFunctions.getDateDifference(sessionsIdList[index].timestamp)}",
-                      ),
-                      // Text("₹ ${snapshot.requireData.}")
-                    ],
-                  ),
-                ],
+                    SizedBox(
+                      width: TSizes.displayWidth(context) * 0.04,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          sessionsIdList[index].title.capitalizeFirst ?? "",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text(
+                          "${THelperFunctions.getDateDifference(sessionsIdList[index].timestamp)}",
+                        ),
+                        // Text("₹ ${snapshot.requireData.}")
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

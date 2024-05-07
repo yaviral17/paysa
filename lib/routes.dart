@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Controllers/UserData.dart';
 import 'package:paysa/Models/GroupModel.dart';
+import 'package:paysa/Models/SessionsModel.dart';
 import 'package:paysa/Views/AddSpending/AddSpending.dart';
 import 'package:paysa/Views/Auth/login.dart';
 import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
@@ -41,10 +42,10 @@ class RouteGenerator {
 
       case '/group-page':
         {
-          Group group = settings.arguments as Group;
+          SessionsModel session = settings.arguments as SessionsModel;
           return MaterialPageRoute(
-              builder: (_) => GroupPage(
-                    group: group,
+              builder: (_) => GroupPageScreen(
+                    session: session,
                   ));
         }
 
