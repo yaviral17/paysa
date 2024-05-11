@@ -517,6 +517,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                   showErrorToast(context, "Please add splits");
                   return;
                 }
+                if (addSpendingController.paidBy.value.name.isEmpty) {
+                  showErrorToast(context, "Please select a payer");
+                  return;
+                }
 
                 if (widget.fromEdit) {
                   return;

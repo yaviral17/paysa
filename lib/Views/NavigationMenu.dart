@@ -67,15 +67,15 @@ class _NavigationMenuState extends State<NavigationMenu> {
         body: PageView(
           controller: pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: [
+          children: const [
             DailySpendingScreen(),
-            const GroupsScreen(),
+            GroupsScreen(),
             // Container(
             //   child: Center(
             //     child: Text('Insight'),
             //   ),
             // ),
-            const ProfileScreen(),
+            ProfileScreen(),
           ],
         ),
       ),

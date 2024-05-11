@@ -14,7 +14,7 @@ import '../constants/colors.dart';
 class TFlexTheme {
   TFlexTheme._();
 
-  static FlexScheme theme = FlexScheme.jungle;
+  static FlexScheme theme = FlexScheme.money;
 
   static ThemeData lightTheme = FlexThemeData.light(
     scheme: theme,

@@ -53,55 +53,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                            NetworkImage(user.user.value!.photoURL!),
-                      ),
-                      SizedBox(width: 20),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            child: SizedBox(
-                              width: TSizes.displayWidth(context) * 0.5,
-                              child: Text(
-                                user.user.value!.displayName!,
-                                // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 2),
-                          Flexible(
-                            child: SizedBox(
-                              width: TSizes.displayWidth(context) * 0.5,
-                              child: Text(
-                                user.user.value!.email!,
-                                // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
-
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                  GestureDetector(
+                    onTap: () {
+                      String encryptedName = THelperFunctions.AESEncription(
+                          user.user.value!.displayName!);
+                      String encryptedEmail = THelperFunctions.AESEncription(
+                          user.user.value!.email!);
+                      // now decrypt the name and email
+                      String decryptedName =
+                          THelperFunctions.AESDecription(encryptedName);
+                      String decryptedEmail =
+                          THelperFunctions.AESDecription(encryptedEmail);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage:
+                              NetworkImage(user.user.value!.photoURL!),
+                        ),
+                        SizedBox(width: 20),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Flexible(
+                              child: SizedBox(
+                                width: TSizes.displayWidth(context) * 0.5,
+                                child: Text(
+                                  user.user.value!.displayName!,
+                                  // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 ),
-                                maxLines: 1,
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    ],
+                            SizedBox(height: 2),
+                            Flexible(
+                              child: SizedBox(
+                                width: TSizes.displayWidth(context) * 0.5,
+                                child: Text(
+                                  user.user.value!.email!,
+                                  // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
+
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

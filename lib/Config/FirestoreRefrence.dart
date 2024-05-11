@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Models/Convo.dart';
 import 'package:paysa/Models/DailySpendingModel.dart';
-import 'package:paysa/Models/DailySpendingSplitModel.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/Models/SessionsModel.dart';
 import 'package:paysa/Models/SplitModel.dart';
@@ -15,11 +14,14 @@ import 'package:uuid/uuid.dart';
 
 class FireStoreRef {
   static String users = 'users';
-  static String groups = 'groups';
-  static String convo = 'convo';
   static String dailySpendings = 'dailySpendings';
   static String sessions = "sessions";
   static String splits = "splits";
+
+  // Deprecated: static String groups = 'groups';
+  // Deprecated: static String convo = 'convo';
+  static String groups = 'groups';
+  static String convo = 'convo';
 
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static CollectionReference<Map<String, dynamic>> get userCollection =>

@@ -7,7 +7,6 @@ import 'package:paysa/Models/DailySpendingModel.dart';
 class SessionsModel {
   String id;
   String title;
-
   List<Convo> convoAndTags;
   String icon;
   DateTime timestamp;

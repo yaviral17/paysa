@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:convert/convert.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -278,11 +282,37 @@ class THelperFunctions {
   }
 
   static AESEncription(String text) {
-    return text;
+    final key = encrypt.Key.fromUtf8(getKey());
+    final iv = encrypt.IV.fromLength(128);
+    final encrypter = encrypt.Encrypter(encrypt.AES(key));
+    final encrypted = encrypter.encrypt(text, iv: iv);
+    final encryptedString = encrypted.base64;
+    log('Encrypted: $encryptedString');
+    return encryptedString;
   }
 
   static AESDecription(String text) {
+    final key = encrypt.Key.fromUtf8(getKey());
+    final iv = encrypt.IV.fromLength(128);
+    final encrypter = encrypt.Encrypter(encrypt.AES(key));
+    final encryptedData = encrypt.Encrypted.fromBase64(text);
+    final decrypted = encrypter.decrypt(encryptedData, iv: iv);
+    log('Decrypted: $decrypted');
+    return decrypted;
+  }
+
+  static String encryptAES(String text, String key) {
     return text;
+  }
+
+  static String testAES(String text) {
+    final key = encrypt.Key.fromUtf8(getKey());
+    final iv = encrypt.IV.fromLength(16);
+    final encrypter = encrypt.Encrypter(encrypt.AES(key));
+    final encrypted = encrypter.encrypt(text, iv: iv);
+    final encryptedString = encrypted.base64;
+    log('Encrypted: $encryptedString');
+    return encryptedString;
   }
 
   // show date time dialog box and return date and time in DateTime format
@@ -312,5 +342,14 @@ class THelperFunctions {
       selectedTime.hour,
       selectedTime.minute,
     );
+  }
+
+  static String getKey() {
+    // random key of 128 bits
+    String key = '';
+    for (var i = 0; i < 128; i++) {
+      key += i.toString();
+    }
+    return key;
   }
 }

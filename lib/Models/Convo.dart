@@ -20,14 +20,15 @@ class Convo {
 
   factory Convo.fromJson(Map<String, dynamic> json) {
     return Convo(
-        id: json['id'],
-        sender: json['sender'],
-        message: json['message'],
-        timestamp: DateTime.parse(json['timestamp']),
-        audio: json['audio'],
-        image: json['image'],
-        type: json['type'],
-        split: json['split']);
+      id: json['id'],
+      sender: json['sender'],
+      message: json['message'],
+      timestamp: DateTime.parse(json['timestamp']),
+      audio: json['audio'],
+      image: json['image'],
+      type: json['type'],
+      split: json['split'],
+    );
   }
 
   Map<String, dynamic> toJson() {

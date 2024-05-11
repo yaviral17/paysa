@@ -152,7 +152,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(
-                          "${THelperFunctions.getDateDifference(sessionsIdList[index].timestamp)}",
+                          THelperFunctions.getDateDifference(
+                              sessionsIdList[index].timestamp),
                         ),
                         // Text("₹ ${snapshot.requireData.}")
                       ],

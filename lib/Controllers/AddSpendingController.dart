@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Models/DailySpendingModel.dart';
-import 'package:paysa/Models/DailySpendingSplitModel.dart';
 import 'package:paysa/Models/SplitModel.dart';
 import 'package:paysa/Models/UserModel.dart';
 import 'package:uuid/uuid.dart';

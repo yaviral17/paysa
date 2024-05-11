@@ -410,7 +410,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                     user.name ?? "No Name",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),

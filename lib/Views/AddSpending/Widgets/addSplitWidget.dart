@@ -74,21 +74,31 @@ class AddSplitWidget extends StatelessWidget {
                           showErrorToast(context, "User already added");
                           return;
                         }
+
+                        Split sp = Split(
+                          uid: FirebaseAuth.instance.currentUser!.uid,
+                          amount: double.parse(
+                                addSpendingController.amountController.text,
+                              ) /
+                              ((addSpendingController.splits.length == 0
+                                      ? 1
+                                      : addSpendingController.splits.length) +
+                                  1),
+                          paid: addSpendingController.paidBy ==
+                                  FirebaseAuth.instance.currentUser!.uid
+                              ? true
+                              : false,
+                        );
                         addSpendingController.splits.add(
-                          Split(
-                            uid: FirebaseAuth.instance.currentUser!.uid,
-                            amount: double.parse(
-                                  addSpendingController.amountController.text,
-                                ) /
-                                ((addSpendingController.splits.length == 0
-                                        ? 1
-                                        : addSpendingController.splits.length) +
-                                    1),
-                            paid: addSpendingController.paidBy ==
-                                    FirebaseAuth.instance.currentUser!.uid
-                                ? true
-                                : false,
-                          ),
+                          sp,
+                        );
+
+                        addSpendingController.paidBy.value = UserModel(
+                          uid: FirebaseAuth.instance.currentUser!.uid,
+                          name: FirebaseAuth.instance.currentUser!.displayName!,
+                          email: FirebaseAuth.instance.currentUser!.email!,
+                          profile: FirebaseAuth.instance.currentUser!.photoURL!,
+                          phone: "",
                         );
                       },
                       child: Text(
