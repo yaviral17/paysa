@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -93,12 +92,23 @@ class AddSplitWidget extends StatelessWidget {
                           sp,
                         );
 
-                        addSpendingController.paidBy.value = UserModel(
-                          uid: FirebaseAuth.instance.currentUser!.uid,
-                          name: FirebaseAuth.instance.currentUser!.displayName!,
-                          email: FirebaseAuth.instance.currentUser!.email!,
-                          profile: FirebaseAuth.instance.currentUser!.photoURL!,
-                          phone: "",
+                        // addSpendingController.paidBy.value = UserModel(
+                        //   uid: FirebaseAuth.instance.currentUser!.uid,
+                        //   name: FirebaseAuth.instance.currentUser!.displayName!,
+                        //   email: FirebaseAuth.instance.currentUser!.email!,
+                        //   profile: FirebaseAuth.instance.currentUser!.photoURL!,
+                        //   phone: "",
+                        // );
+                        addSpendingController.users.add(
+                          UserModel(
+                            uid: FirebaseAuth.instance.currentUser!.uid,
+                            name:
+                                FirebaseAuth.instance.currentUser!.displayName!,
+                            email: FirebaseAuth.instance.currentUser!.email!,
+                            profile:
+                                FirebaseAuth.instance.currentUser!.photoURL!,
+                            phone: "",
+                          ),
                         );
                       },
                       child: Text(
