@@ -55,7 +55,7 @@ class AddSplitWidget extends StatelessWidget {
                     // Add myself
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: TColors.primary.withOpacity(0.4),
+                        backgroundColor: TColors.primary.withOpacity(0.4),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
