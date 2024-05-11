@@ -404,11 +404,16 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  user.name ?? "No Name",
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                SizedBox(
+                  width: TSizes.displayWidth(context) * 0.27,
+                  child: Text(
+                    user.name ?? "No Name",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
                 ),
                 FittedBox(
                   child: Text(
@@ -768,10 +773,12 @@ class BarChartSample1State extends State<BarChartSample1> {
   }
 
   Widget getTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
+    TextStyle style = TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,
-      fontSize: 14,
+      fontSize: TSizes.displayWidth(context) < 500
+          ? TSizes.displayWidth(context) * 0.024
+          : 12,
     );
     Widget text;
     switch (value.toInt()) {
@@ -823,7 +830,7 @@ class BarChartSample1State extends State<BarChartSample1> {
     }
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      space: 16,
+      space: 12,
       child: text,
     );
   }

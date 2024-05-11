@@ -31,15 +31,15 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
                   child: Column(
                     children: [
                       const Text('Members'),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: widget.session.members.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(widget.session.members[index]),
-                          );
-                        },
-                      ),
+                      // ListView.builder(
+                      //   shrinkWrap: true,
+                      //   itemCount: widget.session.members.length,
+                      //   itemBuilder: (context, index) {
+                      //     return ListTile(
+                      //       title: Text(widget.session.members[index]),
+                      //     );
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

@@ -65,9 +65,10 @@ class _GroupsScreenState extends State<GroupsScreen> {
               mySessions = [];
               for (Map<String, dynamic> session in snapshot.requireData) {
                 SessionsModel object = SessionsModel.fromJson(session);
-                if (object.members
-                    .contains(FirebaseAuth.instance.currentUser!.uid)) {
-                  mySessions.add(object);
+                for (var usr in object.users) {
+                  if (usr['id'] == FirebaseAuth.instance.currentUser!.uid) {
+                    mySessions.add(object);
+                  }
                 }
               }
 

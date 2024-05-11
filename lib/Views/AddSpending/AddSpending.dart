@@ -15,6 +15,7 @@ import 'package:paysa/Models/UserModel.dart';
 import 'package:paysa/Views/AddSpending/Widgets/addSplitWidget.dart';
 import 'package:paysa/Views/AddSpending/Widgets/spendingIconWidget.dart';
 import 'package:paysa/Views/DailySpendings/DailySpending.dart';
+import 'package:paysa/Views/NavigationMenu.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 import 'package:paysa/utils/constants/cherryToast.dart';
 import 'package:paysa/utils/constants/colors.dart';
@@ -83,7 +84,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.9),
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
@@ -349,7 +350,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                   );
                 }
                 Get.to(
-                  () => const DailySpendingScreen(),
+                  () => const NavigationMenu(),
                   transition: Transition.cupertinoDialog,
                   popGesture: true,
                 );

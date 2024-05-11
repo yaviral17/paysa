@@ -7,24 +7,25 @@ import 'package:paysa/Models/DailySpendingModel.dart';
 class SessionsModel {
   String id;
   String title;
-  List<String> members;
+
   List<Convo> convoAndTags;
   String icon;
   DateTime timestamp;
+  List users = [];
 
   SessionsModel({
     required this.id,
-    required this.members,
     this.convoAndTags = const [],
     this.icon = "",
     required this.timestamp,
     required this.title,
+    required this.users,
   });
 
   factory SessionsModel.fromJson(Map<String, dynamic> json) {
     return SessionsModel(
       id: json['id'],
-      members: json['members'].cast<String>(),
+      users: json['users'],
       convoAndTags: Convo.fromJsonList(json['convoAndTags']),
       timestamp: DateTime.parse(json['timestamp']),
       title: json['title'],
@@ -34,11 +35,11 @@ class SessionsModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'members': members,
       'convoAndTags': Convo.toJsonList(convoAndTags),
       'icon': icon,
       'timestamp': timestamp.toIso8601String(),
       'title': title,
+      'users': users,
     };
   }
 
@@ -60,6 +61,6 @@ class SessionsModel {
   }
 
   void logData() {
-    log(" id :${id}\n members:${members.toString()}\n convoAndTags:${Convo.toJsonList(convoAndTags).toString()}\n icon: ${icon}\n timestamp: ${timestamp.toIso8601String()}\n title: ${title}");
+    log(" id :${id}\n users:${users.toString()}\n convoAndTags:${Convo.toJsonList(convoAndTags).toString()}\n icon: ${icon}\n timestamp: ${timestamp.toIso8601String()}\n title: ${title}");
   }
 }

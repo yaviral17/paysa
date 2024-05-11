@@ -14,7 +14,7 @@ import '../constants/colors.dart';
 class TFlexTheme {
   TFlexTheme._();
 
-  static FlexScheme theme = FlexScheme.blueM3;
+  static FlexScheme theme = FlexScheme.jungle;
 
   static ThemeData lightTheme = FlexThemeData.light(
     scheme: theme,

@@ -217,6 +217,14 @@ class FireStoreRef {
         'isSplit': true,
       });
     }
+    // storing the split amount of the person who paid the whole split
+    double payedPersonBySplitAmount = 0;
+    for (Split splt in data.splits ?? []) {
+      if (splt.uid == data.paidy!) {
+        payedPersonBySplitAmount = splt.amount;
+      }
+    }
+
     // now make a sessions if not exists
     List<String> sessionIds = await getSessionIdsList();
 
@@ -225,42 +233,101 @@ class FireStoreRef {
         continue;
       }
       if (sessionIds.contains("${data.paidy}-${split.uid}")) {
-        await sessionsCollection.doc("${data.paidy}-${split.uid}").update({
-          'splits': FieldValue.arrayUnion([data.id]),
-        });
+        Map<String, dynamic> fetchSessionJson =
+            await FireStoreRef.getSessionBySessionId(
+                "${data.paidy}-${split.uid}");
+        SessionsModel sessionData = SessionsModel.fromJson(fetchSessionJson);
+        sessionData.convoAndTags.add(Convo(
+          id: data.id,
+          sender: data.paidy!,
+          message: "",
+          timestamp: DateTime.now(),
+          type: 'split',
+        ));
+        if (sessionData.users[0]['id'] == data.paidy) {
+          sessionData.users[0]['amount'] += payedPersonBySplitAmount;
+          sessionData.users[1]['amount'] += split.amount;
+        } else {
+          sessionData.users[1]['amount'] += payedPersonBySplitAmount;
+          sessionData.users[0]['amount'] += split.amount;
+        }
+        await FireStoreRef.updateSessionData(sessionData);
+        // await sessionsCollection.doc("${data.paidy}-${split.uid}").update({
+        //   'convoAndTags': FieldValue.arrayUnion([
+        //     Convo(
+        //       id: data.id,
+        //       sender: FirebaseAuth.instance.currentUser!.uid,
+        //       message:
+        //           "${FirebaseAuth.instance.currentUser!.displayName!.split(' ').first} added new split",
+        //       timestamp: data.timestamp,
+        //       type: 'split',
+        //     ).toJson()
+        //   ]),
+        // });
         continue;
       }
       if (sessionIds.contains("${split.uid}-${data.paidy}")) {
-        await sessionsCollection.doc("${split.uid}-${data.paidy}").update({
-          'splits': FieldValue.arrayUnion([data.id]),
-        });
+        Map<String, dynamic> fetchSessionJson =
+            await FireStoreRef.getSessionBySessionId(
+                "${split.uid}-${data.paidy}");
+        SessionsModel sessionData = SessionsModel.fromJson(fetchSessionJson);
+        sessionData.convoAndTags.add(Convo(
+          id: data.id,
+          sender: data.paidy!,
+          message: "",
+          timestamp: DateTime.now(),
+          type: 'split',
+        ));
+        if (sessionData.users[0]['id'] == data.paidy) {
+          sessionData.users[0]['amount'] += payedPersonBySplitAmount;
+          sessionData.users[1]['amount'] += split.amount;
+        } else {
+          sessionData.users[1]['amount'] += payedPersonBySplitAmount;
+          sessionData.users[0]['amount'] += split.amount;
+        }
+        await FireStoreRef.updateSessionData(sessionData);
         continue;
       }
+
+      List<Map<String, dynamic>> userList = [
+        {
+          'id': data.paidy!,
+          'amount': payedPersonBySplitAmount,
+          'lastPaid': DateTime.now().toIso8601String(),
+        },
+        {
+          'id': split.uid,
+          'amount': split.amount,
+          'lastPaid': DateTime.now().toIso8601String()
+        },
+      ];
+
       SessionsModel newSession = SessionsModel(
-          id: data.paidy! + split.uid,
-          members: [data.paidy!, split.uid],
-          timestamp: data.timestamp,
-          title: data.title +
-              " on " +
-              [
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday',
-                'Sunday',
-              ][data.timestamp.weekday - 1],
-          convoAndTags: [
-            Convo(
-              id: Uuid().v1(),
-              sender: FirebaseAuth.instance.currentUser!.uid,
-              message:
-                  "${FirebaseAuth.instance.currentUser!.displayName!.split(' ').first} added new split",
-              timestamp: data.timestamp,
-              type: 'split',
-            ),
-          ]);
+        id: "${data.paidy}-${split.uid}",
+        timestamp: data.timestamp,
+        users: userList,
+        title: data.title +
+            " on " +
+            [
+              'Monday',
+              'Tuesday',
+              'Wednesday',
+              'Thursday',
+              'Friday',
+              'Saturday',
+              'Sunday',
+            ][data.timestamp.weekday - 1],
+        convoAndTags: [
+          Convo(
+            id: data.id,
+            sender: FirebaseAuth.instance.currentUser!.uid,
+            message:
+                "${FirebaseAuth.instance.currentUser!.displayName!.split(' ').first} added new split",
+            timestamp: data.timestamp,
+            type: 'split',
+          ),
+        ],
+      );
       await sessionsCollection
           .doc("${data.paidy}-${split.uid}")
           .set(newSession.toJson());
@@ -302,6 +369,10 @@ class FireStoreRef {
     // }
   }
 
+  // static Future<void> addNewSplitConvoIntoSession(String sessionid)async{
+  //   await sessions.id
+  // }
+
   static Future<List<String>> getSessionIdsList() async {
     QuerySnapshot querySnapshot = await sessionsCollection.get();
     List<String> documentIds = querySnapshot.docs.map((doc) => doc.id).toList();
@@ -320,6 +391,17 @@ class FireStoreRef {
       }
     }
     return result;
+  }
+
+  static Future<Map<String, dynamic>> getSessionBySessionId(String id) async {
+    return await sessionsCollection
+        .doc(id)
+        .get()
+        .then((value) => value.data() ?? {});
+  }
+
+  static Future<void> updateSessionData(SessionsModel session) async {
+    await sessionsCollection.doc(session.id).update(session.toJson());
   }
 
   static Future<List<String>> getUserSessionsList(String id) async {

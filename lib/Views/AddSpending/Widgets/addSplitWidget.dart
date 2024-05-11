@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,13 +42,61 @@ class AddSplitWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Splits',
-                  style: TextStyle(
-                    color: TColors.textWhite,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    const Text(
+                      'Splits',
+                      style: TextStyle(
+                        color: TColors.textWhite,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    // Add myself
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: TColors.primary.withOpacity(0.4),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        minimumSize: const Size(52, 40),
+                      ),
+                      onPressed: () {
+                        if (addSpendingController
+                            .amountController.text.isEmpty) {
+                          showErrorToast(context, "Please enter amount");
+                          return;
+                        }
+                        if (addSpendingController.splits.any((element) =>
+                            element.uid ==
+                            FirebaseAuth.instance.currentUser!.uid)) {
+                          showErrorToast(context, "User already added");
+                          return;
+                        }
+                        addSpendingController.splits.add(
+                          Split(
+                            uid: FirebaseAuth.instance.currentUser!.uid,
+                            amount: double.parse(
+                                  addSpendingController.amountController.text,
+                                ) /
+                                ((addSpendingController.splits.length == 0
+                                        ? 1
+                                        : addSpendingController.splits.length) +
+                                    1),
+                            paid: addSpendingController.paidBy ==
+                                    FirebaseAuth.instance.currentUser!.uid
+                                ? true
+                                : false,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Add Myself',
+                        style: Theme.of(context).textTheme.button,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
                 ...List.generate(
@@ -348,12 +397,13 @@ class AddSplitWidget extends StatelessWidget {
                                         }
                                       },
                                       child: const Text(
-                                        'Add',
+                                        'Add Member',
                                         style: TextStyle(
                                           color: TColors.textWhite,
                                         ),
                                       ),
                                     ),
+                                    // Add myself
                                   ],
                                 );
                               },

@@ -47,12 +47,12 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
           items: <SalomonBottomBarItem>[
             SalomonBottomBarItem(
-              icon: Icon(Iconsax.chart),
-              title: Text('Groups'),
-            ),
-            SalomonBottomBarItem(
               icon: Icon(Iconsax.chart_1),
               title: Text('Daily Spendings'),
+            ),
+            SalomonBottomBarItem(
+              icon: Icon(Iconsax.chart),
+              title: Text('Groups'),
             ),
             // SalomonBottomBarItem(
             //   icon: Icon(Iconsax.chart_1),
@@ -68,8 +68,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
           controller: pageController,
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            const GroupsScreen(),
             DailySpendingScreen(),
+            const GroupsScreen(),
             // Container(
             //   child: Center(
             //     child: Text('Insight'),
