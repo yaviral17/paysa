@@ -144,18 +144,10 @@ class AddSplitWidget extends StatelessWidget {
                               return;
                             }
 
-                            double splitAmount = double.parse(
-                                    addSpendingController
-                                        .amountController.text) /
-                                (addSpendingController.splits.isEmpty
-                                    ? 1
-                                    : addSpendingController.splits.length + 1);
                             TextEditingController emailController =
                                 TextEditingController();
                             TextEditingController amountController =
-                                TextEditingController(
-                              text: splitAmount.toStringAsFixed(2),
-                            );
+                                TextEditingController(text: 0.toString());
                             RxBool paid = false.obs;
 
                             showDialog(
@@ -239,18 +231,7 @@ class AddSplitWidget extends StatelessWidget {
                                                   RegExp(r'^\d+\.?\d{0,2}'),
                                                 ),
                                               ],
-                                              onChanged: (value) {
-                                                if (double.parse(value) <= 0) {
-                                                  amountController.text = '0';
-                                                  return;
-                                                }
-                                                if (double.parse(value) >
-                                                    splitAmount) {
-                                                  amountController.text =
-                                                      splitAmount
-                                                          .toStringAsFixed(2);
-                                                }
-                                              },
+                                              onChanged: (value) {},
                                               decoration: InputDecoration(
                                                 contentPadding:
                                                     const EdgeInsets.symmetric(
