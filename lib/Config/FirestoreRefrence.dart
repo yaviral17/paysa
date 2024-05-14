@@ -459,8 +459,19 @@ class FireStoreRef {
         .map((event) => event.docs.map((e) => e.data()).toList());
   }
 
+  static Stream<Map<String, dynamic>?> fetchSessionDataByIdStream(String id) {
+    return sessionsCollection.doc(id).snapshots().map((event) => event.data());
+  }
+
   static getUserDataAsStreamByUid(String uid) {
     return userCollection.doc(uid).get().asStream();
+  }
+
+  //a function to post convo model in sessions convoAndTags field in stream
+  static Future<void> postConvoInSession(String sessionId, Convo convo) async {
+    await sessionsCollection.doc(sessionId).update({
+      'convoAndTags': FieldValue.arrayUnion([convo.toJson()])
+    });
   }
 
   // static Stream<List<Map<String, dynamic>>> getDailySpendingListWithSplits(

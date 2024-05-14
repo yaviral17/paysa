@@ -1,15 +1,18 @@
 class Convo {
   String id;
   String sender;
+  String? senderName;
   String message;
   String? audio;
   String? image;
   String? split;
   String type;
+  // chat , audio ,video, split
   DateTime timestamp;
   Convo({
     required this.id,
     required this.sender,
+    this.senderName,
     required this.message,
     required this.timestamp,
     this.audio,
@@ -22,6 +25,7 @@ class Convo {
     return Convo(
       id: json['id'],
       sender: json['sender'],
+      senderName: json['senderName'],
       message: json['message'],
       timestamp: DateTime.parse(json['timestamp']),
       audio: json['audio'],
@@ -35,6 +39,7 @@ class Convo {
     return {
       'id': id,
       'sender': sender,
+      'senderName': senderName,
       'message': message,
       'timestamp': timestamp.toIso8601String(),
       'audio': audio,
