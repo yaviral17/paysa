@@ -1,3 +1,4 @@
+import 'package:cherry_toast/resources/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,22 +28,28 @@ class GroupPageScreen extends StatefulWidget {
   State<GroupPageScreen> createState() => _GroupPageScreenState();
 }
 
-class _GroupPageScreenState extends State<GroupPageScreen> {
-  double barWidth = 0;
+class _GroupPageScreenState extends State<GroupPageScreen>
+    with TickerProviderStateMixin {
   final TextEditingController chatController = TextEditingController();
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
 
-  double _user1Amount = 0.0;
-  double _user2Amount = 0.0;
-  // double _user1Per = 0.0;
-  // double _user2Per = 0.0;
-
+  double _userAmountPercentage = 0;
+  double _userAmount = 0.0;
   double _totalAmount = 0.0;
+
+  RxBool showSendButton = false.obs;
+  RxBool _listning = false.obs;
 
   fetchAmountData(SessionsModel sessn) {
     setState(() {
-      _user1Amount = sessn.users[0]['amount'];
-      _user2Amount = sessn.users[1]['amount'];
-      _totalAmount = _user1Amount + _user2Amount;
+      _totalAmount = sessn.users[0]['amount'] + sessn.users[1]['amount'];
+      if (sessn.users[0]['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+        _userAmount = sessn.users[0]['amount'];
+      } else {
+        _userAmount = sessn.users[1]['amount'];
+      }
+      _userAmountPercentage = _userAmount / _totalAmount;
     });
   }
 
@@ -52,11 +59,18 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        barWidth = 0.7;
+        fetchAmountData(widget.session);
       });
     });
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: true);
 
-    fetchAmountData(widget.session);
+    _colorAnimation = ColorTween(
+      begin: Colors.blue,
+      end: Colors.red,
+    ).animate(_controller);
   }
 
   Stream<SessionsModel> _fetchSession() async* {
@@ -78,150 +92,255 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Obx(
+        () => Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            height: TSizes.displayHeight(context) * 0.08,
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        showSendButton.value = false;
+                      } else {
+                        showSendButton.value = true;
+                      }
+                    },
+                    controller: chatController,
+                    decoration: InputDecoration(
+                      hintText: 'Type a message',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: showSendButton.value,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () {
+                        if (chatController.text.isEmpty) {
+                          showErrorToast(
+                              context, "Please enter a message to send.");
+                          return;
+                        }
+                        Convo _convo = Convo(
+                          id: Uuid().v1(),
+                          sender: FirebaseAuth.instance.currentUser!.uid,
+                          senderName:
+                              FirebaseAuth.instance.currentUser!.displayName,
+                          message: chatController.text,
+                          timestamp: DateTime.now(),
+                          type: "chat",
+                        );
+                        //send message to firestore
+                        FireStoreRef.postConvoInSession(
+                          widget.session.id,
+                          _convo,
+                        );
+
+                        chatController.clear();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: TColors.primary,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Icon(Iconsax.send_2, color: TColors.white),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Mic Button
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: GestureDetector(
+                    onLongPressStart: (details) {
+                      details.globalPosition;
+
+                      _listning.value = true;
+                    },
+                    onLongPressEnd: (details) {
+                      _listning.value = false;
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 100),
+                      curve: Curves.fastOutSlowIn,
+                      padding: const EdgeInsets.all(10),
+                      width: _listning.value ? 50 : 45,
+                      height: _listning.value ? 50 : 45,
+                      decoration: BoxDecoration(
+                        color:
+                            _listning.value ? TColors.error : TColors.primary,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: const Icon(Iconsax.microphone_2,
+                          color: TColors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.symmetric(vertical: 10),
-                // height: TSizes.displayHeight(context) * 0.3,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          icon: Icon(Iconsax.arrow_left_2),
-                        ),
-                        Hero(
-                          tag: 'group_pfp',
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundImage:
-                                AssetImage('assets/images/ic_session.png'),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          widget.session.title.capitalize!,
-                          style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .fontSize!,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+              headerContainer(),
+              // Container(
+              //   margin: EdgeInsets.all(10),
+              //   padding: EdgeInsets.symmetric(vertical: 10),
+              //   // height: TSizes.displayHeight(context) * 0.3,
+              //   width: double.infinity,
+              //   decoration: BoxDecoration(
+              //     color: Theme.of(context).primaryColor.withOpacity(0.2),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: [
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.start,
+              //         children: [
+              //           IconButton(
+              //             onPressed: () {
+              //               Get.back();
+              //             },
+              //             icon: Icon(Iconsax.arrow_left_2),
+              //           ),
+              //           Hero(
+              //             tag: 'group_pfp',
+              //             child: CircleAvatar(
+              //               radius: 20,
+              //               backgroundImage:
+              //                   AssetImage('assets/images/ic_session.png'),
+              //             ),
+              //           ),
+              //           SizedBox(width: 10),
+              //           Text(
+              //             widget.session.title.capitalize!,
+              //             style: TextStyle(
+              //               fontSize: Theme.of(context)
+              //                   .textTheme
+              //                   .titleMedium!
+              //                   .fontSize!,
+              //               fontWeight: FontWeight.bold,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
 
-                    SizedBox(height: 10),
-                    // Text(
-                    //   "Group Description",
-                    //   style: TextStyle(
-                    //     fontSize:
-                    //         Theme.of(context).textTheme.titleMedium!.fontSize!,
-                    //     fontWeight: FontWeight.bold,
-                    //   ),
-                    // ),
-                    SizedBox(height: 10),
+              //       SizedBox(height: 10),
+              //       // Text(
+              //       //   "Group Description",
+              //       //   style: TextStyle(
+              //       //     fontSize:
+              //       //         Theme.of(context).textTheme.titleMedium!.fontSize!,
+              //       //     fontWeight: FontWeight.bold,
+              //       //   ),
+              //       // ),
+              //       SizedBox(height: 10),
 
-                    //split bar
-                    Container(
-                      height: TSizes.displayHeight(context) * 0.08,
-                      width: TSizes.displayWidth(context) * 0.7,
-                      decoration: BoxDecoration(
-                        // color: Color(0xFFd9380b).withOpacity(0.6),
-                        border: Border.all(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .background
-                              .withOpacity(0.2),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          //500rs bar
-                          AnimatedContainer(
-                            height: TSizes.displayHeight(context) * 0.1,
-                            width: TSizes.displayWidth(context) *
-                                (_user1Amount / _totalAmount),
-                            duration: const Duration(seconds: 1),
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            curve: Curves.fastOutSlowIn,
-                            child: Text(
-                              //get split data from the given session id
-                              "₹${_user1Amount}",
+              //       //split bar
+              //       Container(
+              //         height: TSizes.displayHeight(context) * 0.08,
+              //         width: TSizes.displayWidth(context) * 0.7,
+              //         decoration: BoxDecoration(
+              //           // color: Color(0xFFd9380b).withOpacity(0.6),
+              //           border: Border.all(
+              //             color: Theme.of(context)
+              //                 .colorScheme
+              //                 .background
+              //                 .withOpacity(0.2),
+              //             width: 2,
+              //           ),
+              //           borderRadius: BorderRadius.circular(12),
+              //         ),
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             //500rs bar
+              //             AnimatedContainer(
+              //               height: TSizes.displayHeight(context) * 0.1,
+              //               width: TSizes.displayWidth(context) *
+              //                   (_user1Amount / _totalAmount),
+              //               duration: const Duration(seconds: 1),
+              //               alignment: Alignment.center,
+              //               padding: EdgeInsets.all(10),
+              //               decoration: BoxDecoration(
+              //                 color: Theme.of(context)
+              //                     .colorScheme
+              //                     .primary
+              //                     .withOpacity(0.5),
+              //                 borderRadius: BorderRadius.circular(12),
+              //               ),
+              //               curve: Curves.fastOutSlowIn,
+              //               child: Text(
+              //                 //get split data from the given session id
+              //                 "₹${_user1Amount}",
 
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+              //                 style: TextStyle(
+              //                   fontSize: 30,
+              //                   fontWeight: FontWeight.bold,
+              //                 ),
+              //               ),
+              //             ),
 
-                          //50 rs bar
-                          Expanded(
-                            child: AnimatedContainer(
-                              height: TSizes.displayHeight(context) * 0.1,
-                              // width: TSizes.displayWidth(context) * 0.7,
-                              duration: const Duration(seconds: 1),
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color:
-                                    // Theme.of(context).primaryColor.withOpacity(0.9),
-                                    Color(0xFFd9380b).withOpacity(0.7),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              curve: Curves.fastOutSlowIn,
-                              child: Text(
-                                "₹${_user2Amount}",
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'You owe ₹${_user1Amount} to User',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              //             //50 rs bar
+              //             Expanded(
+              //               child: AnimatedContainer(
+              //                 height: TSizes.displayHeight(context) * 0.1,
+              //                 // width: TSizes.displayWidth(context) * 0.7,
+              //                 duration: const Duration(seconds: 1),
+              //                 alignment: Alignment.center,
+              //                 padding: EdgeInsets.all(10),
+              //                 decoration: BoxDecoration(
+              //                   color:
+              //                       // Theme.of(context).primaryColor.withOpacity(0.9),
+              //                       Color(0xFFd9380b).withOpacity(0.7),
+              //                   borderRadius: BorderRadius.circular(12),
+              //                 ),
+              //                 curve: Curves.fastOutSlowIn,
+              //                 child: Text(
+              //                   "₹${_user2Amount}",
+              //                   style: TextStyle(
+              //                     fontSize: 30,
+              //                     fontWeight: FontWeight.bold,
+              //                   ),
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //       SizedBox(height: 10),
+              //       Text(
+              //         'You owe ₹${_user1Amount} to User',
+              //         style: TextStyle(
+              //           color: Colors.white.withOpacity(0.8),
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // ),
+
               // Divider(
               //   height: 0.1,
               //   thickness: 3,
@@ -464,6 +583,179 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
     );
   }
 
+  Widget headerContainer() {
+    return Container(
+      margin: const EdgeInsets.all(TSizes.defaultSpace),
+      padding: const EdgeInsets.all(TSizes.defaultSpace),
+      width: TSizes.displayWidth(context),
+      decoration: BoxDecoration(
+        color: Color(0xff00430F),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: TSizes.displayHeight(context) * (8 / 932),
+          ),
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: Icon(Iconsax.arrow_left),
+              ),
+              SizedBox(width: TSizes.displayWidth(context) * 0.002),
+              Hero(
+                tag: 'group_pfp',
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage('assets/images/ic_session.png'),
+                ),
+              ),
+              SizedBox(width: TSizes.displayWidth(context) * 0.04),
+              Text(
+                widget.session.title.capitalize!,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.titleMedium!.fontSize!,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: TSizes.displayHeight(context) * (24 / 932),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 24.0, right: 36.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Split Amount : ",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: TColors.white.withOpacity(0.6),
+                      ),
+                ),
+                Text(
+                  "₹ ${_userAmount.toString()}",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: TColors.white,
+                        fontSize: 18,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: TSizes.displayHeight(context) * (14 / 932),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 24.0, right: 36.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total Spending with this person : ",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: TColors.white.withOpacity(0.6),
+                      ),
+                ),
+                Text(
+                  "₹ ${_totalAmount.toString()}",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: TColors.white,
+                        fontSize: 18,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: TSizes.displayHeight(context) * (18 / 932),
+          ),
+          Center(
+            child: Text(
+              'You owe ₹${_userAmount} to User',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: TSizes.displayHeight(context) * (18 / 932),
+          ),
+          Divider(
+            height: 0.1,
+            thickness: 3,
+            indent: 20,
+            endIndent: 20,
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+          ),
+          SizedBox(
+            height: TSizes.displayHeight(context) * (18 / 932),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(
+              horizontal: 12,
+            ),
+            height: TSizes.displayHeight(context) * 0.06,
+            width: TSizes.displayWidth(context),
+            decoration: BoxDecoration(
+              // color: Color(0xFFd9380b).withOpacity(0.6),
+              color: const Color(0xff111111),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Stack(
+                children: [
+                  LinearProgressIndicator(
+                    minHeight: TSizes.displayHeight(context) * 0.058,
+                    value: _userAmountPercentage,
+                    backgroundColor: Colors.transparent,
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Color(0xff00430F)),
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '₹ ${_userAmount.toString()} / ',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'OpenSans',
+                          ),
+                        ),
+                        Text(
+                          '₹ ${_totalAmount.toString()}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w300,
+                            fontFamily: 'OpenSans',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   spendingInfoTile(DailySpendingModel dailySpending) {
     return Container(
       width: TSizes.displayWidth(context),
@@ -542,7 +834,6 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 10),
         ...List.generate(_splitData.splits!.length, (index) {
           return FutureBuilder(
             future: FireStoreRef.getuserByUid(_splitData.splits![index].uid),
@@ -575,7 +866,7 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
       UserModel user, DailySpendingModel dailySpending, int index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-      child: Ink(
+      child: Container(
         // height: TSizes.displayWidth(context) * 0.1,
         padding: const EdgeInsets.all(4),
         width: TSizes.displayWidth(context) * 0.4,
