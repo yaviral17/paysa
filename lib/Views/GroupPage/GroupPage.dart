@@ -2,6 +2,7 @@ import 'package:cherry_toast/resources/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Models/Convo.dart';
@@ -89,114 +90,25 @@ class _GroupPageScreenState extends State<GroupPageScreen>
     return amount / _totalAmount * 100;
   }
 
+  void _scrollToEnd() async {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollControllerOuter = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Obx(
-        () => Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: Container(
-            height: TSizes.displayHeight(context) * 0.08,
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    onChanged: (value) {
-                      if (value.isEmpty) {
-                        showSendButton.value = false;
-                      } else {
-                        showSendButton.value = true;
-                      }
-                    },
-                    controller: chatController,
-                    decoration: InputDecoration(
-                      hintText: 'Type a message',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: showSendButton.value,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: () {
-                        if (chatController.text.isEmpty) {
-                          showErrorToast(
-                              context, "Please enter a message to send.");
-                          return;
-                        }
-                        Convo _convo = Convo(
-                          id: Uuid().v1(),
-                          sender: FirebaseAuth.instance.currentUser!.uid,
-                          senderName:
-                              FirebaseAuth.instance.currentUser!.displayName,
-                          message: chatController.text,
-                          timestamp: DateTime.now(),
-                          type: "chat",
-                        );
-                        //send message to firestore
-                        FireStoreRef.postConvoInSession(
-                          widget.session.id,
-                          _convo,
-                        );
-
-                        chatController.clear();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: TColors.primary,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        child: Icon(Iconsax.send_2, color: TColors.white),
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Mic Button
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: GestureDetector(
-                    onLongPressStart: (details) {
-                      details.globalPosition;
-
-                      _listning.value = true;
-                    },
-                    onLongPressEnd: (details) {
-                      _listning.value = false;
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.fastOutSlowIn,
-                      padding: const EdgeInsets.all(10),
-                      width: _listning.value ? 50 : 45,
-                      height: _listning.value ? 50 : 45,
-                      decoration: BoxDecoration(
-                        color:
-                            _listning.value ? TColors.error : TColors.primary,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: const Icon(Iconsax.microphone_2,
-                          color: TColors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar: bottomChatWidget(context),
 
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -384,6 +296,8 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: SingleChildScrollView(
+                        controller: _scrollController,
+                        physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         child: Column(
                           children: [
@@ -475,6 +389,10 @@ class _GroupPageScreenState extends State<GroupPageScreen>
 
                                 return Container();
                               },
+                            ),
+
+                            SizedBox(
+                              height: TSizes.displayHeight(context) * 0.1,
                             ),
                           ],
                         ),
@@ -580,6 +498,109 @@ class _GroupPageScreenState extends State<GroupPageScreen>
       //     ],
       //   ),
       // ),
+    );
+  }
+
+  Obx bottomChatWidget(BuildContext context) {
+    return Obx(
+      () => Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: Container(
+          height: TSizes.displayHeight(context) * 0.08,
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                      showSendButton.value = false;
+                    } else {
+                      showSendButton.value = true;
+                    }
+                  },
+                  controller: chatController,
+                  decoration: InputDecoration(
+                    hintText: 'Type a message',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: showSendButton.value,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: () {
+                      if (chatController.text.isEmpty) {
+                        showErrorToast(
+                            context, "Please enter a message to send.");
+                        return;
+                      }
+                      Convo _convo = Convo(
+                        id: Uuid().v1(),
+                        sender: FirebaseAuth.instance.currentUser!.uid,
+                        senderName:
+                            FirebaseAuth.instance.currentUser!.displayName,
+                        message: chatController.text,
+                        timestamp: DateTime.now(),
+                        type: "chat",
+                      );
+                      //send message to firestore
+                      FireStoreRef.postConvoInSession(
+                        widget.session.id,
+                        _convo,
+                      );
+                      _scrollToEnd();
+                      chatController.clear();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: TColors.primary,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Icon(Iconsax.send_2, color: TColors.white),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Mic Button
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: GestureDetector(
+                  onLongPressStart: (details) {
+                    details.globalPosition;
+
+                    _listning.value = true;
+                  },
+                  onLongPressEnd: (details) {
+                    _listning.value = false;
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 100),
+                    curve: Curves.fastOutSlowIn,
+                    padding: const EdgeInsets.all(10),
+                    width: _listning.value ? 50 : 45,
+                    height: _listning.value ? 50 : 45,
+                    decoration: BoxDecoration(
+                      color: _listning.value ? TColors.error : TColors.primary,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child:
+                        const Icon(Iconsax.microphone_2, color: TColors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
