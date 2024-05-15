@@ -1,24 +1,19 @@
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Models/Convo.dart';
 import 'package:paysa/Models/DailySpendingModel.dart';
 import 'package:paysa/Models/SessionsModel.dart';
-import 'package:paysa/Models/SplitModel.dart';
 import 'package:paysa/Models/UserModel.dart';
 import 'package:paysa/Views/Chats/ChatBubble.dart';
-import 'package:paysa/utils/constants/cherryToast.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../utils/constants/cherryToast.dart';
 
 class GroupPageScreen extends StatefulWidget {
   const GroupPageScreen({
@@ -85,6 +80,7 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -132,19 +128,20 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
                     ),
 
                     SizedBox(height: 10),
-                    Text(
-                      "Group Description",
-                      style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.titleMedium!.fontSize!,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    // Text(
+                    //   "Group Description",
+                    //   style: TextStyle(
+                    //     fontSize:
+                    //         Theme.of(context).textTheme.titleMedium!.fontSize!,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
                     SizedBox(height: 10),
 
                     //split bar
                     Container(
-                      width: TSizes.displayWidth(context) * 0.9,
+                      height: TSizes.displayHeight(context) * 0.08,
+                      width: TSizes.displayWidth(context) * 0.7,
                       decoration: BoxDecoration(
                         // color: Color(0xFFd9380b).withOpacity(0.6),
                         border: Border.all(
@@ -225,190 +222,245 @@ class _GroupPageScreenState extends State<GroupPageScreen> {
                   ],
                 ),
               ),
-              Divider(
-                height: 0.1,
-                thickness: 3,
-                indent: 20,
-                endIndent: 20,
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-              ),
+              // Divider(
+              //   height: 0.1,
+              //   thickness: 3,
+              //   indent: 20,
+              //   endIndent: 20,
+              //   color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
+              // Text(
+              //   " Your Chat ",
+              //   style: TextStyle(
+              //     fontSize: 20,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              // Chat Container and column
               SizedBox(
-                height: 10,
-              ),
-              Text(
-                " Your Chat ",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                height: TSizes.displayHeight(context) * 0.6,
+                child: StreamBuilder(
+                  stream: _fetchSession(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    }
+
+                    SessionsModel latestSessionData =
+                        snapshot.data as SessionsModel;
+
+                    List<Convo> _convoList = latestSessionData.convoAndTags;
+                    _convoList
+                        .sort((a, b) => a.timestamp.compareTo(b.timestamp));
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          children: [
+                            // make chatlist here
+
+                            ...List.generate(
+                              _convoList.length,
+                              (index) {
+                                Convo _chats = _convoList[index];
+
+                                if (_chats.type == "chat") {
+                                  return ChatBubble(
+                                    isYou: _chats.sender ==
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    message: _chats.message,
+                                    senderName: _chats.sender ==
+                                            FirebaseAuth
+                                                .instance.currentUser!.uid
+                                        ? 'You'
+                                        : _chats.senderName ?? "User",
+                                    timestamp: _chats.timestamp,
+                                  );
+                                }
+                                if (_chats.type == "audio") {
+                                  return Container();
+                                }
+
+                                if (_chats.type == "image") {
+                                  return Container();
+                                }
+
+                                if (_chats.type == "split") {
+                                  return FutureBuilder(
+                                      future: _fetchSplit(_chats.id),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+
+                                        if (snapshot.hasError) {
+                                          return Center(
+                                            child: Text(
+                                                'Error: ${snapshot.error}'),
+                                          );
+                                        }
+
+                                        DailySpendingModel _splitData =
+                                            snapshot.data as DailySpendingModel;
+
+                                        return spendingInfoTile(_splitData);
+                                      });
+
+                                  // return Container(
+                                  //   margin: EdgeInsets.symmetric(vertical: 4),
+                                  //   padding: EdgeInsets.all(8),
+                                  //   decoration: BoxDecoration(
+                                  //     color: TColors.primary,
+                                  //     borderRadius: BorderRadius.only(
+                                  //       topLeft: Radius.circular(12),
+                                  //       topRight: Radius.circular(12),
+                                  //       bottomLeft: Radius.circular(12),
+                                  //       bottomRight: Radius.circular(12),
+                                  //     ),
+                                  //   ),
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Text(
+                                  //         'Split',
+                                  //         style: TextStyle(
+                                  //           fontSize: 12,
+                                  //           color: TColors.white.withOpacity(0.6),
+                                  //           fontWeight: FontWeight.bold,
+                                  //         ),
+                                  //       ),
+                                  //       Text(
+                                  //         _chats.split.toString(),
+                                  //         style: TextStyle(
+                                  //           color: Colors.white,
+                                  //           fontSize: 16,
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // );
+                                }
+
+                                return Container();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
-              // Chat Container and column
-              StreamBuilder(
-                stream: _fetchSession(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
-                  }
-
-                  SessionsModel latestSessionData =
-                      snapshot.data as SessionsModel;
-
-                  List<Convo> _convoList = latestSessionData.convoAndTags;
-                  _convoList.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        // make chatlist here
-
-                        ...List.generate(
-                          _convoList.length,
-                          (index) {
-                            Convo _chats = _convoList[index];
-
-                            if (_chats.type == "chat") {
-                              return ChatBubble(
-                                isYou: _chats.sender ==
-                                    FirebaseAuth.instance.currentUser!.uid,
-                                message: _chats.message,
-                                senderName: _chats.sender ==
-                                        FirebaseAuth.instance.currentUser!.uid
-                                    ? 'You'
-                                    : _chats.senderName ?? "User",
-                                timestamp: _chats.timestamp,
-                              );
-                            }
-                            if (_chats.type == "audio") {
-                              return Container();
-                            }
-
-                            if (_chats.type == "image") {
-                              return Container();
-                            }
-
-                            if (_chats.type == "split") {
-                              return FutureBuilder(
-                                  future: _fetchSplit(_chats.id),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-
-                                    if (snapshot.hasError) {
-                                      return Center(
-                                        child: Text('Error: ${snapshot.error}'),
-                                      );
-                                    }
-
-                                    DailySpendingModel _splitData =
-                                        snapshot.data as DailySpendingModel;
-
-                                    return spendingInfoTile(_splitData);
-                                  });
-
-                              // return Container(
-                              //   margin: EdgeInsets.symmetric(vertical: 4),
-                              //   padding: EdgeInsets.all(8),
-                              //   decoration: BoxDecoration(
-                              //     color: TColors.primary,
-                              //     borderRadius: BorderRadius.only(
-                              //       topLeft: Radius.circular(12),
-                              //       topRight: Radius.circular(12),
-                              //       bottomLeft: Radius.circular(12),
-                              //       bottomRight: Radius.circular(12),
-                              //     ),
-                              //   ),
-                              //   child: Row(
-                              //     children: [
-                              //       Text(
-                              //         'Split',
-                              //         style: TextStyle(
-                              //           fontSize: 12,
-                              //           color: TColors.white.withOpacity(0.6),
-                              //           fontWeight: FontWeight.bold,
-                              //         ),
-                              //       ),
-                              //       Text(
-                              //         _chats.split.toString(),
-                              //         style: TextStyle(
-                              //           color: Colors.white,
-                              //           fontSize: 16,
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // );
-                            }
-
-                            return Container();
-                          },
+              Container(
+                height: TSizes.displayHeight(context) * 0.1,
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: chatController,
+                        decoration: InputDecoration(
+                          hintText: 'Type a message',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                      ],
+                      ),
                     ),
-                  );
-                },
+                    IconButton(
+                      onPressed: () {
+                        if (chatController.text.isEmpty) {
+                          showErrorToast(
+                              context, "Please enter a message to send.");
+                          return;
+                        }
+                        Convo _convo = Convo(
+                          id: Uuid().v1(),
+                          sender: FirebaseAuth.instance.currentUser!.uid,
+                          senderName:
+                              FirebaseAuth.instance.currentUser!.displayName,
+                          message: chatController.text,
+                          timestamp: DateTime.now(),
+                          type: "chat",
+                        );
+                        //send message to firestore
+                        FireStoreRef.postConvoInSession(
+                          widget.session.id,
+                          _convo,
+                        );
+
+                        chatController.clear();
+                      },
+                      icon: Icon(Iconsax.send_2),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 80),
             ],
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton:
-          //add a bottom text field for chatting with group members
-          Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: chatController,
-                decoration: InputDecoration(
-                  hintText: 'Type a message',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                if (chatController.text.isEmpty) {
-                  showErrorToast(context, "Please enter a message to send.");
-                  return;
-                }
-                Convo _convo = Convo(
-                  id: Uuid().v1(),
-                  sender: FirebaseAuth.instance.currentUser!.uid,
-                  senderName: FirebaseAuth.instance.currentUser!.displayName,
-                  message: chatController.text,
-                  timestamp: DateTime.now(),
-                  type: "chat",
-                );
-                //send message to firestore
-                FireStoreRef.postConvoInSession(
-                  widget.session.id,
-                  _convo,
-                );
 
-                chatController.clear();
-              },
-              icon: Icon(Iconsax.send_2),
-            ),
-          ],
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton:
+      //     //add a bottom text field for chatting with group members
+      //     Container(
+      //   margin: EdgeInsets.symmetric(horizontal: 10),
+      //   padding: EdgeInsets.symmetric(horizontal: 10),
+      //   child: Row(
+      //     children: [
+      //       Expanded(
+      //         child: TextField(
+      //           controller: chatController,
+      //           decoration: InputDecoration(
+      //             hintText: 'Type a message',
+      //             border: OutlineInputBorder(
+      //               borderRadius: BorderRadius.circular(12),
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //       IconButton(
+      //         onPressed: () {
+      //           if (chatController.text.isEmpty) {
+      //             showErrorToast(context, "Please enter a message to send.");
+      //             return;
+      //           }
+      //           Convo _convo = Convo(
+      //             id: Uuid().v1(),
+      //             sender: FirebaseAuth.instance.currentUser!.uid,
+      //             senderName: FirebaseAuth.instance.currentUser!.displayName,
+      //             message: chatController.text,
+      //             timestamp: DateTime.now(),
+      //             type: "chat",
+      //           );
+      //           //send message to firestore
+      //           FireStoreRef.postConvoInSession(
+      //             widget.session.id,
+      //             _convo,
+      //           );
+
+      //           chatController.clear();
+      //         },
+      //         icon: Icon(Iconsax.send_2),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 
