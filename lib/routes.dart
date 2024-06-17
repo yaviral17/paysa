@@ -17,15 +17,14 @@ import 'package:paysa/utils/appbar/appbar.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    UserData userData = Get.find();
     switch (settings.name) {
       case '/':
         {
-          if (userData.user.value == null) {
-            return MaterialPageRoute(builder: (_) => const OnboardingScreen());
-          } else {
-            return MaterialPageRoute(builder: (_) => const NavigationMenu());
-          }
+          return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+        }
+      case '/dashboard':
+        {
+          return MaterialPageRoute(builder: (_) => const NavigationMenu());
         }
       case '/profile':
         {

@@ -43,6 +43,6 @@ class LoginController extends GetxController {
     }
 
     isLoading.value = false;
-    Get.toNamed('/');
+    Get.toNamed('/dashboard');
   }
 }
