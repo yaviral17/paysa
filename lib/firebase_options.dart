@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -63,6 +54,40 @@ class DefaultFirebaseOptions {
     messagingSenderId: '224319668718',
     projectId: 'paysa-27149',
     storageBucket: 'paysa-27149.appspot.com',
+    androidClientId: '224319668718-0v2eo6jrnr9hsh5k3h6mhvb68q2iv3nl.apps.googleusercontent.com',
+    iosClientId: '224319668718-tbp9ikeo642ejn0fg0kh3dm2d5bj4563.apps.googleusercontent.com',
     iosBundleId: 'com.example.paysa',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDnzsQX8VbrqPLNOSlWSoUixCDtyrXyqbM',
+    appId: '1:224319668718:web:fd5577c3ba675cb3454eff',
+    messagingSenderId: '224319668718',
+    projectId: 'paysa-27149',
+    authDomain: 'paysa-27149.firebaseapp.com',
+    storageBucket: 'paysa-27149.appspot.com',
+    measurementId: 'G-502SLXH4RX',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCX31QLbuNEeBYHw7egBDUsnd7m2KsBZk0',
+    appId: '1:224319668718:ios:e8c19f6a12f75dfc454eff',
+    messagingSenderId: '224319668718',
+    projectId: 'paysa-27149',
+    storageBucket: 'paysa-27149.appspot.com',
+    androidClientId: '224319668718-0v2eo6jrnr9hsh5k3h6mhvb68q2iv3nl.apps.googleusercontent.com',
+    iosClientId: '224319668718-tbp9ikeo642ejn0fg0kh3dm2d5bj4563.apps.googleusercontent.com',
+    iosBundleId: 'com.example.paysa',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDnzsQX8VbrqPLNOSlWSoUixCDtyrXyqbM',
+    appId: '1:224319668718:web:6dda381be44101d5454eff',
+    messagingSenderId: '224319668718',
+    projectId: 'paysa-27149',
+    authDomain: 'paysa-27149.firebaseapp.com',
+    storageBucket: 'paysa-27149.appspot.com',
+    measurementId: 'G-MFQG57BGYM',
+  );
+
 }
