@@ -2,15 +2,12 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 import 'package:paysa/Models/Convo.dart';
 import 'package:paysa/Models/DailySpendingModel.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/Models/SessionsModel.dart';
 import 'package:paysa/Models/SplitModel.dart';
 import 'package:paysa/Models/UserModel.dart';
-import 'package:paysa/utils/constants/cherryToast.dart';
-import 'package:uuid/uuid.dart';
 
 class FireStoreRef {
   static String users = 'users';
