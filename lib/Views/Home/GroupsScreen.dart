@@ -4,17 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Controllers/GroupScreenController.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/Models/SessionsModel.dart';
 import 'package:paysa/Models/UserModel.dart';
-import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
-import 'package:paysa/utils/helpers/helper_functions.dart';
-import 'package:pull_down_button/pull_down_button.dart';
+
+import '../../utils/helpers/helper_functions.dart';
 
 class GroupsScreen extends StatefulWidget {
   const GroupsScreen({super.key});
@@ -26,6 +24,8 @@ class GroupsScreen extends StatefulWidget {
 class _GroupsScreenState extends State<GroupsScreen> {
   GroupController groupController = Get.put(GroupController());
   List<SessionsModel> mySessions = [];
+  List<String> splitUsersId = [];
+  // late UserModel splitUser;
 
   Future<List<Group>> getGroups() async {
     List<Group>? groups = await FireStoreRef.getUserGroupList();
@@ -34,6 +34,11 @@ class _GroupsScreenState extends State<GroupsScreen> {
       return [];
     }
     return groups;
+  }
+
+  Future<UserModel> getSplitUsers(String id) async {
+    UserModel splitUser = await UserModel.getUserbodelById(id);
+    return splitUser;
   }
 
   Future<SessionsModel> fetchSession(String id) async {
@@ -68,6 +73,12 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 for (var usr in object.users) {
                   if (usr['id'] == FirebaseAuth.instance.currentUser!.uid) {
                     mySessions.add(object);
+                    if (object.users[1]['id'] ==
+                        FirebaseAuth.instance.currentUser!.uid) {
+                      splitUsersId.add(object.users[0]['id']);
+                    } else {
+                      splitUsersId.add(object.users[1]['id']);
+                    }
                   }
                 }
               }
@@ -116,122 +127,144 @@ class _GroupsScreenState extends State<GroupsScreen> {
             sessionsIdList.length,
             (index) => Column(
               children: [
-                //Group creation Date
-
-                Divider(
-                  height: 0,
-                  thickness: 1,
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                ),
                 SizedBox(
                   height: TSizes.displayHeight(context) * 0.02,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed(
-                        '/group-page',
-                        arguments: sessionsIdList[index],
-                      );
-                    },
-                    child: Dismissible(
-                      key: UniqueKey(),
-                      direction: DismissDirection.startToEnd,
-                      confirmDismiss: (direction) {
-                        if (direction == DismissDirection.startToEnd) {
-                          return deleteGroup();
-                        }
-                        return Future.value(true);
-                      },
-                      //dismissible background
-                      background: Container(
-                        height: TSizes.displayHeight(context) * 0.11,
-                        margin: const EdgeInsets.only(
-                          bottom: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                        padding: const EdgeInsets.only(left: 22),
-                        alignment: Alignment.centerLeft,
-                        child: Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                        ),
-                      ),
+                FutureBuilder(
+                    future: getSplitUsers(splitUsersId[index]),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
 
-                      //main container for each group
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                          bottom: 12,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
                         ),
-                        height: TSizes.displayHeight(context) * 0.11,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12.0),
-                              child: Hero(
-                                tag: 'group_pfp',
-                                child: CircularCachedNetworkimage(
-                                  url: sessionsIdList[index].icon,
-                                  width: TSizes.displayWidth(context) * 0.15,
-                                ),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              '/group-page',
+                              arguments: sessionsIdList[index],
+                            );
+                          },
+                          child: Dismissible(
+                            key: UniqueKey(),
+                            direction: DismissDirection.startToEnd,
+                            confirmDismiss: (direction) {
+                              if (direction == DismissDirection.startToEnd) {
+                                return deleteGroup();
+                              }
+                              return Future.value(true);
+                            },
+                            //dismissible background
+                            background: Container(
+                              height: TSizes.displayHeight(context) * 0.11,
+                              margin: const EdgeInsets.only(
+                                bottom: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                              padding: const EdgeInsets.only(left: 22),
+                              alignment: Alignment.centerLeft,
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.white,
                               ),
                             ),
-                            SizedBox(
-                              width: TSizes.displayWidth(context) * 0.04,
+
+                            //main container for each group
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                bottom: 12,
+                              ),
+                              height: TSizes.displayHeight(context) * 0.07,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Hero(
+                                          tag: 'group_pfp',
+                                          child: CircularCachedNetworkimage(
+                                            url: snapshot.requireData.profile,
+                                            width:
+                                                TSizes.displayWidth(context) *
+                                                    0.12,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            TSizes.displayWidth(context) * 0.02,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            // sessionsIdList[index].title.capitalizeFirst ?? "",
+                                            snapshot.requireData.name,
+
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                          ),
+                                          SizedBox(
+                                            height:
+                                                TSizes.displayHeight(context) *
+                                                    0.014,
+                                          ),
+                                          Text("Tap to see more",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .copyWith(
+                                                      color: Colors.grey)),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                      "${THelperFunctions.formateDateTime(sessionsIdList[index].timestamp, "dd/MM/yyyy")}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                            color: Colors.grey,
+                                          )),
+
+                                  //add cupertino menu for share,delete and edit groups here
+                                ],
+                              ),
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  // sessionsIdList[index].title.capitalizeFirst ?? "",
-                                  sessionsIdList[index].title,
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                Text(
-                                  "${sessionsIdList[index].users.length} Members",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                Text(
-                                  "${THelperFunctions.getDateDifference(sessionsIdList[index].timestamp)}",
-                                ),
-                                // Text("₹ ${snapshot.requireData.}")
-                              ],
-                            ),
-                            Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Iconsax.menu_14),
-                            ),
-                            //add cupertino menu for share,delete and edit groups here
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ),
+                      );
+                    }),
               ],
             ),
           ),
-          Text(
-            "HELLO ",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          // Text(
+          //   "HELLO ",
+          //   style: Theme.of(context).textTheme.bodyLarge,
+          // ),
         ],
       ),
     );
