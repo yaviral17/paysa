@@ -1,16 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:paysa/Config/FirestoreRefrence.dart';
-import 'package:paysa/Controllers/DailySpendingsController.dart';
-import 'package:paysa/Models/DailySpendingModel.dart';
 import 'package:paysa/Views/DailySpendings/DailySpending.dart';
 import 'package:paysa/Views/Home/GroupsScreen.dart';
 import 'package:paysa/Views/Profile/profile.dart';
-import 'package:paysa/utils/constants/colors.dart';
-import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class NavigationMenu extends StatefulWidget {
@@ -52,7 +44,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
             ),
             SalomonBottomBarItem(
               icon: Icon(Iconsax.chart),
-              title: Text('Groups'),
+              title: Text('Friends'),
             ),
             // SalomonBottomBarItem(
             //   icon: Icon(Iconsax.chart_1),
@@ -70,6 +62,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
           children: const [
             DailySpendingScreen(),
             GroupsScreen(),
+
             // Container(
             //   child: Center(
             //     child: Text('Insight'),
