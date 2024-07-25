@@ -1,9 +1,9 @@
 import 'dart:developer';
-import 'dart:math' as math;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
@@ -11,10 +11,10 @@ import 'package:paysa/Models/DailySpendingModel.dart';
 import 'package:paysa/Models/SplitModel.dart';
 import 'package:paysa/Models/UserModel.dart';
 import 'package:paysa/Views/AddSpending/AddSpending.dart';
+import 'package:paysa/Views/AddSpending/AddSplit.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
-import 'package:shimmer/shimmer.dart';
 
 class DailySpendingScreen extends StatefulWidget {
   const DailySpendingScreen({super.key});
@@ -130,10 +130,37 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.small(
-        onPressed: () => Get.to(() => AddDailySpendingScreen(fromEdit: false),
-            transition: Transition.rightToLeftWithFade),
-        child: const Icon(Icons.add),
+      // floatingActionButton: FloatingActionButton.small(
+      //   onPressed: () => Get.to(() => AddDailySpendingScreen(fromEdit: false),
+      //       transition: Transition.rightToLeftWithFade),
+      //   child: const Icon(Icons.add),
+      // ),
+      floatingActionButton: SpeedDial(
+        animationDuration: const Duration(seconds: 1),
+        // icon: Icons.add,
+
+        animatedIcon: AnimatedIcons.event_add,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        // backgroundColor: TColors.primary,
+        visible: true,
+        curve: Curves.bounceInOut,
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.add),
+            label: 'Add Split',
+            labelStyle: TextStyle(fontSize: 18.0),
+            // onTap: () => Get.to(() => AddDailySpendingScreen(fromEdit: false),
+            //     transition: Transition.rightToLeftWithFade),
+            onTap: () => Get.to(() => AddSplit(),
+                transition: Transition.rightToLeftWithFade),
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.refresh),
+            label: 'Add Spending',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () {},
+          ),
+        ],
       ),
       body: Stack(
         children: [
