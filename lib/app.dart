@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:paysa/Controllers/ProfileController.dart';
 import 'package:paysa/Views/NavigationMenu.dart';
 import 'package:paysa/Views/onboarding.dart';
+import 'package:paysa/main.dart';
 import 'package:paysa/routes.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/theme/theme.dart';
@@ -26,7 +27,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       useInheritedMediaQuery: true,
-
+      navigatorKey: navigatorKey,
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
       title: 'Paysa',
