@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class TColors {
   // App theme colors
-  static const Color primary = Color(0xFF249781);
-  static const Color primaryDark = Color.fromARGB(255, 23, 97, 83);
+  static const Color primary = Color(0xFF7126DA);
+  static const Color primaryDark = Color(0xFF1A1919);
   static const Color secondary = Color(0xFFFFE24B);
   static const Color accent = Color(0xFFb0c7ff);
   static const Color transparent = Colors.transparent;
@@ -13,12 +13,17 @@ class TColors {
   static const Color textSecondary = Color(0xFF6C757D);
   static const Color textWhite = Colors.white;
 
+  // text field colors
+  static const Color lightTextField = Color(0xFFE0E0E0);
+  static const Color darkTextField = Color(0xFF161515);
+
   // Background colors
   static const Color light = Color(0xFFF5F7FB);
   // static const Color dark = Color(0xFF272727);
   static const Color dark = Color(0xFF121933);
   static const Color primaryBackground = Color(0xFFF3F5FF);
-  static const Color darkBackground = Color(0xFF121933);
+  static const Color darkBackground = Colors.black12;
+  static const Color lightBackground = Color(0xFFEBEFFF);
   static const Color lightDarkBackground = Color(0xFF172F53);
 
   // Background Container colors

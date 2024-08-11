@@ -15,6 +15,9 @@ import 'package:paysa/Views/Profile/Settings/changePassword.dart';
 import 'package:paysa/Views/Profile/Settings/privacyPolicy.dart';
 import 'package:paysa/Views/Profile/profileScreen.dart';
 import 'package:paysa/Views/onboarding.dart';
+import 'package:paysa/new/Views/auth/auth_view.dart';
+import 'package:paysa/new/Views/auth/login_view.dart';
+import 'package:paysa/new/Views/auth/sign_up.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 
 class RouteGenerator {
@@ -22,7 +25,7 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         {
-          return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+          return MaterialPageRoute(builder: (_) => const AuthView());
         }
       case '/dashboard':
         {
@@ -36,7 +39,11 @@ class RouteGenerator {
         }
       case '/login':
         {
-          return MaterialPageRoute(builder: (_) => const LoginScreen());
+          return MaterialPageRoute(builder: (_) => LoginView());
+        }
+      case '/register':
+        {
+          return MaterialPageRoute(builder: (_) => SignUpView());
         }
       case '/create-group':
         {
