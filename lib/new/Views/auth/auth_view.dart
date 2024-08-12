@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/Controllers/LoginController.dart';
 import 'package:paysa/main.dart';
+import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/auth/login_view.dart';
 import 'package:paysa/new/Views/auth/widgets/paysa_primary_button.dart';
 import 'package:paysa/utils/constants/colors.dart';
@@ -10,11 +12,11 @@ import 'package:paysa/utils/helpers/helper_functions.dart';
 
 class AuthView extends StatelessWidget {
   const AuthView({super.key});
-
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
 
+    final AuthController controller = Get.find();
     return Scaffold(
       backgroundColor:
           isDark ? TColors.darkBackground : TColors.lightBackground,
@@ -29,7 +31,7 @@ class AuthView extends StatelessWidget {
               authHeader(context),
 
               // login and sign up buttons
-              Center(child: authButtons(context)),
+              Center(child: authButtons(context, controller)),
             ],
           ),
         ),
@@ -37,7 +39,7 @@ class AuthView extends StatelessWidget {
     );
   }
 
-  Widget authButtons(BuildContext context) {
+  Widget authButtons(BuildContext context, AuthController controller) {
     return Column(
       children: [
         PaysaPrimaryButton(
@@ -59,7 +61,9 @@ class AuthView extends StatelessWidget {
         PaysaPrimaryButton(
           width: TSizes.displayWidth(context) * 0.88,
           height: TSizes.displayHeight(context) * 0.06,
-          onTap: () {},
+          onTap: () async {
+            await controller.signInWithGoogle();
+          },
           color: TColors.white,
           textColor: TColors.black,
           prefixWidget: Image.asset(
@@ -68,6 +72,9 @@ class AuthView extends StatelessWidget {
           ),
           text: 'Authenticate with Google',
           fontSize: TSizes.displayWidth(context) * 0.05,
+        ),
+        SizedBox(
+          height: TSizes.displayHeight(context) * 0.01,
         ),
       ],
     );

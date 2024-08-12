@@ -26,8 +26,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  UserData user = Get.find();
-
   @override
   Widget build(BuildContext context) {
     // THelperFunctions.hideBottomBlackStrip();
@@ -55,24 +53,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      String encryptedName = THelperFunctions.AESEncription(
-                          user.user.value!.displayName!);
-                      String encryptedEmail = THelperFunctions.AESEncription(
-                          user.user.value!.email!);
-                      // now decrypt the name and email
-                      String decryptedName =
-                          THelperFunctions.AESDecription(encryptedName);
-                      String decryptedEmail =
-                          THelperFunctions.AESDecription(encryptedEmail);
+                      // String encryptedName = THelperFunctions.AESEncription(
+                      //     user.user.value!.displayName!);
+                      // String encryptedEmail = THelperFunctions.AESEncription(
+                      //     user.user.value!.email!);
+                      // // now decrypt the name and email
+                      // String decryptedName =
+                      //     THelperFunctions.AESDecription(encryptedName);
+                      // String decryptedEmail =
+                      //     THelperFunctions.AESDecription(encryptedEmail);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage:
-                              NetworkImage(user.user.value!.photoURL!),
-                        ),
+                        // CircleAvatar(
+                        //   radius: 50,
+                        //   backgroundImage:
+                        //       NetworkImage(user.user.value!.photoURL!),
+                        // ),
                         SizedBox(width: 20),
                         Column(
                           mainAxisSize: MainAxisSize.min,
@@ -82,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: SizedBox(
                                 width: TSizes.displayWidth(context) * 0.5,
                                 child: Text(
-                                  user.user.value!.displayName!,
+                                  "",
                                   // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
                                   style: TextStyle(
                                     fontSize: 20,
@@ -94,23 +92,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             SizedBox(height: 2),
-                            Flexible(
-                              child: SizedBox(
-                                width: TSizes.displayWidth(context) * 0.5,
-                                child: Text(
-                                  user.user.value!.email!,
-                                  // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
+                            // Flexible(
+                            //   child: SizedBox(
+                            //     width: TSizes.displayWidth(context) * 0.5,
+                            //     child: Text(
+                            //       user.user.value!.email!,
+                            //       // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
 
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ),
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //         color:
+                            //             Theme.of(context).colorScheme.secondary,
+                            //         overflow: TextOverflow.ellipsis,
+                            //       ),
+                            //       maxLines: 1,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         )
                       ],

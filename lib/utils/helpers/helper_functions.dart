@@ -206,6 +206,24 @@ class THelperFunctions {
 
   static Future<File?> pickImageWithCrop(
       BuildContext context, bool isCamera) async {
+    final status = await Permission.storage.request();
+    log('Storage permission status: $status');
+    if (status.isDenied) {
+      Get.snackbar(
+        "Storage Permission not provided",
+        "Please grant storage permission",
+        backgroundColor: TColors.primary,
+        backgroundGradient: LinearGradient(
+          colors: [
+            TColors.primary,
+            TColors.primary,
+            Colors.blue.shade900,
+          ],
+        ),
+      );
+      return null;
+    }
+
     XFile? image = await THelperFunctions.pickImage(fromCamera: isCamera);
     if (image == null) {
       showErrorToast(context, "Please select an image");

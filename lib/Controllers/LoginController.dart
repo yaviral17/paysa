@@ -8,7 +8,6 @@ import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Controllers/UserData.dart';
 
 class LoginController extends GetxController {
-  UserData user = Get.find();
   RxBool isLoading = false.obs;
   Rx<UserCredential?> userCredential = Rx<UserCredential?>(null);
   // login with google
@@ -34,8 +33,8 @@ class LoginController extends GetxController {
           .then((value) {
         return value;
       });
-      user.user.value = userCredential.value!.user;
-      FireStoreRef.uploadUser(user.user.value!);
+      // user.user.value = userCredential.value!.user;
+      // FireStoreRef.uploadUser(user.user.value!);
     } catch (e) {
       log(e.toString());
       Get.snackbar('Error', e.toString());

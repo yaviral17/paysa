@@ -1,13 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paysa/Controllers/ProfileController.dart';
-import 'package:paysa/Views/NavigationMenu.dart';
-import 'package:paysa/Views/onboarding.dart';
 import 'package:paysa/main.dart';
+import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/routes.dart';
-import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/theme/theme.dart';
 
 class App extends StatefulWidget {
@@ -25,6 +20,7 @@ class _AppState extends State<App> {
   }
 
   Widget build(BuildContext context) {
+    Get.put(AuthController());
     return GetMaterialApp(
       useInheritedMediaQuery: true,
       navigatorKey: navigatorKey,
