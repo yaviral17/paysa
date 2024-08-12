@@ -246,6 +246,58 @@ class THelperFunctions {
     showSuccessToast(context, "Copied to clipboard");
   }
 
+  static void showErrorMessageGet({
+    required String title,
+    required String message,
+  }) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: TColors.error,
+      colorText: TColors.light,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+
+  static void showSuccessMessageGet({
+    required String title,
+    required String message,
+  }) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: TColors.success,
+      colorText: TColors.light,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+
+  static void showWarningMessageGet({
+    required String title,
+    required String message,
+  }) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: TColors.warning,
+      colorText: TColors.light,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+
+  static void showInfoMessageGet({
+    required String title,
+    required String message,
+  }) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: TColors.info,
+      colorText: TColors.light,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+
   static String truncateText(String text, int maxLength) {
     if (text.length <= maxLength) {
       return text;

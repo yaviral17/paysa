@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     // THelperFunctions.hideBottomBlackStrip();
     return Scaffold(
-      appBar: TAppBar(
+      appBar: const TAppBar(
         title: Text('Profile'),
         showBackArrow: false,
       ),
@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () {
                 showCupertinoDialog(
                     context: context,
-                    builder: (context) {
+                    builder: (ctx) {
                       return CupertinoAlertDialog(
                         title: Text("Log Out"),
                         content: Text("Are you sure you want to log out?"),
@@ -158,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           CupertinoDialogAction(
                             child: Text("Cancel"),
                             onPressed: () {
-                              Navigator.pop(context);
+                              Navigator.pop(ctx);
                             },
                           ),
                           CupertinoDialogAction(
@@ -166,7 +166,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onPressed: () {
                               FirebaseAuth.instance.signOut();
                               GoogleSignIn().signOut();
-                              Get.offAllNamed('/login');
                             },
                           ),
                         ],

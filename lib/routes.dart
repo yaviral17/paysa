@@ -29,8 +29,6 @@ class RouteGenerator {
         }
       case '/dashboard':
         {
-          String userId = settings.arguments as String;
-          log('userId: $userId');
           return MaterialPageRoute(builder: (_) => const NavigationMenu());
         }
       case '/profile':
