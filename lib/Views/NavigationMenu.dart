@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Views/DailySpendings/DailySpending.dart';
 import 'package:paysa/Views/Home/GroupsScreen.dart';
-import 'package:paysa/Views/Profile/profile.dart';
+import 'package:paysa/new/Views/settings/setteing_view.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class NavigationMenu extends StatefulWidget {
@@ -68,7 +68,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
             //     child: Text('Insight'),
             //   ),
             // ),
-            ProfileScreen(),
+            SettingsView(),
           ],
         ),
       ),

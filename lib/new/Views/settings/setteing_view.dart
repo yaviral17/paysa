@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:paysa/new/Views/settings/widget/option_card.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
@@ -117,6 +120,42 @@ class _SettingsViewState extends State<SettingsView> {
                     fontSize: 15,
                   ),
                 ),
+              ),
+              SettingsOptionCard(
+                text: 'Log out',
+                textColor: Colors.red,
+                fontSize: 15,
+                height: MediaQuery.of(context).size.height * 0.08,
+                color: TColors.error.withOpacity(0.2),
+                suffixWidget: const Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                ),
+                onTap: () {
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return CupertinoAlertDialog(
+                          title: Text("Log Out"),
+                          content: Text("Are you sure you want to log out?"),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text("Cancel"),
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text("Log Out"),
+                              onPressed: () {
+                                FirebaseAuth.instance.signOut();
+                                GoogleSignIn().signOut();
+                              },
+                            ),
+                          ],
+                        );
+                      });
+                },
               )
             ],
           ),
