@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paysa/utils/helpers/helper_functions.dart';
 
 class TColors {
   // App theme colors
@@ -53,4 +54,8 @@ class TColors {
   static const Color softGrey = Color(0xFFF4F4F4);
   static const Color lightGrey = Color(0xFFF9F9F9);
   static const Color white = Color(0xFFFFFFFF);
+
+  static Color background(BuildContext context) {
+    return THelperFunctions.isDarkMode(context) ? dark : light;
+  }
 }
