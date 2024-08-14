@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/main.dart';
+import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/auth/widgets/paysa_primary_button.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
@@ -17,7 +19,8 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
 
-    var alternate_email;
+    AuthController authController = Get.find<AuthController>();
+
     return Scaffold(
       backgroundColor:
           isDark ? TColors.darkBackground : TColors.lightBackground,
@@ -156,7 +159,38 @@ class LoginView extends StatelessWidget {
                   Center(
                     child: PaysaPrimaryButton(
                       text: 'Login',
-                      onTap: () {},
+                      onTap: () {
+                        if (emailController.text.isEmpty) {
+                          THelperFunctions.showErrorMessageGet(
+                            title: 'Email Missing',
+                            message: 'Please enter your email address',
+                          );
+                          return;
+                        }
+                        if (!THelperFunctions.validateEmail(
+                            emailController.text)) {
+                          THelperFunctions.showErrorMessageGet(
+                            title: 'Email Error',
+                            message: 'Please enter a valid email address',
+                          );
+                          return;
+                        }
+
+                        if (passwordController.text.isEmpty) {
+                          THelperFunctions.showErrorMessageGet(
+                            title: 'Password Missing',
+                            message: 'Please enter your password',
+                          );
+                          return;
+                        }
+
+                        // Call the login function
+                        authController.signInWithEmailPassword(
+                          email: emailController.text.trim(),
+                          password: passwordController.text,
+                        );
+                        //
+                      },
                       width: TSizes.displayWidth(context),
                       height: TSizes.displayHeight(context) * 0.058,
                       textColor: TColors.textWhite,

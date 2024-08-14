@@ -1,13 +1,11 @@
 import 'dart:developer';
 
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/new/Controllers/navigation_controller.dart';
-import 'package:paysa/new/Views/settings/setteing_view.dart';
+import 'package:paysa/new/Views/settings/setting_view.dart';
 import 'package:paysa/utils/constants/colors.dart';
 
 class NavigationView extends StatefulWidget {

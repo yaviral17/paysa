@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/settings/widget/option_card.dart';
 import 'package:paysa/utils/constants/colors.dart';
@@ -168,6 +168,8 @@ class _SettingsViewState extends State<SettingsView> {
                               onPressed: () {
                                 FirebaseAuth.instance.signOut();
                                 GoogleSignIn().signOut();
+                                //pops correctly to the first screen and disappears from the stack
+                                navigatorKey.currentState!.pop();
                               },
                             ),
                           ],

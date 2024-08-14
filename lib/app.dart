@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paysa/Views/NavigationMenu.dart';
-import 'package:paysa/Views/onboarding.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/auth/auth_view.dart';
 import 'package:paysa/new/Views/dashboard/navigation_view.dart';
 import 'package:paysa/routes.dart';
+import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:paysa/utils/theme/theme.dart';
 
 class App extends StatefulWidget {
@@ -46,6 +45,15 @@ class _AppState extends State<App> {
             );
           }
           if (snapshot.hasData) {
+            if (snapshot.requireData!.emailVerified == false) {
+              THelperFunctions.showErrorMessageGet(
+                  title: 'Email not verified',
+                  message:
+                      'Verification email already sent to ${snapshot.requireData!.email}');
+              FirebaseAuth.instance.signOut();
+              return const AuthView();
+            }
+
             return const NavigationView();
           }
           return const AuthView();

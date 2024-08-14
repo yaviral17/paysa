@@ -200,13 +200,13 @@ class SignUpView extends StatelessWidget {
                           child: PaysaPrimaryButton(
                             text: 'Sign Up',
                             onTap: () {
-                              if (nameController.text.isEmpty) {
+                              if (nameController.text.trim().isEmpty) {
                                 THelperFunctions.showErrorMessageGet(
                                     title: 'Name Missing',
                                     message: 'Please enter your name');
                                 return;
                               }
-                              if (emailController.text.isEmpty) {
+                              if (emailController.text.trim().isEmpty) {
                                 THelperFunctions.showErrorMessageGet(
                                     title: 'Email Missing',
                                     message: 'Please enter your email');
@@ -251,9 +251,10 @@ class SignUpView extends StatelessWidget {
 
                               // Call the sign-up function
                               authController.signUpWithEmailPassword(
-                                  name: nameController.text,
-                                  email: emailController.text,
-                                  password: passwordController.text);
+                                name: nameController.text.trim(),
+                                email: emailController.text.trim(),
+                                password: passwordController.text,
+                              );
                             },
                             width: TSizes.displayWidth(context),
                             height: TSizes.displayHeight(context) * 0.058,

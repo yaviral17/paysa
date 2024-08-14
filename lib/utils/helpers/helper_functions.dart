@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -7,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:convert/convert.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -264,6 +262,13 @@ class THelperFunctions {
   static void copyToClipBoard(String text, BuildContext context) {
     Clipboard.setData(ClipboardData(text: text));
     showSuccessToast(context, "Copied to clipboard");
+  }
+
+  static bool validateEmail(String email) {
+    final emailPattern = RegExp(
+        r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+(\.[a-zA-Z]+)?$',
+        caseSensitive: false);
+    return emailPattern.hasMatch(email);
   }
 
   static void showErrorMessageGet({

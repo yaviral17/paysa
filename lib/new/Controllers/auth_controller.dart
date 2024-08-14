@@ -50,8 +50,10 @@ class AuthController extends GetxController {
           .then((value) {
         return value.user;
       });
+      navigatorKey.currentState!.pop();
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      THelperFunctions.showErrorMessageGet(
+          title: 'Sign In Error', message: e.toString());
       return;
     }
     isLoading.value = false;
