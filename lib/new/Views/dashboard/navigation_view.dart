@@ -19,7 +19,6 @@ class NavigationView extends StatefulWidget {
 
 class _NavigationViewState extends State<NavigationView> {
   final navigationController = Get.put(NavigationController());
-  final pageController = PageController();
 
   List<FlashyTabBarItem> bottomItem = [
     FlashyTabBarItem(
@@ -44,6 +43,8 @@ class _NavigationViewState extends State<NavigationView> {
 
   @override
   Widget build(BuildContext context) {
+    final pageController =
+        PageController(initialPage: navigationController.currentIndex);
     return Scaffold(
       backgroundColor: TColors.background(context),
       body: PageView(

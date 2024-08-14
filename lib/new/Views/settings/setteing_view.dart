@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/settings/widget/option_card.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
@@ -14,6 +17,7 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
+  AuthController authController = Get.find();
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
@@ -39,10 +43,23 @@ class _SettingsViewState extends State<SettingsView> {
                 height: 20,
               ),
               Center(
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: const AssetImage('assets/images/google.png'),
-                ),
+                child: FirebaseAuth.instance.currentUser?.photoURL != null
+                    ? CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(
+                            FirebaseAuth.instance.currentUser!.photoURL!),
+                      )
+                    : CircleAvatar(
+                        radius: 50,
+                        child: Text(
+                          FirebaseAuth.instance.currentUser?.displayName?[0] ??
+                              'J',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
               ),
               SizedBox(
                 height: 10,
@@ -58,7 +75,7 @@ class _SettingsViewState extends State<SettingsView> {
                 height: MediaQuery.of(context).size.height * 0.08,
                 color: TColors.darkTextField,
                 suffixWidget: Text(
-                  'John Doe',
+                  FirebaseAuth.instance.currentUser?.displayName ?? 'John Doe',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 15,
@@ -71,7 +88,8 @@ class _SettingsViewState extends State<SettingsView> {
                 height: MediaQuery.of(context).size.height * 0.08,
                 color: TColors.darkTextField,
                 suffixWidget: Text(
-                  'johnmaster69@sexy.com',
+                  FirebaseAuth.instance.currentUser?.email ??
+                      'johan.example.com',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 15,
