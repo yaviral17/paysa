@@ -275,7 +275,7 @@ class THelperFunctions {
       message,
       backgroundColor: TColors.error,
       colorText: TColors.light,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
     );
   }
 
@@ -288,7 +288,7 @@ class THelperFunctions {
       message,
       backgroundColor: TColors.success,
       colorText: TColors.light,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
     );
   }
 
@@ -301,7 +301,7 @@ class THelperFunctions {
       message,
       backgroundColor: TColors.warning,
       colorText: TColors.light,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
     );
   }
 
@@ -314,7 +314,7 @@ class THelperFunctions {
       message,
       backgroundColor: TColors.info,
       colorText: TColors.light,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
     );
   }
 

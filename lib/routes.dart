@@ -1,12 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:paysa/Controllers/UserData.dart';
 import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/Models/SessionsModel.dart';
 import 'package:paysa/Views/AddSpending/AddSpending.dart';
-import 'package:paysa/Views/Auth/login.dart';
 import 'package:paysa/Views/CreateGroup/CreateGroupScreen.dart';
 import 'package:paysa/Views/GroupPage/CreateSplitPage.dart';
 import 'package:paysa/Views/GroupPage/GroupPage.dart';
@@ -14,10 +9,9 @@ import 'package:paysa/Views/NavigationMenu.dart';
 import 'package:paysa/Views/Profile/Settings/changePassword.dart';
 import 'package:paysa/Views/Profile/Settings/privacyPolicy.dart';
 import 'package:paysa/Views/Profile/profileScreen.dart';
-import 'package:paysa/Views/onboarding.dart';
 import 'package:paysa/new/Views/auth/auth_view.dart';
 import 'package:paysa/new/Views/auth/login_view.dart';
-import 'package:paysa/new/Views/auth/sign_up.dart';
+import 'package:paysa/new/Views/auth/sign_up_view.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 
 class RouteGenerator {
