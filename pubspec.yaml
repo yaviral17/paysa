@@ -41,7 +41,7 @@ dependencies:
   custom_refresh_indicator: ^3.0.0
   url_launcher: ^6.2.4
   intl: ^0.19.0
-  permission_handler: ^11.2.0
+  permission_handler: ^11.3.1
   image_cropper: ^5.0.1
   image_picker: ^1.0.7
   logger: ^2.0.2+1
@@ -63,6 +63,9 @@ dependencies:
   shimmer: ^3.0.0
   fl_chart: ^0.67.0
   encrypt: ^5.0.3
+  firebase_messaging: ^14.9.4
+  smooth_corner: ^1.1.0
+  flashy_tab_bar2: ^0.0.10
 
 dev_dependencies:
   flutter_test:
@@ -120,6 +123,7 @@ flutter:
           weight: 700
         - asset: assets/fonts/OpenSans-Italic.ttf
           style: italic
+ 
   # fonts:
   #   - family: Schyler
   #     fonts:

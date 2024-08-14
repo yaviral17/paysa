@@ -24,8 +24,15 @@ class TColors {
   static const Color dark = Color(0xFF121933);
   static const Color primaryBackground = Color(0xFFF3F5FF);
   static const Color darkBackground = Colors.black12;
+
+  // Light and Dark Background colors
   static const Color lightBackground = Color(0xFFEBEFFF);
   static const Color lightDarkBackground = Color(0xFF172F53);
+  static Color background(BuildContext context) {
+    return THelperFunctions.isDarkMode(context)
+        ? darkBackground
+        : lightBackground;
+  }
 
   // Background Container colors
   static const Color lightContainer = Color(0xFFF5F7FB);
@@ -55,7 +62,29 @@ class TColors {
   static const Color lightGrey = Color(0xFFF9F9F9);
   static const Color white = Color(0xFFFFFFFF);
 
-  static Color background(BuildContext context) {
-    return THelperFunctions.isDarkMode(context) ? dark : light;
+  // Bottom bar colors
+  static const Color lightBottomBar = Color(0xFFE0E0E0);
+  static const Color darkBottomBar = Color(0xFF1A1919);
+  static Color bottomBar(BuildContext context) {
+    return THelperFunctions.isDarkMode(context)
+        ? darkBottomBar
+        : lightBottomBar;
+  }
+
+  // bottom nav item colors
+  static const Color lightBottomNavItemActive = Color(0xFF4b68ff);
+  static const Color darkBottomNavItemActive = Color(0xFF4b68ff);
+  static Color bottomNavItemActive(BuildContext context) {
+    return THelperFunctions.isDarkMode(context)
+        ? darkBottomNavItemActive
+        : lightBottomNavItemActive;
+  }
+
+  static const Color lightBottomNavItemInactive = Color(0xFF6C757D);
+  static const Color darkBottomNavItemInactive = Color(0xFF6C757D);
+  static Color bottomNavItemInactive(BuildContext context) {
+    return THelperFunctions.isDarkMode(context)
+        ? darkBottomNavItemInactive
+        : lightBottomNavItemInactive;
   }
 }

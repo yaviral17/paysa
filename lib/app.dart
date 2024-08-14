@@ -6,6 +6,7 @@ import 'package:paysa/Views/onboarding.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/auth/auth_view.dart';
+import 'package:paysa/new/Views/dashboard/navigation_view.dart';
 import 'package:paysa/routes.dart';
 import 'package:paysa/utils/theme/theme.dart';
 
@@ -45,7 +46,7 @@ class _AppState extends State<App> {
             );
           }
           if (snapshot.hasData) {
-            return const NavigationMenu();
+            return const NavigationView();
           }
           return const AuthView();
         },
