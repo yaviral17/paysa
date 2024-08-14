@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paysa/api/firebase_api.dart';
 import 'package:paysa/app.dart';
@@ -16,7 +18,8 @@ void main() async {
   final app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await requestStoragePermission();
+
+  await requestPhotoPermission();
   await FirebaseAPI().initNotifications();
 
   // Check and request storage permission
@@ -26,17 +29,21 @@ void main() async {
   runApp(const App());
 }
 
-Future<void> requestStoragePermission() async {
-  PermissionStatus status = await Permission.storage.status;
-  if (status.isGranted) {
-    log('Storage permission granted');
+Future<PermissionStatus> requestPhotoPermission() async {
+  final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  Permission permissionToRequest;
+
+  if (defaultTargetPlatform == TargetPlatform.android &&
+      androidInfo.version.sdkInt <= 32) {
+    permissionToRequest = Permission.storage;
+  } else {
+    permissionToRequest = Permission.photos;
   }
-  if (!status.isGranted) {
-    status = await Permission.storage.request();
-    if (status.isDenied || status.isPermanentlyDenied) {
-      // Handle the case when the user denies the permission
-      // You can show a dialog or a message to the user
-      log('Storage permission denied');
-    }
+
+  if (await permissionToRequest.status.isDenied) {
+    return await permissionToRequest.request();
   }
+  log('Storage permission denied');
+  return permissionToRequest.status;
 }

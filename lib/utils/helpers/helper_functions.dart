@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -179,6 +181,9 @@ class THelperFunctions {
 
   static Future<XFile?> pickImage({bool fromCamera = false}) async {
     final ImagePicker picker = ImagePicker();
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    Permission permissionToRequest;
     if (fromCamera) {
       // get camera permission if not granted
       PermissionStatus status = await Permission.camera.request();
@@ -192,8 +197,14 @@ class THelperFunctions {
       return image;
     } else {
       // get storage permission if not granted
-      PermissionStatus status = await Permission.storage.request();
-      if (!status.isGranted) {
+
+      if (defaultTargetPlatform == TargetPlatform.android &&
+          androidInfo.version.sdkInt <= 32) {
+        permissionToRequest = Permission.storage;
+      } else {
+        permissionToRequest = Permission.photos;
+      }
+      if (await permissionToRequest.status.isDenied) {
         Get.snackbar("Error", "Please grant storage permission");
         return null;
       }
@@ -206,7 +217,16 @@ class THelperFunctions {
 
   static Future<File?> pickImageWithCrop(
       BuildContext context, bool isCamera) async {
-    final status = await Permission.storage.request();
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    Permission permissionToRequest;
+    if (defaultTargetPlatform == TargetPlatform.android &&
+        androidInfo.version.sdkInt <= 32) {
+      permissionToRequest = Permission.storage;
+    } else {
+      permissionToRequest = Permission.photos;
+    }
+    final status = await permissionToRequest.request();
     log('Storage permission status: $status');
     if (status.isDenied) {
       Get.snackbar(
