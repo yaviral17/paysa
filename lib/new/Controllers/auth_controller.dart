@@ -1,14 +1,10 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:paysa/utils/constants/colors.dart';
-import 'package:paysa/utils/constants/sizes.dart';
+import 'package:paysa/main.dart';
+import 'package:paysa/new/Models/user_data.dart';
+import 'package:paysa/new/api/firestore_apis.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
 
 class AuthController extends GetxController {
@@ -44,4 +40,56 @@ class AuthController extends GetxController {
 
     isLoading.value = false;
   }
+
+  Future<void> signInWithEmailPassword(
+      {required String email, required String password}) async {
+    try {
+      isLoading.value = true;
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        return value.user;
+      });
+      navigatorKey.currentState!.pop();
+    } catch (e) {
+      THelperFunctions.showErrorMessageGet(
+          title: 'Sign In Error', message: e.toString());
+      return;
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> signUpWithEmailPassword(
+      {required String name,
+      required String email,
+      required String password}) async {
+    try {
+      isLoading.value = true;
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
+      User user = FirebaseAuth.instance.currentUser!;
+      FirestoreAPIs.createUser(UserData(
+        uid: user.uid,
+        name: user.displayName!,
+        email: user.email!,
+        photoUrl: user.photoURL ?? '',
+      ));
+      FirebaseAuth.instance.currentUser!.sendEmailVerification();
+
+      THelperFunctions.showSuccessMessageGet(
+          title: 'Success', message: 'User created successfully');
+
+      navigatorKey.currentState!.pop();
+    } catch (e) {
+      THelperFunctions.showErrorMessageGet(
+          title: 'Error', message: e.toString());
+      log(e.toString(), name: 'Error');
+      return;
+    }
+    isLoading.value = false;
+  }
+
+  //
 }

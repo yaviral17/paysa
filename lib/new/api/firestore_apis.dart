@@ -8,4 +8,10 @@ class FirestoreAPIs {
   static Future<void> createUser(UserData user) async {
     await users.doc(user.uid).set(user.toJson());
   }
+
+  // get user by email
+
+  // get user by uid
+
+  // update user
 }

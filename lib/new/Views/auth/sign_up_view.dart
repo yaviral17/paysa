@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/api/firebase_api.dart';
 import 'package:paysa/main.dart';
+import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/auth/login_view.dart';
 import 'package:paysa/new/Views/auth/widgets/paysa_primary_button.dart';
 import 'package:paysa/utils/constants/colors.dart';
@@ -19,6 +22,7 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
+    AuthController authController = Get.find<AuthController>();
 
     return Scaffold(
       backgroundColor:
@@ -190,12 +194,68 @@ class SignUpView extends StatelessWidget {
                           obscureText: true,
                         ),
                         SizedBox(
-                          height: TSizes.displayHeight(context) * 0.01,
+                          height: TSizes.displayHeight(context) * 0.02,
                         ),
                         Center(
                           child: PaysaPrimaryButton(
                             text: 'Sign Up',
-                            onTap: () {},
+                            onTap: () {
+                              if (nameController.text.trim().isEmpty) {
+                                THelperFunctions.showErrorMessageGet(
+                                    title: 'Name Missing',
+                                    message: 'Please enter your name');
+                                return;
+                              }
+                              if (emailController.text.trim().isEmpty) {
+                                THelperFunctions.showErrorMessageGet(
+                                    title: 'Email Missing',
+                                    message: 'Please enter your email');
+                                return;
+                              }
+                              //regex email check
+                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                  .hasMatch(emailController.text)) {
+                                THelperFunctions.showErrorMessageGet(
+                                    title: 'Invalid Email',
+                                    message: 'Please enter a valid email');
+                                return;
+                              }
+                              if (passwordController.text.isEmpty) {
+                                THelperFunctions.showErrorMessageGet(
+                                    title: 'Password Missing',
+                                    message: 'Please enter your password');
+                                return;
+                              }
+                              if (passwordController.text.length < 8) {
+                                THelperFunctions.showErrorMessageGet(
+                                    title: 'Password too short',
+                                    message:
+                                        'Password should be at least 8 characters long');
+                                return;
+                              }
+                              if (confirmPasswordController.text.isEmpty) {
+                                THelperFunctions.showErrorMessageGet(
+                                    title: 'Confirm Password Missing',
+                                    message:
+                                        'Please confirm your password by re-entering it');
+                                return;
+                              }
+
+                              if (passwordController.text !=
+                                  confirmPasswordController.text) {
+                                THelperFunctions.showErrorMessageGet(
+                                    title: 'Error',
+                                    message: 'Passwords do not match');
+                                return;
+                              }
+
+                              // Call the sign-up function
+                              authController.signUpWithEmailPassword(
+                                name: nameController.text.trim(),
+                                email: emailController.text.trim(),
+                                password: passwordController.text,
+                              );
+                            },
                             width: TSizes.displayWidth(context),
                             height: TSizes.displayHeight(context) * 0.058,
                             textColor: TColors.textWhite,

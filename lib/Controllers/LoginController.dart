@@ -4,8 +4,6 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:paysa/Config/FirestoreRefrence.dart';
-import 'package:paysa/Controllers/UserData.dart';
 
 class LoginController extends GetxController {
   RxBool isLoading = false.obs;
