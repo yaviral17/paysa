@@ -72,6 +72,7 @@ dependencies:
   firebase_storage: 
   path_provider: any
   path: any
+  zoom_tap_animation: ^1.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

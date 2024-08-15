@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:smooth_corner/smooth_corner.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class PaysaPrimaryButton extends StatelessWidget {
   final Color color;
@@ -35,11 +36,14 @@ class PaysaPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SmoothClipRRect(
-      borderRadius: BorderRadius.circular(18),
-      smoothness: 0.8,
-      child: GestureDetector(
-        onTap: onTap,
+    return ZoomTapAnimation(
+      onTap: onTap,
+      end: 0.98,
+      beginCurve: Curves.fastEaseInToSlowEaseOut,
+      endCurve: Curves.easeOut,
+      child: SmoothClipRRect(
+        borderRadius: BorderRadius.circular(18),
+        smoothness: 0.8,
         child: Container(
           width: width,
           height: height,
