@@ -24,7 +24,7 @@ class CustomCircleAvatar extends StatelessWidget {
               ),
             ),
           ),
-          Text(
+          const Text(
             'You',
             style: TextStyle(
               color: TColors.textWhite,

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:paysa/utils/constants/colors.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
   const ChangePasswordScreen({super.key});
@@ -9,7 +7,7 @@ class ChangePasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Change Password',
           style: TextStyle(
             fontSize: 20,
@@ -18,8 +16,8 @@ class ChangePasswordScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        margin: EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        margin: const EdgeInsets.all(20),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.blue.withOpacity(0.1),
@@ -33,37 +31,37 @@ class ChangePasswordScreen extends StatelessWidget {
           children: [
             // SizedBox(height: 20),
             // Privacy Policy
-            Text(
+            const Text(
               'Reset Password',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // Privacy Policy Content
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Old Password',
               ),
             ),
-            SizedBox(height: 10),
-            TextField(
+            const SizedBox(height: 10),
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'New Password',
               ),
             ),
-            SizedBox(height: 10),
-            TextField(
+            const SizedBox(height: 10),
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Confirm New Password',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             ElevatedButton(
               onPressed: () {},
-              child: Text(
+              child: const Text(
                 'Submit',
               ),
             ),

@@ -39,19 +39,19 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
           items: <SalomonBottomBarItem>[
             SalomonBottomBarItem(
-              icon: Icon(Iconsax.chart_1),
-              title: Text('Daily Spendings'),
+              icon: const Icon(Iconsax.chart_1),
+              title: const Text('Daily Spendings'),
             ),
             SalomonBottomBarItem(
-              icon: Icon(Iconsax.chart),
-              title: Text('Friends'),
+              icon: const Icon(Iconsax.chart),
+              title: const Text('Friends'),
             ),
             // SalomonBottomBarItem(
             //   icon: Icon(Iconsax.chart_1),
             //   title: Text('Monthly Insights'),
             // ),
             SalomonBottomBarItem(
-              icon: Icon(Iconsax.user),
+              icon: const Icon(Iconsax.user),
               title: const Text('Profile'),
             ),
           ],

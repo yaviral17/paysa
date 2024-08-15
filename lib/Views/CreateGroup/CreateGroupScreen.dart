@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Controllers/CreateGroupController.dart';
-import 'package:paysa/Models/GroupModel.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 
@@ -50,7 +49,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
                   onTap: () => navigator?.pop(context),
-                  child: Icon(Icons.arrow_back_ios),
+                  child: const Icon(Icons.arrow_back_ios),
                 ),
               ),
               const SizedBox(
@@ -120,7 +119,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                     }
                     controller.addMember.text += '@gmail.com';
                   },
-                  child: Chip(
+                  child: const Chip(
                     label: Text('@gmail.com'),
                   ),
                 ),
@@ -174,7 +173,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: TSizes.spaceBtwInputFields,
               ),
               Obx(

@@ -30,8 +30,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              margin: EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              margin: const EdgeInsets.all(20),
               width: TSizes.displayWidth(context),
               decoration: BoxDecoration(
                 color: TColors.primary.withOpacity(0.1),
@@ -63,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         //   backgroundImage:
                         //       NetworkImage(user.user.value!.photoURL!),
                         // ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Flexible(
                               child: SizedBox(
                                 width: TSizes.displayWidth(context) * 0.5,
-                                child: Text(
+                                child: const Text(
                                   "",
                                   // "sagvdgasvfgvafgvasfvajhfasjhfvasjh",
                                   style: TextStyle(
@@ -83,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 2),
+                            const SizedBox(height: 2),
                             // Flexible(
                             //   child: SizedBox(
                             //     width: TSizes.displayWidth(context) * 0.5,
@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: TSizes.xl,
             ),
             MenuOptionsTile(
@@ -144,17 +144,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context: context,
                     builder: (ctx) {
                       return CupertinoAlertDialog(
-                        title: Text("Log Out"),
-                        content: Text("Are you sure you want to log out?"),
+                        title: const Text("Log Out"),
+                        content: const Text("Are you sure you want to log out?"),
                         actions: [
                           CupertinoDialogAction(
-                            child: Text("Cancel"),
+                            child: const Text("Cancel"),
                             onPressed: () {
                               Navigator.pop(ctx);
                             },
                           ),
                           CupertinoDialogAction(
-                            child: Text("Log Out"),
+                            child: const Text("Log Out"),
                             onPressed: () {
                               FirebaseAuth.instance.signOut();
                               GoogleSignIn().signOut();

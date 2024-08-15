@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:paysa/Models/SplitModel.dart';
 
 class DailySpendingModel {
@@ -113,5 +111,5 @@ class DailySpendingModel {
   ];
 
   String get categoryIcon =>
-      'assets/expanses_category_icons/ic_${this.category}.png';
+      'assets/expanses_category_icons/ic_$category.png';
 }

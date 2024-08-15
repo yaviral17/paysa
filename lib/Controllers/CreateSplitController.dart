@@ -27,7 +27,7 @@ class CreateSplitController extends GetxController {
     this.group = group;
     members.value = await Group.getMembers(group.members);
     for (var member in members) {
-      log("member fetch : " + member.name);
+      log("member fetch : ${member.name}");
     }
 
     memberFetch.value = false;
@@ -104,10 +104,10 @@ class CreateSplitController extends GetxController {
             : false,
       });
     }
-    log("Transaction members list : " + transactionMembersList.toString());
+    log("Transaction members list : $transactionMembersList");
 
     Transaction transaction = Transaction(
-      id: Uuid().v1(),
+      id: const Uuid().v1(),
       amount: double.parse(amountController.text.trim()),
       description: descriptionController.text.trim().isEmpty
           ? ""
@@ -126,7 +126,7 @@ class CreateSplitController extends GetxController {
       log("Transaction created");
       Navigator.pop(context);
     }).catchError((error) {
-      log("Error in creating transaction : " + error.toString());
+      log("Error in creating transaction : $error");
     });
 
     isLoading.value = false;

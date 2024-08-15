@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:paysa/api/firebase_api.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/auth/login_view.dart';

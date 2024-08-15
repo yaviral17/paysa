@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:paysa/Models/Convo.dart';
-import 'package:paysa/Models/DailySpendingModel.dart';
 
 class SessionsModel {
   String id;
@@ -60,6 +58,6 @@ class SessionsModel {
   }
 
   void logData() {
-    log(" id :${id}\n users:${users.toString()}\n convoAndTags:${Convo.toJsonList(convoAndTags).toString()}\n icon: ${icon}\n timestamp: ${timestamp.toIso8601String()}\n title: ${title}");
+    log(" id :$id\n users:${users.toString()}\n convoAndTags:${Convo.toJsonList(convoAndTags).toString()}\n icon: $icon\n timestamp: ${timestamp.toIso8601String()}\n title: $title");
   }
 }

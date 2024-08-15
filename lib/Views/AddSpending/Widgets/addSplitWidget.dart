@@ -79,7 +79,7 @@ class AddSplitWidget extends StatelessWidget {
                           amount: double.parse(
                                 addSpendingController.amountController.text,
                               ) /
-                              ((addSpendingController.splits.length == 0
+                              ((addSpendingController.splits.isEmpty
                                       ? 1
                                       : addSpendingController.splits.length) +
                                   1),
@@ -113,7 +113,7 @@ class AddSplitWidget extends StatelessWidget {
                       },
                       child: Text(
                         'Add Myself',
-                        style: Theme.of(context).textTheme.button,
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
                   ],
@@ -176,7 +176,7 @@ class AddSplitWidget extends StatelessWidget {
                                                 .withOpacity(0.5),
                                           ),
                                           fillColor: Colors.transparent,
-                                          disabledBorder: OutlineInputBorder(
+                                          disabledBorder: const OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color: TColors.white,
                                             ),
@@ -187,7 +187,7 @@ class AddSplitWidget extends StatelessWidget {
                                                   .withOpacity(0.5),
                                             ),
                                           ),
-                                          focusedBorder: OutlineInputBorder(
+                                          focusedBorder: const OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color: TColors.white,
                                             ),
@@ -259,7 +259,7 @@ class AddSplitWidget extends StatelessWidget {
                                                     OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(16),
-                                                  borderSide: BorderSide(
+                                                  borderSide: const BorderSide(
                                                     color: TColors.transparent,
                                                   ),
                                                 ),
@@ -267,7 +267,7 @@ class AddSplitWidget extends StatelessWidget {
                                                     OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(16),
-                                                  borderSide: BorderSide(
+                                                  borderSide: const BorderSide(
                                                     color: TColors.transparent,
                                                   ),
                                                 ),
@@ -275,7 +275,7 @@ class AddSplitWidget extends StatelessWidget {
                                                     OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(16),
-                                                  borderSide: BorderSide(
+                                                  borderSide: const BorderSide(
                                                     color: TColors.transparent,
                                                   ),
                                                 ),
@@ -311,7 +311,7 @@ class AddSplitWidget extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 10),
+                                      const SizedBox(height: 10),
                                       Row(
                                         children: [
                                           const Text(
@@ -385,18 +385,16 @@ class AddSplitWidget extends StatelessWidget {
 
                                         addSpendingController.users.add(user!);
 
-                                        if (user != null) {
-                                          addSpendingController.splits.add(
-                                            Split(
-                                              uid: user.uid,
-                                              amount: double.parse(
-                                                  amountController.text),
-                                              paid: paid.value,
-                                            ),
-                                          );
-                                          Get.back();
-                                        }
-                                      },
+                                        addSpendingController.splits.add(
+                                          Split(
+                                            uid: user.uid,
+                                            amount: double.parse(
+                                                amountController.text),
+                                            paid: paid.value,
+                                          ),
+                                        );
+                                        Get.back();
+                                                                            },
                                       child: const Text(
                                         'Add Member',
                                         style: TextStyle(
@@ -410,7 +408,7 @@ class AddSplitWidget extends StatelessWidget {
                               },
                             );
                           },
-                          child: Text('Add Member'));
+                          child: const Text('Add Member'));
                     }
                     return Row(
                       children: [

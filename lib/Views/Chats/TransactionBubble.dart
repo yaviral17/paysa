@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:paysa/Views/Transactions/Transactions.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
@@ -27,8 +25,8 @@ class TransactionBubble extends StatelessWidget {
         if (isYou) showTimeStamp(isYou),
         Container(
           width: MediaQuery.of(context).size.width * 0.54,
-          margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
           decoration: BoxDecoration(
             color: isYou ? TColors.primary : TColors.darkerGrey,
             borderRadius: BorderRadius.circular(12),
@@ -38,7 +36,7 @@ class TransactionBubble extends StatelessWidget {
               strokeAlign: 1,
               color: TColors.white,
             ),
-            image: DecorationImage(
+            image: const DecorationImage(
               image: AssetImage('assets/images/money_bg.jpg'),
               fit: BoxFit.cover,
               opacity: 0.06,
@@ -67,7 +65,7 @@ class TransactionBubble extends StatelessWidget {
               // Amount
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "Total : ",
                     style: TextStyle(
                       fontSize: 16,
@@ -86,7 +84,7 @@ class TransactionBubble extends StatelessWidget {
               // Description
               Text(
                 transaction.description,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                 ),
@@ -95,7 +93,7 @@ class TransactionBubble extends StatelessWidget {
               ...List.generate(
                 transaction.members.length,
                 (index) => Container(
-                  padding: EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.symmetric(vertical: 4),
                   decoration: BoxDecoration(
                     border: Border(
                       top: BorderSide(
@@ -111,19 +109,19 @@ class TransactionBubble extends StatelessWidget {
                     children: [
                       Text(
                         transaction.members[index]['name'].split(' ').first,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
                         ),
                       ),
                       Text(
                         ' : ₹ ${transaction.members[index]['amount']}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         transaction.members[index]['paid']
                             ? 'Paid ✔'
@@ -136,7 +134,7 @@ class TransactionBubble extends StatelessWidget {
                               : Colors.red.shade400,
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                     ],
                   ),
                 ),
@@ -160,7 +158,7 @@ class TransactionBubble extends StatelessWidget {
                               TColors.white,
                             ),
                             minimumSize:
-                                MaterialStateProperty.all(Size(100, 38)),
+                                MaterialStateProperty.all(const Size(100, 38)),
                           ),
                           onPressed: () {
                             // Navigator.push(

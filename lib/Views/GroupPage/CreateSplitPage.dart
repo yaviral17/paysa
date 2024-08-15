@@ -11,7 +11,7 @@ import 'package:pull_down_button/pull_down_button.dart';
 // ignore: must_be_immutable
 class CreateSplitScreen extends StatefulWidget {
   final Group group;
-  CreateSplitScreen({super.key, required this.group});
+  const CreateSplitScreen({super.key, required this.group});
 
   @override
   State<CreateSplitScreen> createState() => _CreateSplitScreenState();
@@ -28,7 +28,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
   }
 
   splitEqually() {
-    double total = double.parse(controller.amountController.text.length > 0
+    double total = double.parse(controller.amountController.text.isNotEmpty
         ? controller.amountController.text
         : '0');
     controller.splitAmount.value.clear();
@@ -43,7 +43,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TAppBar(
+      appBar: const TAppBar(
         title: Text('Create Split'),
         showBackArrow: true,
       ),
@@ -53,7 +53,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
             : SingleChildScrollView(
                 child: Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                      const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -63,15 +63,15 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text('Split Name'),
+                            child: const Text('Split Name'),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Expanded(
                             child: TextField(
                               controller: controller.splitNameController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Enter Split Name',
                               ),
@@ -79,7 +79,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -88,9 +88,9 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text('Amount'),
+                            child: const Text('Amount'),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Expanded(
@@ -108,7 +108,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                                 // split equally
                                 splitEqually();
                               },
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Enter Amount',
                               ),
@@ -116,7 +116,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -125,15 +125,15 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text('Description'),
+                            child: const Text('Description'),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Expanded(
                             child: TextField(
                               controller: controller.descriptionController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Enter Description',
                               ),
@@ -141,13 +141,13 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 24,
                       ),
                       Row(
                         children: [
-                          Text('Paid by:'),
-                          SizedBox(
+                          const Text('Paid by:'),
+                          const SizedBox(
                             width: 10,
                           ),
                           PullDownButton(itemBuilder: (context) {
@@ -201,13 +201,13 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                           }),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 18,
                       ),
                       Row(
                         children: [
-                          Text('Split between:'),
-                          Spacer(),
+                          const Text('Split between:'),
+                          const Spacer(),
                           // Split Equally
                           TextButton(
                             style: ButtonStyle(
@@ -233,7 +233,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                                   .copyWith(color: Colors.white),
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           TextButton(
                             style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all(
@@ -267,12 +267,12 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                                   .copyWith(color: Colors.white),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 14,
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       ...List.generate(
@@ -296,7 +296,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: Text('Enter Amount'),
+                                title: const Text('Enter Amount'),
                                 content: TextField(
                                   controller: TextEditingController(
                                       text: amount.toString()),
@@ -329,7 +329,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text('Cancel'),
+                                    child: const Text('Cancel'),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -347,7 +347,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
 
                                       Navigator.pop(context);
                                     },
-                                    child: Text('Ok'),
+                                    child: const Text('Ok'),
                                   ),
                                 ],
                               ),
@@ -379,7 +379,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                     ],
@@ -410,7 +410,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
               child: controller.isLoading.value
-                  ? SizedBox(
+                  ? const SizedBox(
                       height: 24,
                       width: 24,
                       child: CircularProgressIndicator(

@@ -305,9 +305,7 @@ class FireStoreRef {
         id: "${data.paidy}-${split.uid}",
         timestamp: data.timestamp,
         users: userList,
-        title: data.title +
-            " on " +
-            [
+        title: "${data.title} on ${[
               'Monday',
               'Tuesday',
               'Wednesday',
@@ -315,7 +313,7 @@ class FireStoreRef {
               'Friday',
               'Saturday',
               'Sunday',
-            ][data.timestamp.weekday - 1],
+            ][data.timestamp.weekday - 1]}",
         convoAndTags: [
           Convo(
             id: data.id,

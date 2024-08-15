@@ -57,7 +57,7 @@ class SettingsOptionCard extends StatelessWidget {
                   Row(
                     children: [
                       prefixWidget ?? Container(),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(

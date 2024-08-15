@@ -4,11 +4,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Models/GroupModel.dart';
-import 'package:paysa/Models/UserModel.dart';
 import 'package:paysa/Views/Chats/ChatModel.dart';
 import 'package:paysa/Views/Transactions/Transactions.dart';
 import 'package:uuid/uuid.dart';
@@ -48,7 +45,7 @@ class GroupPageController extends GetxController {
     }
 
     ChatMessage chatMessage = ChatMessage(
-      id: Uuid().v1(),
+      id: const Uuid().v1(),
       createdBy: FirebaseAuth.instance.currentUser!.uid,
       createdByUserName: FirebaseAuth.instance.currentUser!.displayName!,
       message: chatController.text,

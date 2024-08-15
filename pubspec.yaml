@@ -70,6 +70,8 @@ dependencies:
   flashy_tab_bar2: ^0.0.10
   device_info_plus: ^10.1.2
 
+  path_provider: any
+  path: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,12 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/AddSpendingController.dart';
-import 'package:paysa/Models/SplitModel.dart';
-import 'package:paysa/Models/UserModel.dart';
 import 'package:paysa/Views/AddSpending/Widgets/custCircleAvatar.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 import 'package:paysa/utils/constants/cherryToast.dart';
@@ -14,7 +9,7 @@ import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 
 class AddDailySpendingScreen extends StatefulWidget {
-  AddDailySpendingScreen({
+  const AddDailySpendingScreen({super.key, 
     required this.fromEdit,
   });
 
@@ -95,9 +90,9 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                     Container(
                       width: TSizes.displayWidth(context),
                       padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: TColors.primary,
-                        borderRadius: const BorderRadius.only(
+                        borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                         ),
@@ -151,7 +146,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -203,9 +198,9 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                         ? Container(
                             width: TSizes.displayWidth(context),
                             padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 color: TColors.primary,
-                                borderRadius: const BorderRadius.only(
+                                borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(30),
                                   bottomRight: Radius.circular(30),
                                 )
@@ -253,7 +248,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
             ),
 
             (!nextpage)
-                ? SplitWithWidget()
+                ? const SplitWithWidget()
                 : Column(
                     children: [
                       Row(
@@ -266,13 +261,13 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                               });
                             },
                           ),
-                          Text(
+                          const Text(
                             'Auto Split with all members',
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
+                      const Padding(
+                        padding: EdgeInsets.all(12.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -287,12 +282,12 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                       ),
                     ],
                   ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             // List of all the users
-            AllMembersSplitWidget(),
-            SizedBox(
+            const AllMembersSplitWidget(),
+            const SizedBox(
               height: 50,
             ),
           ],
@@ -350,7 +345,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
               color: TColors.dark.withOpacity(0.2),
             ),
           ),
-          child: Center(
+          child: const Center(
             child: Text(
               'Continue',
               style: TextStyle(
@@ -892,7 +887,7 @@ class AllMembersSplitWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: TSizes.displayHeight(context) * 0.8,
       child: Expanded(
         child: ListView.builder(
@@ -916,7 +911,7 @@ class AllMembersSplitWidget extends StatelessWidget {
                       color: TColors.textWhite,
                     ),
                   ),
-                  Text(
+                  const Text(
                     // who paid
                     "Paid",
                   )
@@ -972,11 +967,11 @@ class SplitWithWidget extends StatelessWidget {
           color: TColors.primary.withOpacity(0.2),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 'Split with',
                 style: TextStyle(

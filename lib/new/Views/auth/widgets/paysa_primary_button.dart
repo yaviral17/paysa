@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:paysa/utils/constants/colors.dart';
-import 'package:paysa/utils/constants/sizes.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 class PaysaPrimaryButton extends StatelessWidget {

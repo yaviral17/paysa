@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:paysa/Controllers/LoginController.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/auth_controller.dart';
-import 'package:paysa/new/Views/auth/login_view.dart';
 import 'package:paysa/new/Views/auth/widgets/paysa_primary_button.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';

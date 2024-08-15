@@ -6,7 +6,6 @@ import 'package:paysa/new/Controllers/auth_controller.dart';
 import 'package:paysa/new/Views/auth/auth_view.dart';
 import 'package:paysa/new/Views/dashboard/navigation_view.dart';
 import 'package:paysa/routes.dart';
-import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:paysa/utils/theme/theme.dart';
 
 class App extends StatefulWidget {
@@ -23,6 +22,7 @@ class _AppState extends State<App> {
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     Get.put(AuthController());
     return GetMaterialApp(

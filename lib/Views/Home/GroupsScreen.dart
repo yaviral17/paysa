@@ -65,7 +65,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
               }
 
               if (snapshot.hasError) {
-                return Text("Something Went Wrong");
+                return const Text("Something Went Wrong");
               }
               mySessions = [];
               for (Map<String, dynamic> session in snapshot.requireData) {
@@ -171,7 +171,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                               ),
                               padding: const EdgeInsets.only(left: 22),
                               alignment: Alignment.centerLeft,
-                              child: Icon(
+                              child: const Icon(
                                 Icons.delete,
                                 color: Colors.white,
                               ),
@@ -242,7 +242,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                     ],
                                   ),
                                   Text(
-                                      "${THelperFunctions.formateDateTime(sessionsIdList[index].timestamp, "dd/MM/yyyy")}",
+                                      THelperFunctions.formateDateTime(sessionsIdList[index].timestamp, "dd/MM/yyyy"),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!

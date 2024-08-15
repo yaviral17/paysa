@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:math' as math;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -14,7 +13,6 @@ import 'package:paysa/Views/AddSpending/AddSpending.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
-import 'package:shimmer/shimmer.dart';
 
 class DailySpendingScreen extends StatefulWidget {
   const DailySpendingScreen({super.key});
@@ -26,7 +24,7 @@ class DailySpendingScreen extends StatefulWidget {
 class _DailySpendingScreenState extends State<DailySpendingScreen> {
   RxList<DailySpendingModel> dailySpendings = <DailySpendingModel>[].obs;
   RxList<String> days = <String>[].obs;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   GlobalKey? _refreshScreenKey = GlobalKey();
   RxBool canRefresh = false.obs;
   @override
@@ -70,7 +68,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => AddDailySpendingScreen(fromEdit: false)),
+          builder: (context) => const AddDailySpendingScreen(fromEdit: false)),
     );
 
     // Refresh data when user comes back from the new screen
@@ -131,7 +129,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () => Get.to(() => AddDailySpendingScreen(fromEdit: false),
+        onPressed: () => Get.to(() => const AddDailySpendingScreen(fromEdit: false),
             transition: Transition.rightToLeftWithFade),
         child: const Icon(Icons.add),
       ),
@@ -167,7 +165,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                       return Text('Something went wrong ${snapshot.error}');
                     }
                     if (snapshot.data!.isEmpty) {
-                      return Text('No Daily Spendings');
+                      return const Text('No Daily Spendings');
                     }
 
                     return GroupedListView(
@@ -210,9 +208,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                                     ),
                               ),
                               Text(
-                                "₹ " +
-                                    _getTotalAmmountByDateTime(element)
-                                        .toString(),
+                                "₹ ${_getTotalAmmountByDateTime(element)}",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge!
@@ -313,7 +309,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                   Text(
                     dailySpending.description.capitalizeFirst ??
                         "No Description",
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                   ),
@@ -324,7 +320,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "₹ " + dailySpending.amount.toString(),
+                    "₹ ${dailySpending.amount}",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -332,7 +328,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                   Text(
                     THelperFunctions.formateDateTime(
                         dailySpending.timestamp, 'h:mm a'),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                   ),
@@ -354,8 +350,8 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                         dailySpending.splits![index].uid),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(
                               vertical: 4, horizontal: 12),
                           child: CircularProgressIndicator(),
                         );
@@ -453,7 +449,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
 }
 
 class BarChartSample1 extends StatefulWidget {
-  BarChartSample1({
+  const BarChartSample1({
     super.key,
     required this.dailySpendings,
   });
@@ -540,7 +536,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                 ),
                 Text(
                   'Max: ₹ ${getMaxOfLast7Day()}\nMin: ₹ ${getMinOfLast7Day()}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: TColors.accent,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

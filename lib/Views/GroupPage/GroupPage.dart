@@ -1,8 +1,6 @@
-import 'package:cherry_toast/resources/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Config/FirestoreRefrence.dart';
 import 'package:paysa/Models/Convo.dart';
@@ -40,7 +38,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
   double _totalAmount = 0.0;
 
   RxBool showSendButton = false.obs;
-  RxBool _listning = false.obs;
+  final RxBool _listning = false.obs;
 
   fetchAmountData(SessionsModel sessn) {
     setState(() {
@@ -76,7 +74,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
 
   Stream<SessionsModel> _fetchSession() async* {
     Stream<Map<String, dynamic>?> getSessionData =
-        await FireStoreRef.fetchSessionDataByIdStream(widget.session.id);
+        FireStoreRef.fetchSessionDataByIdStream(widget.session.id);
     yield* getSessionData.map((event) => SessionsModel.fromJson(event!));
   }
 
@@ -93,13 +91,13 @@ class _GroupPageScreenState extends State<GroupPageScreen>
   void _scrollToEnd() async {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
     );
   }
 
-  ScrollController _scrollController = ScrollController();
-  ScrollController _scrollControllerOuter = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollControllerOuter = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +275,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                   stream: _fetchSession(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -290,8 +288,8 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                     SessionsModel latestSessionData =
                         snapshot.data as SessionsModel;
 
-                    List<Convo> _convoList = latestSessionData.convoAndTags;
-                    _convoList
+                    List<Convo> convoList = latestSessionData.convoAndTags;
+                    convoList
                         .sort((a, b) => a.timestamp.compareTo(b.timestamp));
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -304,38 +302,38 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                             // make chatlist here
 
                             ...List.generate(
-                              _convoList.length,
+                              convoList.length,
                               (index) {
-                                Convo _chats = _convoList[index];
+                                Convo chats = convoList[index];
 
-                                if (_chats.type == "chat") {
+                                if (chats.type == "chat") {
                                   return ChatBubble(
-                                    isYou: _chats.sender ==
+                                    isYou: chats.sender ==
                                         FirebaseAuth.instance.currentUser!.uid,
-                                    message: _chats.message,
-                                    senderName: _chats.sender ==
+                                    message: chats.message,
+                                    senderName: chats.sender ==
                                             FirebaseAuth
                                                 .instance.currentUser!.uid
                                         ? 'You'
-                                        : _chats.senderName ?? "User",
-                                    timestamp: _chats.timestamp,
+                                        : chats.senderName ?? "User",
+                                    timestamp: chats.timestamp,
                                   );
                                 }
-                                if (_chats.type == "audio") {
+                                if (chats.type == "audio") {
                                   return Container();
                                 }
 
-                                if (_chats.type == "image") {
+                                if (chats.type == "image") {
                                   return Container();
                                 }
 
-                                if (_chats.type == "split") {
+                                if (chats.type == "split") {
                                   return FutureBuilder(
-                                      future: _fetchSplit(_chats.id),
+                                      future: _fetchSplit(chats.id),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
-                                          return Center(
+                                          return const Center(
                                             child: CircularProgressIndicator(),
                                           );
                                         }
@@ -347,10 +345,10 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                                           );
                                         }
 
-                                        DailySpendingModel _splitData =
+                                        DailySpendingModel splitData =
                                             snapshot.data as DailySpendingModel;
 
-                                        return spendingInfoTile(_splitData);
+                                        return spendingInfoTile(splitData);
                                       });
 
                                   // return Container(
@@ -403,8 +401,8 @@ class _GroupPageScreenState extends State<GroupPageScreen>
               ),
               Container(
                 height: TSizes.displayHeight(context) * 0.1,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
                     Expanded(
@@ -425,8 +423,8 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                               context, "Please enter a message to send.");
                           return;
                         }
-                        Convo _convo = Convo(
-                          id: Uuid().v1(),
+                        Convo convo = Convo(
+                          id: const Uuid().v1(),
                           sender: FirebaseAuth.instance.currentUser!.uid,
                           senderName:
                               FirebaseAuth.instance.currentUser!.displayName,
@@ -437,12 +435,12 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                         //send message to firestore
                         FireStoreRef.postConvoInSession(
                           widget.session.id,
-                          _convo,
+                          convo,
                         );
 
                         chatController.clear();
                       },
-                      icon: Icon(Iconsax.send_2),
+                      icon: const Icon(Iconsax.send_2),
                     ),
                   ],
                 ),
@@ -507,8 +505,8 @@ class _GroupPageScreenState extends State<GroupPageScreen>
         padding: MediaQuery.of(context).viewInsets,
         child: Container(
           height: TSizes.displayHeight(context) * 0.08,
-          margin: EdgeInsets.symmetric(horizontal: 10),
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
               Expanded(
@@ -541,8 +539,8 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                             context, "Please enter a message to send.");
                         return;
                       }
-                      Convo _convo = Convo(
-                        id: Uuid().v1(),
+                      Convo convo = Convo(
+                        id: const Uuid().v1(),
                         sender: FirebaseAuth.instance.currentUser!.uid,
                         senderName:
                             FirebaseAuth.instance.currentUser!.displayName,
@@ -553,18 +551,18 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                       //send message to firestore
                       FireStoreRef.postConvoInSession(
                         widget.session.id,
-                        _convo,
+                        convo,
                       );
                       _scrollToEnd();
                       chatController.clear();
                     },
                     child: Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: TColors.primary,
                         borderRadius: BorderRadius.circular(24),
                       ),
-                      child: Icon(Iconsax.send_2, color: TColors.white),
+                      child: const Icon(Iconsax.send_2, color: TColors.white),
                     ),
                   ),
                 ),
@@ -610,7 +608,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
       padding: const EdgeInsets.all(TSizes.defaultSpace),
       width: TSizes.displayWidth(context),
       decoration: BoxDecoration(
-        color: Color(0xff00430F),
+        color: const Color(0xff00430F),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -625,10 +623,10 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                 onPressed: () {
                   Get.back();
                 },
-                icon: Icon(Iconsax.arrow_left),
+                icon: const Icon(Iconsax.arrow_left),
               ),
               SizedBox(width: TSizes.displayWidth(context) * 0.002),
-              Hero(
+              const Hero(
                 tag: 'group_pfp',
                 child: CircleAvatar(
                   radius: 20,
@@ -698,7 +696,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
           ),
           Center(
             child: Text(
-              'You owe ₹${_userAmount} to User',
+              'You owe ₹$_userAmount to User',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -815,7 +813,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                   Text(
                     dailySpending.description.capitalizeFirst ??
                         "No Description",
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                   ),
@@ -826,7 +824,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "₹ " + dailySpending.amount.toString(),
+                    "₹ ${dailySpending.amount}",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -834,7 +832,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                   Text(
                     THelperFunctions.formateDateTime(
                         dailySpending.timestamp, 'h:mm a'),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                   ),
@@ -851,18 +849,18 @@ class _GroupPageScreenState extends State<GroupPageScreen>
     );
   }
 
-  Widget splitWidget(DailySpendingModel _splitData) {
+  Widget splitWidget(DailySpendingModel splitData) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...List.generate(_splitData.splits!.length, (index) {
+        ...List.generate(splitData.splits!.length, (index) {
           return FutureBuilder(
-            future: FireStoreRef.getuserByUid(_splitData.splits![index].uid),
+            future: FireStoreRef.getuserByUid(splitData.splits![index].uid),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Padding(
+                return const Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                      EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                   child: CircularProgressIndicator(),
                 );
               }
@@ -875,7 +873,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
 
               UserModel user = UserModel.fromJson(snapshot.requireData);
 
-              return usertagTile(user, _splitData, index);
+              return usertagTile(user, splitData, index);
             },
           );
         }),

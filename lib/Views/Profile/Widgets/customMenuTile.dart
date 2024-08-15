@@ -1,9 +1,7 @@
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 
 class MenuOptionsTile extends StatelessWidget {
@@ -12,7 +10,7 @@ class MenuOptionsTile extends StatelessWidget {
   final void Function()? onTap;
   final Color? bgColor;
 
-  MenuOptionsTile({
+  const MenuOptionsTile({
     super.key,
     required this.tileText,
     required this.icon,
@@ -25,8 +23,8 @@ class MenuOptionsTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         width: TSizes.displayWidth(context),
         decoration: BoxDecoration(
           color: bgColor ?? bgColor!.withOpacity(0.1),
@@ -42,7 +40,7 @@ class MenuOptionsTile extends StatelessWidget {
                 child: Text(
                   tileText,
                   // + 'dsfdsfsfdsfdgfdgfdhhghdfdjgfdjgfdjgfd',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),

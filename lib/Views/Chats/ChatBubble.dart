@@ -38,15 +38,15 @@ class ChatBubble extends StatelessWidget {
       children: [
         if (isYou) ShowTimeStamp(),
         Container(
-          margin: EdgeInsets.symmetric(vertical: 4),
-          padding: EdgeInsets.all(8),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: isYou ? TColors.primary : TColors.darkerGrey,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(isYou ? 12 : 0),
               topRight: Radius.circular(isYou ? 0 : 12),
-              bottomLeft: Radius.circular(12),
-              bottomRight: Radius.circular(12),
+              bottomLeft: const Radius.circular(12),
+              bottomRight: const Radius.circular(12),
             ),
           ),
           child: Column(
@@ -78,7 +78,7 @@ class ChatBubble extends StatelessWidget {
                 child: Text(
                   message,
                   softWrap: true,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
                   ),

@@ -31,7 +31,7 @@ class _SettingsViewState extends State<SettingsView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SafeArea(
+              const SafeArea(
                 child: Text('Settings',
                     style: TextStyle(
                       color: TColors.textWhite,
@@ -39,7 +39,7 @@ class _SettingsViewState extends State<SettingsView> {
                       fontWeight: FontWeight.bold,
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Center(
@@ -54,18 +54,18 @@ class _SettingsViewState extends State<SettingsView> {
                         child: Text(
                           FirebaseAuth.instance.currentUser?.displayName?[0] ??
                               'J',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text('Account Settings'),
-              SizedBox(
+              const Text('Account Settings'),
+              const SizedBox(
                 height: 10,
               ),
               SettingsOptionCard(
@@ -76,7 +76,7 @@ class _SettingsViewState extends State<SettingsView> {
                 color: TColors.darkTextField,
                 suffixWidget: Text(
                   FirebaseAuth.instance.currentUser?.displayName ?? 'John Doe',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 15,
                   ),
@@ -90,7 +90,7 @@ class _SettingsViewState extends State<SettingsView> {
                 suffixWidget: Text(
                   FirebaseAuth.instance.currentUser?.email ??
                       'johan.example.com',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 15,
                   ),
@@ -106,11 +106,11 @@ class _SettingsViewState extends State<SettingsView> {
                   color: Colors.grey,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
-              Text('App Settings'),
-              SizedBox(
+              const Text('App Settings'),
+              const SizedBox(
                 height: 10,
               ),
               SettingsOptionCard(
@@ -118,7 +118,7 @@ class _SettingsViewState extends State<SettingsView> {
                 fontSize: 15,
                 height: MediaQuery.of(context).size.height * 0.08,
                 color: TColors.darkTextField,
-                suffixWidget: Text(
+                suffixWidget: const Text(
                   'INR',
                   style: TextStyle(
                     color: Colors.grey,
@@ -131,7 +131,7 @@ class _SettingsViewState extends State<SettingsView> {
                 fontSize: 15,
                 height: MediaQuery.of(context).size.height * 0.08,
                 color: TColors.darkTextField,
-                suffixWidget: Text(
+                suffixWidget: const Text(
                   'Off',
                   style: TextStyle(
                     color: Colors.grey,
@@ -154,17 +154,17 @@ class _SettingsViewState extends State<SettingsView> {
                       context: context,
                       builder: (ctx) {
                         return CupertinoAlertDialog(
-                          title: Text("Log Out"),
-                          content: Text("Are you sure you want to log out?"),
+                          title: const Text("Log Out"),
+                          content: const Text("Are you sure you want to log out?"),
                           actions: [
                             CupertinoDialogAction(
-                              child: Text("Cancel"),
+                              child: const Text("Cancel"),
                               onPressed: () {
                                 Navigator.pop(ctx);
                               },
                             ),
                             CupertinoDialogAction(
-                              child: Text("Log Out"),
+                              child: const Text("Log Out"),
                               onPressed: () {
                                 FirebaseAuth.instance.signOut();
                                 GoogleSignIn().signOut();

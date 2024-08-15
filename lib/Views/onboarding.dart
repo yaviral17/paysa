@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
@@ -55,7 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(50.0),
                   child: BackdropFilter(
@@ -63,7 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: TColors.primaryBackground.withOpacity(0.1),
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                         border: Border.all(
                           width: 1.5,
                           color: TColors.primaryBackground.withOpacity(0.2),
@@ -76,8 +74,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         },
                         child: Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text(
+                              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: const Text(
                             'Skip',
                             style: TextStyle(
                               color: TColors.textWhite,
@@ -130,7 +128,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             decoration: BoxDecoration(
                               color: TColors.primaryBackground.withOpacity(0.1),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(50.0)),
+                                  const BorderRadius.all(Radius.circular(50.0)),
                               border: Border.all(
                                 width: 1.5,
                                 color:
@@ -142,8 +140,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               onTap: () {
                                 Navigator.pushNamed(context, '/login');
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'Done',
                                   style: TextStyle(
@@ -174,7 +172,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             decoration: BoxDecoration(
                               color: TColors.primaryBackground.withOpacity(0.1),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(50.0)),
+                                  const BorderRadius.all(Radius.circular(50.0)),
                               border: Border.all(
                                 width: 1.5,
                                 color:
@@ -197,8 +195,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   curve: Curves.easeIn,
                                 );
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'Next',
                                   style: TextStyle(
@@ -215,7 +213,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ],
                   ),
                 ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ],
@@ -272,7 +270,7 @@ class OnBoardContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // const Spacer(),
-        SizedBox(height: 50),
+        const SizedBox(height: 50),
 
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.4,
@@ -280,7 +278,7 @@ class OnBoardContent extends StatelessWidget {
           child: Center(child: Lottie.asset(image, fit: BoxFit.cover)),
         ),
 
-        Spacer(),
+        const Spacer(),
         Text(
           title,
           style: const TextStyle(
@@ -301,7 +299,7 @@ class OnBoardContent extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }
