@@ -69,7 +69,7 @@ dependencies:
   smooth_corner: ^1.1.0
   flashy_tab_bar2: ^0.0.10
   device_info_plus: ^10.1.2
-  firebase_storage: ^11.6.9
+  firebase_storage: 
   path_provider: any
   path: any
 dev_dependencies:
