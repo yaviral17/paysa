@@ -99,7 +99,6 @@ class AuthView extends StatelessWidget {
           style: TextStyle(
             fontSize: TSizes.displayWidth(context) * 0.1,
             fontWeight: FontWeight.bold,
-            color: TColors.textWhite,
             fontFamily: 'OpenSans',
           ),
           textAlign: TextAlign.left,
@@ -109,7 +108,6 @@ class AuthView extends StatelessWidget {
           'Manage your expenses with ease. 💸\nBecause who doesn\'t love knowing where all their money went? 🤔💰',
           style: TextStyle(
             fontSize: TSizes.displayWidth(context) * 0.047,
-            color: TColors.textWhite.withOpacity(0.9),
             fontFamily: 'OpenSans',
           ),
           textAlign: TextAlign.left,

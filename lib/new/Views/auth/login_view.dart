@@ -42,7 +42,6 @@ class LoginView extends StatelessWidget {
                         },
                         icon: const Icon(
                           Iconsax.arrow_left_2,
-                          color: Colors.white,
                         ),
                       ),
                       SizedBox(
@@ -64,7 +63,6 @@ class LoginView extends StatelessWidget {
                     style: TextStyle(
                       fontSize: TSizes.displayWidth(context) * 0.09,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -72,7 +70,7 @@ class LoginView extends StatelessWidget {
                     'Paysa helps you track your expenses effortlessly. 💸\nStay on top of your spending and save more!',
                     style: TextStyle(
                       fontSize: TSizes.displayWidth(context) * 0.044,
-                      color: Colors.white70,
+                      color: isDark ? TColors.textWhite : TColors.textSecondary,
                     ),
                   ),
                 ],
@@ -91,7 +89,6 @@ class LoginView extends StatelessWidget {
                       'Email',
                       style: TextStyle(
                         fontSize: TSizes.displayWidth(context) * 0.04,
-                        color: TColors.textWhite,
                         fontFamily: 'OpenSans',
                       ),
                     ),
@@ -116,7 +113,6 @@ class LoginView extends StatelessWidget {
                       'Password',
                       style: TextStyle(
                         fontSize: TSizes.displayWidth(context) * 0.04,
-                        color: TColors.textWhite,
                         fontFamily: 'OpenSans',
                       ),
                     ),
@@ -210,7 +206,7 @@ class LoginView extends StatelessWidget {
                     'Don\'t have an account? Register',
                     style: TextStyle(
                       fontSize: TSizes.displayWidth(context) * 0.04,
-                      color: TColors.textWhite,
+                      color: isDark ? TColors.textWhite : TColors.textSecondary,
                       fontFamily: 'OpenSans',
                     ),
                   ),
