@@ -3,7 +3,7 @@ import 'package:paysa/utils/helpers/helper_functions.dart';
 
 class TColors {
   // App theme colors
-  static const Color primary = Color(0xFF7126DA);
+  static const Color primary = Color(0xFF4b68ff);
   static const Color primaryDark = Color(0xFF1A1919);
   static const Color secondary = Color(0xFFFFE24B);
   static const Color accent = Color(0xFFb0c7ff);

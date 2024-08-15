@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/new/Controllers/navigation_controller.dart';
+import 'package:paysa/new/Views/Home/home_view.dart';
 import 'package:paysa/new/Views/settings/setting_view.dart';
 import 'package:paysa/utils/constants/colors.dart';
 
@@ -45,27 +46,25 @@ class _NavigationViewState extends State<NavigationView> {
         PageController(initialPage: navigationController.currentIndex);
     return Scaffold(
       backgroundColor: TColors.background(context),
-      body: PageView(
-        controller: pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          Container(
-            child: const Center(
-              child: Text('Home'),
+      body: SafeArea(
+        child: PageView(
+          controller: pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            HomeView(),
+            Container(
+              child: const Center(
+                child: Text('Stats'),
+              ),
             ),
-          ),
-          Container(
-            child: const Center(
-              child: Text('Stats'),
+            Container(
+              child: const Center(
+                child: Text('Wallet'),
+              ),
             ),
-          ),
-          Container(
-            child: const Center(
-              child: Text('Wallet'),
-            ),
-          ),
-          const SettingsView(),
-        ],
+            const SettingsView(),
+          ],
+        ),
       ),
       bottomNavigationBar: FlashyTabBar(
         backgroundColor: TColors.background(context),

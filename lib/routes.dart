@@ -9,9 +9,11 @@ import 'package:paysa/Views/NavigationMenu.dart';
 import 'package:paysa/Views/Profile/Settings/changePassword.dart';
 import 'package:paysa/Views/Profile/Settings/privacyPolicy.dart';
 import 'package:paysa/Views/Profile/profileScreen.dart';
+import 'package:paysa/new/Views/transaction/spending_numpad_view.dart';
 import 'package:paysa/new/Views/auth/auth_view.dart';
 import 'package:paysa/new/Views/auth/login_view.dart';
 import 'package:paysa/new/Views/auth/sign_up_view.dart';
+import 'package:paysa/new/Views/transaction/transaction_data_view.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 
 class RouteGenerator {
@@ -65,6 +67,14 @@ class RouteGenerator {
           AddDailySpendingScreen screen =
               settings.arguments as AddDailySpendingScreen;
           return MaterialPageRoute(builder: (_) => screen);
+        }
+      case '/spending-numpad':
+        {
+          return MaterialPageRoute(builder: (_) => const SpendingNumpadView());
+        }
+      case '/transaction':
+        {
+          return MaterialPageRoute(builder: (_) => const TransactionView());
         }
       case '/privacy-policy':
         {
