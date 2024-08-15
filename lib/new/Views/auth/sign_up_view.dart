@@ -47,7 +47,6 @@ class SignUpView extends StatelessWidget {
                               },
                               icon: const Icon(
                                 Iconsax.arrow_left_2,
-                                color: Colors.white,
                               ),
                             ),
                             SizedBox(
@@ -69,7 +68,6 @@ class SignUpView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: TSizes.displayWidth(context) * 0.09,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -77,7 +75,9 @@ class SignUpView extends StatelessWidget {
                           'Create an account to start tracking your expenses. 💸\nIt\'s quick and easy!',
                           style: TextStyle(
                             fontSize: TSizes.displayWidth(context) * 0.044,
-                            color: Colors.white70,
+                            color: isDark
+                                ? TColors.textWhite
+                                : TColors.textSecondary,
                           ),
                         ),
                       ],
@@ -96,7 +96,9 @@ class SignUpView extends StatelessWidget {
                             'Name',
                             style: TextStyle(
                               fontSize: TSizes.displayWidth(context) * 0.04,
-                              color: TColors.textWhite,
+                              color: isDark
+                                  ? TColors.textWhite
+                                  : TColors.textSecondary,
                               fontFamily: 'OpenSans',
                             ),
                           ),
@@ -122,7 +124,9 @@ class SignUpView extends StatelessWidget {
                             'Email',
                             style: TextStyle(
                               fontSize: TSizes.displayWidth(context) * 0.04,
-                              color: TColors.textWhite,
+                              color: isDark
+                                  ? TColors.textWhite
+                                  : TColors.textSecondary,
                               fontFamily: 'OpenSans',
                             ),
                           ),
@@ -148,7 +152,9 @@ class SignUpView extends StatelessWidget {
                             'Password',
                             style: TextStyle(
                               fontSize: TSizes.displayWidth(context) * 0.04,
-                              color: TColors.textWhite,
+                              color: isDark
+                                  ? TColors.textWhite
+                                  : TColors.textSecondary,
                               fontFamily: 'OpenSans',
                             ),
                           ),
@@ -175,7 +181,9 @@ class SignUpView extends StatelessWidget {
                             'Confirm Password',
                             style: TextStyle(
                               fontSize: TSizes.displayWidth(context) * 0.04,
-                              color: TColors.textWhite,
+                              color: isDark
+                                  ? TColors.textWhite
+                                  : TColors.textSecondary,
                               fontFamily: 'OpenSans',
                             ),
                           ),
@@ -275,7 +283,8 @@ class SignUpView extends StatelessWidget {
                       'Already have an account? Login',
                       style: TextStyle(
                         fontSize: TSizes.displayWidth(context) * 0.04,
-                        color: TColors.textWhite,
+                        color:
+                            isDark ? TColors.textWhite : TColors.textSecondary,
                         fontFamily: 'OpenSans',
                       ),
                     ),
