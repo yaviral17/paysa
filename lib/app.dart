@@ -45,15 +45,6 @@ class _AppState extends State<App> {
             );
           }
           if (snapshot.hasData) {
-            if (snapshot.requireData!.emailVerified == false) {
-              THelperFunctions.showErrorMessageGet(
-                  title: 'Email not verified',
-                  message:
-                      'Verification email already sent to ${snapshot.requireData!.email}');
-              FirebaseAuth.instance.signOut();
-              return const AuthView();
-            }
-
             return const NavigationView();
           }
           return const AuthView();

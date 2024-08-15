@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,21 +48,29 @@ class AuthController extends GetxController {
       {required String email, required String password}) async {
     try {
       isLoading.value = true;
-      log("isLoading.value = true;");
+
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      log("await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);");
+
+      bool emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+
+      if (!emailVerified) {
+        THelperFunctions.showErrorMessageGet(
+            title: 'Email Verification',
+            message: 'Please verify your email to continue');
+        FirebaseAuth.instance.currentUser!.sendEmailVerification();
+        FirebaseAuth.instance.signOut();
+        return;
+      }
+
       String? token = await FirebaseMessaging.instance.getToken();
+
       if (token != null) {
         FirestoreAPIs.addDeviceToken(
             FirebaseAuth.instance.currentUser!.uid, token);
-        log("FirestoreAPIs.addDeviceToken(FirebaseAuth.instance.currentUser!.uid, token);");
-      } else {
-        log("Failed to get FCM token");
       }
 
       navigatorKey.currentState!.pop();
-      log("navigatorKey.currentState!.pop();");
     } catch (e) {
       THelperFunctions.showErrorMessageGet(
           title: 'Sign In Error', message: e.toString());
