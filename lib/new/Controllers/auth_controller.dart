@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Models/user_data.dart';
 import 'package:paysa/new/api/firestore_apis.dart';
@@ -12,26 +14,26 @@ class AuthController extends GetxController {
   Future<void> signInWithGoogle() async {
     try {
       isLoading.value = true;
-      // // Trigger the authentication flow
-      // final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      // // Obtain the auth details from the request
-      // final GoogleSignInAuthentication? googleAuth =
-      //     await googleUser?.authentication;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-      // // Create a new credential
-      // final credential = GoogleAuthProvider.credential(
-      //   accessToken: googleAuth?.accessToken,
-      //   idToken: googleAuth?.idToken,
-      // );
-      // log(credential.toString(), name: 'credential');
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      log(credential.toString(), name: 'credential');
 
-      // // Once signed in, return the UserCredential
-      // await FirebaseAuth.instance
-      //     .signInWithCredential(credential)
-      //     .then((value) {
-      //   return value.user;
-      // });
+      // Once signed in, return the UserCredential
+      await FirebaseAuth.instance
+          .signInWithCredential(credential)
+          .then((value) {
+        return value.user;
+      });
       // log(credential.toString(), name: 'credential-');
     } catch (e) {
       Get.snackbar('Error', e.toString());
@@ -45,15 +47,25 @@ class AuthController extends GetxController {
       {required String email, required String password}) async {
     try {
       isLoading.value = true;
+      log("isLoading.value = true;");
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        return value.user;
-      });
+          .signInWithEmailAndPassword(email: email, password: password);
+      log("await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);");
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        FirestoreAPIs.addDeviceToken(
+            FirebaseAuth.instance.currentUser!.uid, token);
+        log("FirestoreAPIs.addDeviceToken(FirebaseAuth.instance.currentUser!.uid, token);");
+      } else {
+        log("Failed to get FCM token");
+      }
+
       navigatorKey.currentState!.pop();
+      log("navigatorKey.currentState!.pop();");
     } catch (e) {
       THelperFunctions.showErrorMessageGet(
           title: 'Sign In Error', message: e.toString());
+      log(e.toString(), name: 'Error');
       return;
     }
     isLoading.value = false;

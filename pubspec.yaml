@@ -51,11 +51,13 @@ dependencies:
   lottie: ^3.1.0
   salomon_bottom_bar: ^3.3.2
   grouped_list: ^5.1.2
-  firebase_core: ^2.25.4
-  firebase_auth: ^4.17.4
-  google_sign_in: ^6.2.1
+  firebase_core: 
+  firebase_auth: 
+  google_sign_in: 
+  cloud_firestore: 
+  firebase_crashlytics: 
+  firebase_analytics: 
   uuid: ^4.3.3
-  cloud_firestore: ^4.15.4
   pull_down_button: ^0.9.3 
   cached_network_image: ^3.3.1
   flex_color_scheme: ^7.3.1
