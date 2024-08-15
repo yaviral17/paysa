@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/auth_controller.dart';
+import 'package:paysa/new/Controllers/settings_controller.dart';
 import 'package:paysa/new/Views/settings/widget/option_card.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
@@ -18,12 +21,15 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   AuthController authController = Get.find();
+  SettingsController settingsController = SettingsController();
+
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor:
+          isDark ? TColors.darkBackground : TColors.lightBackground,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -34,7 +40,6 @@ class _SettingsViewState extends State<SettingsView> {
               const SafeArea(
                 child: Text('Settings',
                     style: TextStyle(
-                      color: TColors.textWhite,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     )),
@@ -43,23 +48,50 @@ class _SettingsViewState extends State<SettingsView> {
                 height: 20,
               ),
               Center(
-                child: FirebaseAuth.instance.currentUser?.photoURL != null
-                    ? CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(
-                            FirebaseAuth.instance.currentUser!.photoURL!),
-                      )
-                    : CircleAvatar(
-                        radius: 50,
-                        child: Text(
-                          FirebaseAuth.instance.currentUser?.displayName?[0] ??
-                              'J',
-                          style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
+                child: Stack(
+                  children: [
+                    FirebaseAuth.instance.currentUser?.photoURL != null
+                        ? CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(
+                                FirebaseAuth.instance.currentUser!.photoURL!),
+                          )
+                        : CircleAvatar(
+                            radius: 50,
+                            child: Text(
+                              FirebaseAuth
+                                      .instance.currentUser?.displayName?[0] ??
+                                  'J',
+                              style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
+                    Positioned(
+                      right: 0,
+                      // left: 0,
+                      bottom: 0,
+                      child: InkWell(
+                        onTap: () {
+                          settingsController.updateProfileInFirebase(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? TColors.black.withOpacity(0.8)
+                                : TColors.white.withOpacity(0.8),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Icon(CupertinoIcons.pencil,
+                              size: 20,
+                              color: isDark ? TColors.white : TColors.black),
                         ),
                       ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -71,13 +103,14 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 onTap: () {},
                 text: 'Name',
+                textColor: isDark ? TColors.white : TColors.black,
                 fontSize: 15,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: TColors.darkTextField,
+                color: isDark ? TColors.darkTextField : TColors.lightTextField,
                 suffixWidget: Text(
                   FirebaseAuth.instance.currentUser?.displayName ?? 'John Doe',
-                  style: const TextStyle(
-                    color: Colors.grey,
+                  style: TextStyle(
+                    color: isDark ? Colors.grey : Colors.grey[700],
                     fontSize: 15,
                   ),
                 ),
@@ -85,13 +118,14 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 text: 'Email',
                 fontSize: 15,
+                textColor: isDark ? TColors.white : TColors.black,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: TColors.darkTextField,
+                color: isDark ? TColors.darkTextField : TColors.lightTextField,
                 suffixWidget: Text(
                   FirebaseAuth.instance.currentUser?.email ??
                       'johan.example.com',
-                  style: const TextStyle(
-                    color: Colors.grey,
+                  style: TextStyle(
+                    color: isDark ? Colors.grey : Colors.grey[700],
                     fontSize: 15,
                   ),
                 ),
@@ -99,11 +133,12 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 text: 'Change Password',
                 fontSize: 15,
+                textColor: isDark ? TColors.white : TColors.black,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: TColors.darkTextField,
-                suffixWidget: const Icon(
+                color: isDark ? TColors.darkTextField : TColors.lightTextField,
+                suffixWidget: Icon(
                   Icons.arrow_forward_ios,
-                  color: Colors.grey,
+                  color: isDark ? Colors.grey : Colors.grey[700],
                 ),
               ),
               const SizedBox(
@@ -116,12 +151,13 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 text: 'Currency',
                 fontSize: 15,
+                textColor: isDark ? TColors.white : TColors.black,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: TColors.darkTextField,
-                suffixWidget: const Text(
+                color: isDark ? TColors.darkTextField : TColors.lightTextField,
+                suffixWidget: Text(
                   'INR',
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: isDark ? Colors.grey : Colors.grey[700],
                     fontSize: 15,
                   ),
                 ),
@@ -129,12 +165,13 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 text: 'Reminder notification',
                 fontSize: 15,
+                textColor: isDark ? TColors.white : TColors.black,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: TColors.darkTextField,
-                suffixWidget: const Text(
+                color: isDark ? TColors.darkTextField : TColors.lightTextField,
+                suffixWidget: Text(
                   'Off',
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: isDark ? Colors.grey : Colors.grey[700],
                     fontSize: 15,
                   ),
                 ),
@@ -155,7 +192,8 @@ class _SettingsViewState extends State<SettingsView> {
                       builder: (ctx) {
                         return CupertinoAlertDialog(
                           title: const Text("Log Out"),
-                          content: const Text("Are you sure you want to log out?"),
+                          content:
+                              const Text("Are you sure you want to log out?"),
                           actions: [
                             CupertinoDialogAction(
                               child: const Text("Cancel"),
