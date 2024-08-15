@@ -46,3 +46,5 @@ android/app/google-services.json
 ios/firebase_app_id_file.json
 ios/Runner/GoogleService-Info.plist
 android/app/google_services.json
+firebase.json
+pubspec.lock
