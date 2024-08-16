@@ -1,8 +1,6 @@
 import 'package:dashed_circular_progress_bar/dashed_circular_progress_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/spending_controller.dart';
@@ -83,29 +81,69 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // hello header
-            SmoothClipRRect(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-              smoothness: 0.8,
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: TColors.primary,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      FirebaseAuth.instance.currentUser!.photoURL == null
-                          ? CircleAvatar(
-                              radius: 20,
-                              backgroundColor: TColors.primaryDark,
-                              child: Text(
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SmoothClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                  smoothness: 0.8,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: TColors.primary,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FirebaseAuth.instance.currentUser!.photoURL == null
+                              ? CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: TColors.primaryDark,
+                                  child: Text(
+                                    FirebaseAuth
+                                            .instance.currentUser!.displayName
+                                            ?.split(' ')
+                                            .first[0] ??
+                                        '',
+                                    style: const TextStyle(
+                                      color: TColors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'OpenSans',
+                                    ),
+                                  ),
+                                )
+                              : PaysaNetworkImage(
+                                  url: FirebaseAuth
+                                          .instance.currentUser!.photoURL ??
+                                      'https://i.pinimg.com/564x/98/1d/6b/981d6b2e0ccb5e968a0618c8d47671da.jpg',
+                                  height: 36,
+                                  width: 36,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Hello,',
+                                style: TextStyle(
+                                  color: TColors.white,
+                                  fontSize: 14,
+                                  fontFamily: 'OpenSans',
+                                ),
+                              ),
+                              Text(
                                 FirebaseAuth.instance.currentUser!.displayName
                                         ?.split(' ')
-                                        .first[0] ??
+                                        .first ??
                                     '',
                                 style: const TextStyle(
                                   color: TColors.white,
@@ -114,48 +152,39 @@ class _HomeViewState extends State<HomeView> {
                                   fontFamily: 'OpenSans',
                                 ),
                               ),
-                            )
-                          : PaysaNetworkImage(
-                              url: FirebaseAuth
-                                      .instance.currentUser!.photoURL ??
-                                  'https://i.pinimg.com/564x/98/1d/6b/981d6b2e0ccb5e968a0618c8d47671da.jpg',
-                              height: 36,
-                              width: 36,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Hello,',
-                            style: TextStyle(
-                              color: TColors.white,
-                              fontSize: 14,
-                              fontFamily: 'OpenSans',
-                            ),
-                          ),
-                          Text(
-                            FirebaseAuth.instance.currentUser!.displayName
-                                    ?.split(' ')
-                                    .first ??
-                                '',
-                            style: const TextStyle(
-                              color: TColors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'OpenSans',
-                            ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                const Spacer(),
+                IconButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      TColors.white.withOpacity(0.12),
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    navigatorKey.currentState!.pushNamed('/settings');
+                  },
+                  icon: const Text(
+                    '🔧 change targets',
+                    style: TextStyle(
+                      color: TColors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'OpenSans',
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 20,
@@ -277,7 +306,7 @@ class TransactionWidget extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           color: TColors.white,
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -286,7 +315,7 @@ class TransactionWidget extends StatelessWidget {
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
+        style: const TextStyle(
           color: TColors.textSecondary,
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -300,7 +329,7 @@ class TransactionWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-          isReceived ? '+ \$${amount}' : '- \$${amount}',
+          isReceived ? '+ \$$amount' : '- \$$amount',
           style: TextStyle(
             color: isReceived ? TColors.success : TColors.error,
             fontSize: 20,

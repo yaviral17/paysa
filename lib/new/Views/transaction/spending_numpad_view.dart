@@ -1,11 +1,8 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:paysa/app.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/spending_controller.dart';
 import 'package:paysa/new/Views/auth/widgets/paysa_primary_button.dart';

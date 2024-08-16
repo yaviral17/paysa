@@ -9,12 +9,12 @@ class ChatBubble extends StatelessWidget {
   final bool isYou;
 
   const ChatBubble({
-    Key? key,
+    super.key,
     required this.senderName,
     required this.message,
     required this.timestamp,
     required this.isYou,
-  }) : super(key: key);
+  });
 
   // String getDateDifference(DateTime date) {
   //   final Duration difference = DateTime.now().difference(date);

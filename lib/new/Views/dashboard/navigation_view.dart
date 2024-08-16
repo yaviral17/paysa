@@ -50,9 +50,9 @@ class _NavigationViewState extends State<NavigationView> {
         child: PageView(
           controller: pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: [
+          children: const [
             HomeView(),
-            const SettingsView(),
+            SettingsView(),
           ],
         ),
       ),

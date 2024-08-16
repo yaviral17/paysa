@@ -62,7 +62,7 @@ class FirestoreAPIs {
     if (response.statusCode == 200) {
       Map<String, dynamic> categories = await jsonDecode(response.body);
       categories['isSuccess'] = true;
-      log(categories.toString(), name: "json");
+      // log(categories.toString(), name: "json");
       return categories;
     } else {
       log('Failed to load categories', name: "json");
