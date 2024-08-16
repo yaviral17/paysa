@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/app.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/spending_controller.dart';
 import 'package:paysa/new/Views/auth/widgets/paysa_primary_button.dart';
@@ -61,27 +62,50 @@ class _SpendingNumpadViewState extends State<SpendingNumpadView> {
       backgroundColor: TColors.background(context),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Spacer(),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
+              child: CircleAvatar(
+                backgroundColor: TColors.textField(context),
+                child: IconButton(
+                  icon: const Icon(
+                    Iconsax.arrow_left_2,
+                    color: TColors.white,
+                  ),
+                  onPressed: () {
+                    navigatorKey.currentState!.pop();
+                  },
+                ),
+              ),
+            ),
+            const Spacer(),
             // amount text with currency sign and currency sign fontSize 24 and amount text is 32
-            Obx(
-              () => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 36.0),
-                child: FittedBox(
-                  child: Text(
-                    '\$${controller.amount}',
-                    style: TextStyle(
-                      color: TColors.white,
-                      fontSize: TSizes.displayWidth(context) * 0.2,
-                      fontWeight: FontWeight.bold,
+            Center(
+              child: Obx(
+                () => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 36.0),
+                  child: FittedBox(
+                    child: Text(
+                      '\$${controller.amount}',
+                      style: TextStyle(
+                        color: TColors.white,
+                        fontSize: TSizes.displayWidth(context) * 0.2,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
 
-            Spacer(),
+            const Spacer(),
+            Divider(
+              color: TColors.textSecondary.withOpacity(0.4),
+              thickness: 1,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -141,13 +165,15 @@ class _SpendingNumpadViewState extends State<SpendingNumpadView> {
             SizedBox(
               height: TSizes.displayHeight(context) * 0.02,
             ),
-            PaysaPrimaryButton(
-              text: "Continue",
-              onTap: () {
-                log(controller.amount.value);
-                navigatorKey.currentState!.pushNamed('/transaction');
-              },
-              width: TSizes.displayWidth(context) * 0.9,
+            Center(
+              child: PaysaPrimaryButton(
+                text: "Continue",
+                onTap: () {
+                  log(controller.amount.value);
+                  navigatorKey.currentState!.pushNamed('/transaction');
+                },
+                width: TSizes.displayWidth(context) * 0.9,
+              ),
             ),
             SizedBox(
               height: TSizes.displayHeight(context) * 0.02,

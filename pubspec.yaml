@@ -73,6 +73,8 @@ dependencies:
   path_provider: any
   path: any
   zoom_tap_animation: ^1.1.0
+  dashed_circular_progress_bar: ^0.0.6
+  flutter_secure_storage: ^9.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

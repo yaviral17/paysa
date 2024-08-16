@@ -26,14 +26,14 @@ class _NavigationViewState extends State<NavigationView> {
       ),
       title: const Text('Home'),
     ),
-    FlashyTabBarItem(
-      icon: const Icon(Iconsax.chart_1),
-      title: const Text('Stats'),
-    ),
-    FlashyTabBarItem(
-      icon: const Icon(Iconsax.wallet),
-      title: const Text('Wallet'),
-    ),
+    // FlashyTabBarItem(
+    //   icon: const Icon(Iconsax.timer),
+    //   title: const Text('History'),
+    // ),
+    // FlashyTabBarItem(
+    //   icon: const Icon(Iconsax.wallet),
+    //   title: const Text('Wallet'),
+    // ),
     FlashyTabBarItem(
       icon: const Icon(Iconsax.setting_2),
       title: const Text('Settings'),
@@ -52,16 +52,6 @@ class _NavigationViewState extends State<NavigationView> {
           physics: const NeverScrollableScrollPhysics(),
           children: [
             HomeView(),
-            Container(
-              child: const Center(
-                child: Text('Stats'),
-              ),
-            ),
-            Container(
-              child: const Center(
-                child: Text('Wallet'),
-              ),
-            ),
             const SettingsView(),
           ],
         ),

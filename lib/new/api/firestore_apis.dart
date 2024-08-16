@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:paysa/new/Models/user_data.dart';
 
 class FirestoreAPIs {
@@ -42,5 +45,28 @@ class FirestoreAPIs {
       }
     });
     return tokens as List<String>;
+  }
+
+  static Future<Map<String, dynamic>> getCategories() async {
+    String jsonUrl;
+    jsonUrl = await FirebaseFirestore.instance
+        .collection('global-data')
+        .doc('categories')
+        .get()
+        .then((value) {
+      return (value.data() as Map<String, dynamic>)['url'] ?? '';
+    });
+
+    final response = await http.get(Uri.parse(jsonUrl));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> categories = await jsonDecode(response.body);
+      categories['isSuccess'] = true;
+      log(categories.toString(), name: "json");
+      return categories;
+    } else {
+      log('Failed to load categories', name: "json");
+      return {'isSuccess': false};
+    }
   }
 }

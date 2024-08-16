@@ -1,35 +1,43 @@
 class Transaction {
   final String id;
+  final String emoji;
   final String title;
-  final String category;
+  final String subtitle;
   final double amount;
-  final DateTime date;
+  final DateTime createdAt;
+  final String paidBy;
 
   Transaction({
     required this.id,
+    required this.emoji,
     required this.title,
-    required this.category,
+    required this.subtitle,
     required this.amount,
-    required this.date,
+    required this.createdAt,
+    required this.paidBy,
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
       id: json['id'],
+      emoji: json['emoji'],
       title: json['title'],
-      category: json['category'],
+      subtitle: json['subtitle'],
       amount: json['amount'],
-      date: DateTime.parse(json['date']),
+      createdAt: DateTime.parse(json['createdAt']),
+      paidBy: json['paidBy'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'emoji': emoji,
       'title': title,
-      'category': category,
+      'subtitle': subtitle,
       'amount': amount,
-      'date': date.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'paidBy': paidBy,
     };
   }
 }

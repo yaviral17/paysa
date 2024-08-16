@@ -2,14 +2,33 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Models/user_data.dart';
 import 'package:paysa/new/api/firestore_apis.dart';
+import 'package:paysa/new/api/flutter_secure_storage_api.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
 
 class AuthController extends GetxController {
+  getCategories() async {
+    if (await FlutterSecureStorageAPI.contains('categories')) {
+      String? categories = await FlutterSecureStorageAPI.read('categories');
+    }
+
+    Map<String, dynamic> categoriesData = await FirestoreAPIs.getCategories();
+    if (categoriesData['isSuccess']) {
+      log(categoriesData['data'].toString(), name: 'categories');
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
+
   RxBool isLoading = false.obs;
   Future<void> signInWithGoogle() async {
     try {

@@ -13,7 +13,7 @@ class _TransactionViewState extends State<TransactionView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: TColors.background(context),
-      body: Column(
+      body: const Column(
         children: [],
       ),
     );

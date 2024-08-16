@@ -17,6 +17,11 @@ class TColors {
   // text field colors
   static const Color lightTextField = Color(0xFFE0E0E0);
   static const Color darkTextField = Color(0xFF161515);
+  static Color textField(BuildContext context) {
+    return THelperFunctions.isDarkMode(context)
+        ? darkTextField
+        : lightTextField;
+  }
 
   // Background colors
   static const Color light = Color(0xFFF5F7FB);
