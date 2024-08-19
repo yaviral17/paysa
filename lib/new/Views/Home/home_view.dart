@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/spending_controller.dart';
+import 'package:paysa/new/Views/Home/widgets/transaction_widget.dart';
 import 'package:paysa/new/api/firestore_apis.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:paysa/utils/widgets/cachedNetworkImageWidget.dart';
 import 'package:smooth_corner/smooth_corner.dart';
+
+import 'widgets/spending_counter_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -95,7 +98,12 @@ class _HomeViewState extends State<HomeView> {
                       color: TColors.primary,
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(18),
+                      padding: const EdgeInsets.only(
+                        left: 12,
+                        right: 16,
+                        top: 8,
+                        bottom: 8,
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -132,11 +140,12 @@ class _HomeViewState extends State<HomeView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'Hello,',
                                 style: TextStyle(
                                   color: TColors.white,
-                                  fontSize: 14,
+                                  fontSize:
+                                      TSizes.displayWidth(context) * 0.032,
                                   fontFamily: 'OpenSans',
                                 ),
                               ),
@@ -145,9 +154,9 @@ class _HomeViewState extends State<HomeView> {
                                         ?.split(' ')
                                         .first ??
                                     '',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: TColors.white,
-                                  fontSize: 20,
+                                  fontSize: TSizes.displayWidth(context) * 0.04,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'OpenSans',
                                 ),
@@ -267,209 +276,6 @@ class _HomeViewState extends State<HomeView> {
           Icons.add,
           color: Colors.white,
         ),
-      ),
-    );
-  }
-}
-
-class TransactionWidget extends StatelessWidget {
-  final String emoji;
-  final String title;
-  final String subtitle;
-  final String amount;
-  final bool isReceived;
-  const TransactionWidget({
-    super.key,
-    required this.emoji,
-    required this.title,
-    required this.subtitle,
-    required this.amount,
-    this.isReceived = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: TColors.white.withOpacity(0.1),
-        child: Center(
-          child: Text(
-            emoji,
-            style: const TextStyle(
-              color: TColors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans',
-            ),
-          ),
-        ),
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: TColors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'OpenSans',
-        ),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(
-          color: TColors.textSecondary,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'OpenSans',
-        ),
-      ),
-      trailing: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          color: TColors.white.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          isReceived ? '+ \$$amount' : '- \$$amount',
-          style: TextStyle(
-            color: isReceived ? TColors.success : TColors.error,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SpendingCounter extends StatelessWidget {
-  final String title;
-  final double amount;
-  final String currency;
-  final double targetAmount;
-
-  const SpendingCounter({
-    super.key,
-    this.title = 'Today',
-    this.amount = 181.39,
-    this.currency = '\$',
-    this.targetAmount = 200,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: TColors.white.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      width: TSizes.displayWidth(context) * 0.4,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          PaysaCircleProgressWidget(
-            size: TSizes.displayWidth(context) * 0.14,
-            value: 40,
-            targetValue: 100,
-          ),
-          SizedBox(
-            width: TSizes.displayWidth(context) * 0.02,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: TColors.white,
-                  fontSize: TSizes.displayWidth(context) * 0.05,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'OpenSans',
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '$currency${amount.toInt()}',
-                    style: TextStyle(
-                      color: TColors.white,
-                      fontSize: TSizes.displayWidth(context) * 0.042,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'OpenSans',
-                    ),
-                  ),
-                  Text(
-                    ".${amount.toString().split('.').last.padRight(2, '0')}",
-                    style: TextStyle(
-                      color: TColors.white,
-                      fontSize: TSizes.displayWidth(context) * 0.04,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'OpenSans',
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PaysaCircleProgressWidget extends StatelessWidget {
-  final double size;
-  final double value;
-  final double targetValue;
-
-  const PaysaCircleProgressWidget({
-    super.key,
-    this.size = 100,
-    this.targetValue = 100,
-    this.value = 0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
-    return SizedBox(
-      width: size,
-      height: size,
-      child: DashedCircularProgressBar.aspectRatio(
-        aspectRatio: 1, // width ÷ height
-        valueNotifier: ValueNotifier(value),
-        progress: value,
-        maxProgress: targetValue,
-        corners: StrokeCap.butt,
-        foregroundColor: TColors.primary,
-        backgroundColor: isDark
-            ? TColors.white.withOpacity(0.1)
-            : TColors.black.withOpacity(0.1),
-        foregroundStrokeWidth: 12,
-        backgroundStrokeWidth: 8,
-        seekColor: TColors.primary,
-
-        circleCenterAlignment: Alignment.center,
-        seekSize: 0,
-        backgroundDashSize: 0,
-        animation: true,
-        // child: Center(
-        //   child: ValueListenableBuilder(
-        //     valueListenable: valueNotifier,
-        //     builder: (_, double value, __) => Text(
-        //       '${value.toInt()}%',
-        //       style: const TextStyle(
-        //           color: Colors.black,
-        //           fontWeight: FontWeight.w300,
-        //           fontSize: 60),
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }
