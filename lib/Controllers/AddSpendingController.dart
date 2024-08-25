@@ -16,7 +16,7 @@ class AddSpendingController extends GetxController {
   TextEditingController amountController = TextEditingController();
   DateTime? timestamp = DateTime.now();
   Rx<UserModel> paidBy = Rx(UserModel.empty());
-  RxList<Split> splits = <Split>[].obs;
+  // RxList<Split> splits = <Split>[].obs;
   RxList<UserModel> users = <UserModel>[].obs;
 
   void addDailySpending({
@@ -50,7 +50,7 @@ class AddSpendingController extends GetxController {
       isSplit: true,
       timestamp: timestamp!,
       title: titleController.text,
-      splits: splits.toList(),
+      // splits: splits.toList(),
       paidy: paidBy.value.uid,
     );
 
