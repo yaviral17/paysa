@@ -1,9 +1,9 @@
-import 'package:dashed_circular_progress_bar/dashed_circular_progress_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/main.dart';
 import 'package:paysa/new/Controllers/spending_controller.dart';
+import 'package:paysa/new/Controllers/widgets_controller.dart';
 import 'package:paysa/new/Views/Home/widgets/transaction_widget.dart';
 import 'package:paysa/new/api/firestore_apis.dart';
 import 'package:paysa/utils/constants/colors.dart';
@@ -12,6 +12,7 @@ import 'package:paysa/utils/helpers/helper_functions.dart';
 import 'package:paysa/utils/widgets/cachedNetworkImageWidget.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
+import '../../Home Screen Widget/spending_chart_widget.dart';
 import 'widgets/spending_counter_widget.dart';
 
 class HomeView extends StatefulWidget {
@@ -28,6 +29,24 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     Get.put(SpendingController());
     FirestoreAPIs.getCategories();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      updateWidgetUi();
+    });
+  }
+
+  //widget not showing in home screen
+  updateWidgetUi() async {
+    await WidgetsController.update(
+      context,
+      SpendingChartWidget(
+        title: 'Today',
+        amount: 120,
+        currency: '\$',
+        targetAmount: 200,
+      ),
+      'SpendingChartWidget',
+    );
+    setState(() {});
   }
 
   final ValueNotifier<double> _valueNotifierToday = ValueNotifier(40);

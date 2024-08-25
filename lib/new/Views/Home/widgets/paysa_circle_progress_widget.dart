@@ -10,6 +10,8 @@ class PaysaCircleProgressWidget extends StatelessWidget {
   final double foregroundStrokeWidth;
   final double backgroundStrokeWidth;
   final Widget? child;
+  final bool animation;
+  final Duration animationDuration;
 
   const PaysaCircleProgressWidget({
     super.key,
@@ -19,6 +21,8 @@ class PaysaCircleProgressWidget extends StatelessWidget {
     this.foregroundStrokeWidth = 12,
     this.backgroundStrokeWidth = 8,
     this.child,
+    this.animation = true,
+    this.animationDuration = const Duration(milliseconds: 1000),
   });
 
   @override
@@ -44,7 +48,9 @@ class PaysaCircleProgressWidget extends StatelessWidget {
         circleCenterAlignment: Alignment.center,
         seekSize: 0,
         backgroundDashSize: 0,
-        animation: true,
+        animation: animation,
+        animationDuration: animationDuration,
+
         child: Center(child: child),
       ),
     );
