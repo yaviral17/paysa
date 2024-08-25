@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:paysa/new/Views/Home/home_view.dart';
 import 'package:paysa/new/Views/Home/widgets/paysa_circle_progress_widget.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';

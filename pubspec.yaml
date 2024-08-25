@@ -36,19 +36,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get_storage: ^2.1.1
-  http: ^1.2.0
+  http: 
   jwt_decoder: ^2.0.1
   custom_refresh_indicator: ^3.0.0
   url_launcher: ^6.2.4
   intl: ^0.19.0
   permission_handler: ^11.3.1
-  image_cropper: ^5.0.1
   image_picker: ^1.0.7
   logger: ^2.0.2+1
   cherry_toast: ^1.8.0
   iconsax: ^0.0.8
   get: ^4.6.6
-  lottie: ^3.1.0
+  lottie: 
   salomon_bottom_bar: ^3.3.2
   grouped_list: ^6.0.0
   firebase_core: 
@@ -75,6 +74,9 @@ dependencies:
   zoom_tap_animation: ^1.1.0
   dashed_circular_progress_bar: ^0.0.6
   flutter_secure_storage: ^9.2.2
+  davinci: ^2.1.1
+  home_widget: 
+  image_cropper: ^4.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
