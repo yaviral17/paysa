@@ -103,7 +103,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
       if (THelperFunctions.getDayDifference(spending.timestamp) == time) {
         if (spending.isSplit) {
           double mySplit = 0;
-          for (Split split in spending.splits!) {
+          for (SplitMode split in spending.splits!) {
             if (split.uid == FirebaseAuth.instance.currentUser!.uid) {
               mySplit = split.amount;
             }
@@ -129,7 +129,8 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () => Get.to(() => const AddDailySpendingScreen(fromEdit: false),
+        onPressed: () => Get.to(
+            () => const AddDailySpendingScreen(fromEdit: false),
             transition: Transition.rightToLeftWithFade),
         child: const Icon(Icons.add),
       ),
@@ -351,8 +352,8 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 12),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                           child: CircularProgressIndicator(),
                         );
                       }
@@ -591,7 +592,7 @@ class BarChartSample1State extends State<BarChartSample1> {
       if (THelperFunctions.getDayDifference(spending.timestamp) == date) {
         if (spending.isSplit) {
           double mySplit = 0;
-          for (Split split in spending.splits!) {
+          for (SplitMode split in spending.splits!) {
             if (split.uid == FirebaseAuth.instance.currentUser!.uid) {
               mySplit = split.amount;
             }

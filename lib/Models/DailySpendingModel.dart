@@ -1,4 +1,3 @@
-
 import 'package:paysa/Models/SplitModel.dart';
 
 class DailySpendingModel {
@@ -10,7 +9,7 @@ class DailySpendingModel {
   String title;
   String description;
   String? paidy;
-  List<Split>? splits;
+  List<SplitMode>? splits;
 
   DailySpendingModel({
     required this.id,
@@ -37,7 +36,7 @@ class DailySpendingModel {
       isSplit: json['isSplit'] ?? false,
       paidy: json['paidy'],
       splits: json['splits'] != null
-          ? Split.fromJsonList(json['splits'].cast<Map<String, dynamic>>())
+          ? SplitMode.fromJsonList(json['splits'].cast<Map<String, dynamic>>())
           : null,
     );
   }
@@ -52,7 +51,7 @@ class DailySpendingModel {
       'description': description,
       'isSplit': isSplit,
       'paidy': paidy,
-      'splits': splits != null ? Split.toJsonList(splits!) : null,
+      'splits': splits != null ? SplitMode.toJsonList(splits!) : null,
     };
   }
 
@@ -110,6 +109,5 @@ class DailySpendingModel {
     'working',
   ];
 
-  String get categoryIcon =>
-      'assets/expanses_category_icons/ic_$category.png';
+  String get categoryIcon => 'assets/expanses_category_icons/ic_$category.png';
 }

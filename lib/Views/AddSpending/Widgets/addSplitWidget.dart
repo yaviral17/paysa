@@ -25,7 +25,7 @@ class AddSplitWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Members Split with amount
+        // Members SplitMode with amount
 
         Obx(
           () => Container(
@@ -74,7 +74,7 @@ class AddSplitWidget extends StatelessWidget {
                           return;
                         }
 
-                        Split sp = Split(
+                        SplitMode sp = SplitMode(
                           uid: FirebaseAuth.instance.currentUser!.uid,
                           amount: double.parse(
                                 addSpendingController.amountController.text,
@@ -156,7 +156,7 @@ class AddSplitWidget extends StatelessWidget {
                                 return AlertDialog(
                                   backgroundColor: TColors.dark,
                                   title: const Text(
-                                    'Split member',
+                                    'SplitMode member',
                                     style: TextStyle(
                                       color: TColors.textWhite,
                                     ),
@@ -176,7 +176,8 @@ class AddSplitWidget extends StatelessWidget {
                                                 .withOpacity(0.5),
                                           ),
                                           fillColor: Colors.transparent,
-                                          disabledBorder: const OutlineInputBorder(
+                                          disabledBorder:
+                                              const OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color: TColors.white,
                                             ),
@@ -187,7 +188,8 @@ class AddSplitWidget extends StatelessWidget {
                                                   .withOpacity(0.5),
                                             ),
                                           ),
-                                          focusedBorder: const OutlineInputBorder(
+                                          focusedBorder:
+                                              const OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color: TColors.white,
                                             ),
@@ -386,7 +388,7 @@ class AddSplitWidget extends StatelessWidget {
                                         addSpendingController.users.add(user!);
 
                                         addSpendingController.splits.add(
-                                          Split(
+                                          SplitMode(
                                             uid: user.uid,
                                             amount: double.parse(
                                                 amountController.text),
@@ -394,7 +396,7 @@ class AddSplitWidget extends StatelessWidget {
                                           ),
                                         );
                                         Get.back();
-                                                                            },
+                                      },
                                       child: const Text(
                                         'Add Member',
                                         style: TextStyle(
@@ -468,7 +470,7 @@ class AddSplitWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        // Amount Split
+                        // Amount SplitMode
 
                         Container(
                           padding: const EdgeInsets.all(16),

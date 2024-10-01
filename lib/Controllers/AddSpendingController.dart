@@ -16,7 +16,7 @@ class AddSpendingController extends GetxController {
   TextEditingController amountController = TextEditingController();
   DateTime? timestamp = DateTime.now();
   Rx<UserModel> paidBy = Rx(UserModel.empty());
-  RxList<Split> splits = <Split>[].obs;
+  RxList<SplitMode> splits = <SplitMode>[].obs;
   RxList<UserModel> users = <UserModel>[].obs;
 
   void addDailySpending({

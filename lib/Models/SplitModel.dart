@@ -1,9 +1,9 @@
-class Split {
+class SplitMode {
   final String uid;
   final bool paid;
   final double amount;
 
-  Split({
+  SplitMode({
     required this.uid,
     required this.paid,
     required this.amount,
@@ -17,38 +17,38 @@ class Split {
     };
   }
 
-  factory Split.fromJSon(Map<String, dynamic> data) {
-    return Split(
+  factory SplitMode.fromJSon(Map<String, dynamic> data) {
+    return SplitMode(
       uid: data['uid'],
       paid: data['paid'],
       amount: double.parse(data['amount'].toString()),
     );
   }
 
-  Split copyWith({
+  SplitMode copyWith({
     String? uid,
     bool? paid,
     double? amount,
   }) {
-    return Split(
+    return SplitMode(
       uid: uid ?? this.uid,
       paid: paid ?? this.paid,
       amount: amount ?? this.amount,
     );
   }
 
-  static List<Split> fromJsonList(List<dynamic> data) {
-    List<Split> splits = [];
-    for (var split in data) {
-      splits.add(Split.fromJSon(split));
+  static List<SplitMode> fromJsonList(List<dynamic> data) {
+    List<SplitMode> SplitModes = [];
+    for (var SplitMode in data) {
+      SplitModes.add(SplitMode.fromJSon(SplitMode));
     }
-    return splits;
+    return SplitModes;
   }
 
-  static List<Map<String, dynamic>> toJsonList(List<Split> splits) {
+  static List<Map<String, dynamic>> toJsonList(List<SplitMode> SplitModes) {
     List<Map<String, dynamic>> data = [];
-    for (var split in splits) {
-      data.add(split.toJSon());
+    for (var SplitMode in SplitModes) {
+      data.add(SplitMode.toJSon());
     }
     return data;
   }
