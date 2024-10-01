@@ -48,3 +48,10 @@ ios/Runner/GoogleService-Info.plist
 android/app/google_services.json
 firebase.json
 pubspec.lock
+firestore.rules
+.env
+lib/firebase_options.dart
+firestore.indexes.json
+.firebaserc
+storage.rules
+lib/firebase_options.dart

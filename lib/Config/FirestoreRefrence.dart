@@ -210,7 +210,7 @@ class FireStoreRef {
     // create a split
     await splitsCollection.doc(data.id).set(data.toJson());
     // add daily spending data in all users's collection
-    for (Split split in data.splits!) {
+    for (SplitMode split in data.splits!) {
       await dailySpendingsCollection(split.uid).doc(data.id).set({
         'id': data.id,
         'isSplit': true,
@@ -218,7 +218,7 @@ class FireStoreRef {
     }
     // storing the split amount of the person who paid the whole split
     double payedPersonBySplitAmount = 0;
-    for (Split splt in data.splits ?? []) {
+    for (SplitMode splt in data.splits ?? []) {
       if (splt.uid == data.paidy!) {
         payedPersonBySplitAmount = splt.amount;
       }
@@ -227,7 +227,7 @@ class FireStoreRef {
     // now make a sessions if not exists
     List<String> sessionIds = await getSessionIdsList();
 
-    for (Split split in data.splits!) {
+    for (SplitMode split in data.splits!) {
       if (split.uid == data.paidy) {
         continue;
       }
@@ -306,14 +306,14 @@ class FireStoreRef {
         timestamp: data.timestamp,
         users: userList,
         title: "${data.title} on ${[
-              'Monday',
-              'Tuesday',
-              'Wednesday',
-              'Thursday',
-              'Friday',
-              'Saturday',
-              'Sunday',
-            ][data.timestamp.weekday - 1]}",
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday',
+        ][data.timestamp.weekday - 1]}",
         convoAndTags: [
           Convo(
             id: data.id,
@@ -330,7 +330,7 @@ class FireStoreRef {
           .set(newSession.toJson());
     }
     // if (!sessionExists) {
-    //   for (Split split in data.splits!) {
+    //   for (SplitMode split in data.splits!) {
     //     SessionsModel newSession = SessionsModel(
     //         id: data.paidy! + splits.uid,
     //         members: [data.paidy!, splits.uid],
@@ -358,7 +358,7 @@ class FireStoreRef {
     //         ]);
     //   }
     // } else {
-    //   for (Split split in data.splits!) {
+    //   for (SplitMode split in data.splits!) {
     //     await sessionsCollection.doc("${data.paidy}-${split.uid}").update({
     //       'splits': FieldValue.arrayUnion([data.id]),
     //     });
