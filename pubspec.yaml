@@ -74,9 +74,9 @@ dependencies:
   zoom_tap_animation: ^1.1.0
   dashed_circular_progress_bar: ^0.0.6
   flutter_secure_storage: ^9.2.2
-  davinci: ^2.1.1
   home_widget: 
   image_cropper: ^4.0.1
+  davincii: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
