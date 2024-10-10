@@ -32,10 +32,9 @@ class _AppState extends State<App> {
       onGenerateRoute: RouteGenerator.generateRoute,
       title: 'Paysa',
       // dark only theme
-      darkTheme: TFlexTheme.darkTheme,
-      theme: TFlexTheme.lightTheme,
+      darkTheme: TAppTheme.darkTheme,
+      theme: TAppTheme.lightTheme,
       themeMode: ThemeMode.system,
-
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {

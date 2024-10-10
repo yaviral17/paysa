@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:davincii/core/davinci_capture.dart';
+import 'package:davinci/core/davinci_capture.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:home_widget/home_widget.dart';

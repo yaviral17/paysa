@@ -3,12 +3,14 @@ class UserData {
   final String name;
   final String email;
   final String photoUrl;
+  final bool googleAuth;
 
   UserData({
     required this.uid,
     required this.name,
     required this.email,
     required this.photoUrl,
+    required this.googleAuth,
   });
 
   Map<String, dynamic> toJson() {
@@ -17,6 +19,7 @@ class UserData {
       'name': name,
       'email': email,
       'photoUrl': photoUrl,
+      'googleAuth': googleAuth,
     };
   }
 
@@ -26,6 +29,7 @@ class UserData {
       name: json['name'],
       email: json['email'],
       photoUrl: json['photoUrl'],
+      googleAuth: json['googleAuth'],
     );
   }
 
@@ -40,12 +44,13 @@ class UserData {
       name: name ?? this.name,
       email: email ?? this.email,
       photoUrl: photoUrl ?? this.photoUrl,
+      googleAuth: googleAuth,
     );
   }
 
   @override
   String toString() {
-    return 'UserData(uid: $uid, name: $name, email: $email, photoUrl: $photoUrl)';
+    return 'UserData(uid: $uid, name: $name, email: $email, photoUrl: $photoUrl, googleAuth: $googleAuth)';
   }
 
   @override
@@ -56,6 +61,7 @@ class UserData {
         other.uid == uid &&
         other.name == name &&
         other.email == email &&
-        other.photoUrl == photoUrl;
+        other.photoUrl == photoUrl &&
+        other.googleAuth == googleAuth;
   }
 }

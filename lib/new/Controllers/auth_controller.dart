@@ -48,11 +48,14 @@ class AuthController extends GetxController {
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
 
+      bool userExists = await FirestoreAPIs.userExists(googleUser!.email);
+
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
+
       log(credential.toString(), name: 'credential');
 
       // Once signed in, return the UserCredential
@@ -61,6 +64,28 @@ class AuthController extends GetxController {
           .then((value) {
         return value.user;
       });
+
+      bool isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      if (!isEmailVerified) {
+        FirebaseAuth.instance.currentUser!.sendEmailVerification();
+        FirebaseAuth.instance.signOut();
+        THelperFunctions.showErrorMessageGet(
+            title: 'Email Verification',
+            message: 'Please verify your email to continue');
+        return;
+      }
+      if (!userExists) {
+        FirestoreAPIs.createUser(
+          UserData(
+            uid: FirebaseAuth.instance.currentUser!.uid,
+            name: FirebaseAuth.instance.currentUser!.displayName!,
+            email: FirebaseAuth.instance.currentUser!.email!,
+            photoUrl: FirebaseAuth.instance.currentUser!.photoURL ?? '',
+            googleAuth: true,
+          ),
+        );
+      }
+
       // log(credential.toString(), name: 'credential-');
     } catch (e) {
       Get.snackbar('Error', e.toString());
@@ -72,37 +97,47 @@ class AuthController extends GetxController {
 
   Future<void> signInWithEmailPassword(
       {required String email, required String password}) async {
-    try {
-      isLoading.value = true;
+    // try {
+    isLoading.value = true;
 
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-
-      bool emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-
-      if (!emailVerified) {
-        THelperFunctions.showErrorMessageGet(
-            title: 'Email Verification',
-            message: 'Please verify your email to continue');
-        FirebaseAuth.instance.currentUser!.sendEmailVerification();
-        FirebaseAuth.instance.signOut();
-        return;
-      }
-
-      String? token = await FirebaseMessaging.instance.getToken();
-
-      if (token != null) {
-        FirestoreAPIs.addDeviceToken(
-            FirebaseAuth.instance.currentUser!.uid, token);
-      }
-
-      navigatorKey.currentState!.pop();
-    } catch (e) {
+    bool isGoogleAuth = await FirestoreAPIs.isGoogleAuth(email);
+    log(isGoogleAuth.toString(), name: 'Google Auth');
+    if (isGoogleAuth) {
+      log('This email is registered with Google Auth', name: 'Google Auth');
       THelperFunctions.showErrorMessageGet(
-          title: 'Sign In Error', message: e.toString());
-      log(e.toString(), name: 'Error');
+          title: 'Sign In With Google',
+          message: 'This email is registered with Google Auth');
       return;
     }
+
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+
+    bool emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+
+    if (!emailVerified) {
+      THelperFunctions.showErrorMessageGet(
+          title: 'Email Verification',
+          message: 'Please verify your email to continue');
+      FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      FirebaseAuth.instance.signOut();
+      return;
+    }
+
+    String? token = await FirebaseMessaging.instance.getToken();
+
+    if (token != null) {
+      FirestoreAPIs.addDeviceToken(
+          FirebaseAuth.instance.currentUser!.uid, token);
+    }
+
+    navigatorKey.currentState!.pop();
+    // } catch (e) {
+    //   THelperFunctions.showErrorMessageGet(
+    //       title: 'Sign In Error', message: e.toString());
+    //   log(e.toString(), name: 'Error');
+    //   return;
+    // }
     isLoading.value = false;
   }
 
@@ -117,12 +152,15 @@ class AuthController extends GetxController {
 
       await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
       User user = FirebaseAuth.instance.currentUser!;
-      FirestoreAPIs.createUser(UserData(
-        uid: user.uid,
-        name: user.displayName!,
-        email: user.email!,
-        photoUrl: user.photoURL ?? '',
-      ));
+      FirestoreAPIs.createUser(
+        UserData(
+          uid: user.uid,
+          name: user.displayName!,
+          email: user.email!,
+          photoUrl: user.photoURL ?? '',
+          googleAuth: false,
+        ),
+      );
       FirebaseAuth.instance.currentUser!.sendEmailVerification();
 
       THelperFunctions.showSuccessMessageGet(

@@ -78,4 +78,12 @@ class TSizes {
 
   // Grid view spacing
   static const double gridViewSpacing = 10.0;
+
+  static double figmaRatioWidth(BuildContext context, double figmaWidth) {
+    return displayWidth(context) * (figmaWidth / 420);
+  }
+
+  static double figmaRatioHeight(BuildContext context, double figmaHeight) {
+    return displayHeight(context) * (figmaHeight / 840);
+  }
 }

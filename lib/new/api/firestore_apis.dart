@@ -69,4 +69,22 @@ class FirestoreAPIs {
       return {'isSuccess': false};
     }
   }
+
+  static Future<bool> isGoogleAuth(String email) {
+    log('Checking if google auth...', name: 'googleAuth');
+    return users.where('email', isEqualTo: email).get().then((value) {
+      log(value.docs.toString(), name: 'googleAuth');
+      if (value.docs.isEmpty) {
+        return false;
+      }
+      log(value.docs.first.data().toString(), name: 'googleAuth');
+      return (value.docs.first.data()! as Map)['googleAuth'] ?? false;
+    });
+  }
+
+  static Future<bool> userExists(String email) {
+    return users.where('email', isEqualTo: email).get().then((value) {
+      return value.docs.isNotEmpty;
+    });
+  }
 }

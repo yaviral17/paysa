@@ -55,3 +55,4 @@ firestore.indexes.json
 .firebaserc
 storage.rules
 lib/firebase_options.dart
+lib/new/api/api_keys.dart

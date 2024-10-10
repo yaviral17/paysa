@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get_storage: ^2.1.1
-  http: 
+  http: ^1.0.0
   jwt_decoder: ^2.0.1
   custom_refresh_indicator: ^3.0.0
   url_launcher: ^6.2.4
@@ -75,8 +75,11 @@ dependencies:
   dashed_circular_progress_bar: ^0.0.6
   flutter_secure_storage: ^9.2.2
   home_widget: 
-  image_cropper: ^4.0.1
-  davincii: ^1.0.0
+  davinci: ^2.5.1
+  image_cropper: ^8.0.2
+  google_generative_ai: ^0.4.6
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -133,6 +136,46 @@ flutter:
           weight: 700
         - asset: assets/fonts/OpenSans-Italic.ttf
           style: italic
+
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/rubik/Rubik-light.ttf
+          weight: 300
+        - asset: assets/fonts/rubik/Rubik-lightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/rubik/Rubik-regular.ttf
+        - asset: assets/fonts/rubik/Rubik-regularItalic.ttf
+          style: italic
+        - asset: assets/fonts/rubik/Rubik-medium.ttf
+          weight: 500
+        - asset: assets/fonts/rubik/Rubik-mediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/rubik/Rubik-semiBold.ttf
+          weight: 600
+        - asset: assets/fonts/rubik/Rubik-semiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/rubik/Rubik-bold.ttf
+          weight: 700
+        - asset: assets/fonts/rubik/Rubik-boldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/rubik/Rubik-extraBold.ttf
+          weight: 800
+        - asset: assets/fonts/rubik/Rubik-extraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/rubik/Rubik-black.ttf
+          weight: 900
+        - asset: assets/fonts/rubik/Rubik-blackItalic.ttf 
+          weight: 900
+          style: italic
+
+
+      
+
  
   # fonts:
   #   - family: Schyler

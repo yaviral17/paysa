@@ -56,34 +56,34 @@ class _NavigationViewState extends State<NavigationView> {
           ],
         ),
       ),
-      bottomNavigationBar: FlashyTabBar(
-        backgroundColor: TColors.background(context),
-        selectedIndex: navigationController.currentIndex,
-        showElevation: true,
-        onItemSelected: (index) => setState(() {
-          log('index: $index');
-          navigationController.changePage(index);
-          pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.ease,
-          );
-        }),
-        shadows: [
-          BoxShadow(
-            color: TColors.background(context),
-            blurRadius: 10.0,
-          ),
-        ],
-        items: bottomItem.map((e) {
-          return FlashyTabBarItem(
-            icon: e.icon,
-            title: e.title,
-            inactiveColor: TColors.bottomNavItemInactive(context),
-            activeColor: TColors.bottomNavItemActive(context),
-          );
-        }).toList(),
-      ),
+      // bottomNavigationBar: FlashyTabBar(
+      //   backgroundColor: TColors.background(context),
+      //   selectedIndex: navigationController.currentIndex,
+      //   showElevation: true,
+      //   onItemSelected: (index) => setState(() {
+      //     log('index: $index');
+      //     navigationController.changePage(index);
+      //     pageController.animateToPage(
+      //       index,
+      //       duration: const Duration(milliseconds: 300),
+      //       curve: Curves.ease,
+      //     );
+      //   }),
+      //   shadows: [
+      //     BoxShadow(
+      //       color: TColors.background(context),
+      //       blurRadius: 10.0,
+      //     ),
+      //   ],
+      //   items: bottomItem.map((e) {
+      //     return FlashyTabBarItem(
+      //       icon: e.icon,
+      //       title: e.title,
+      //       inactiveColor: TColors.bottomNavItemInactive(context),
+      //       activeColor: TColors.bottomNavItemActive(context),
+      //     );
+      //   }).toList(),
+      // ),
     );
   }
 }
