@@ -16,6 +16,8 @@ import 'package:paysa/new/Views/auth/sign_up_view.dart';
 import 'package:paysa/new/Views/transaction/transaction_data_view.dart';
 import 'package:paysa/utils/appbar/appbar.dart';
 
+import 'new/Views/statistics/statistics_view.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -85,6 +87,11 @@ class RouteGenerator {
         {
           return MaterialPageRoute(
               builder: (_) => const ChangePasswordScreen());
+        }
+        case '/statistics':
+        {
+          return MaterialPageRoute(
+              builder: (_) => const StatisticsView());
         }
       default:
         return _errorRoute();
