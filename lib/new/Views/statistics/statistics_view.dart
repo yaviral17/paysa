@@ -109,7 +109,7 @@ class _StatisticsViewState extends State<StatisticsView> {
   Widget _buildFriend(bool isDark) {
     return Container(
       height: TSizes.displayHeight(context) * 0.1,
-      width: TSizes.displayWidth(context) * 0.4,
+      width: TSizes.displayWidth(context) * 0.42,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: isDark ? TColors.darkContainer : TColors.lightContainer,
