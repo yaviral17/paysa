@@ -286,16 +286,16 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          navigatorKey.currentState!.pushNamed('/spending-numpad');
-        },
-        backgroundColor: TColors.bottomNavItemActive(context),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     navigatorKey.currentState!.pushNamed('/spending-numpad');
+      //   },
+      //   backgroundColor: TColors.bottomNavItemActive(context),
+      //   child: const Icon(
+      //     Icons.add,
+      //     color: Colors.white,
+      //   ),
+      // ),
     );
   }
 }
