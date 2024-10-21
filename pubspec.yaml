@@ -78,6 +78,7 @@ dependencies:
   image_cropper: ^4.0.1
   davincii: ^1.0.0
   chips_choice_null_safety: ^2.0.6
+  flutter_native_splash: ^2.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -149,3 +150,22 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+flutter_native_splash:
+  color: "#2EAB57"
+  image: assets/images/light_paysa.png
+  branding: assets/images/light_branding.png
+  color_dark: "#000000"
+  image_dark: assets/images/dark_paysa.png
+  branding_dark: assets/images/dark_branding.png
+
+  android_12:
+    image: assets/images/light_paysa.png
+    branding: assets/images/light_branding.png
+    icon_background_color: "#2EAB57"
+    image_dark: assets/images/dark_paysa.png
+    branding_dark: assets/images/dark_branding.png
+    icon_background_color_dark: "#000000"
+
+  web: false
