@@ -32,6 +32,9 @@ dependencies:
     sdk: flutter
   get: ^4.6.6
   flutter_native_splash: ^2.2.8
+  iconsax: ^0.0.8
+  zoom_tap_animation: ^1.1.0
+  smooth_corner: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
