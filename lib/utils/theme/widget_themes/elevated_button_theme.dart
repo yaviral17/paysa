@@ -10,14 +10,14 @@ class TElevatedButtonTheme {
   static final lightElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
-      foregroundColor: TColors.light,
-      backgroundColor: TColors.primary,
-      disabledForegroundColor: TColors.darkGrey,
-      disabledBackgroundColor: TColors.buttonDisabled,
-      side: const BorderSide(color: TColors.primary),
+      foregroundColor: PColors.light,
+      backgroundColor: PColors.primary,
+      disabledForegroundColor: PColors.darkGrey,
+      disabledBackgroundColor: PColors.buttonDisabled,
+      side: const BorderSide(color: PColors.primary),
       padding: const EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
       textStyle: const TextStyle(
-          fontSize: 16, color: TColors.textWhite, fontWeight: FontWeight.w600),
+          fontSize: 16, color: PColors.textWhite, fontWeight: FontWeight.w600),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(TSizes.buttonRadius)),
     ),
@@ -27,14 +27,14 @@ class TElevatedButtonTheme {
   static final darkElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
-      foregroundColor: TColors.light,
-      backgroundColor: TColors.primary,
-      disabledForegroundColor: TColors.darkGrey,
-      disabledBackgroundColor: TColors.darkerGrey,
-      side: const BorderSide(color: TColors.primary),
+      foregroundColor: PColors.light,
+      backgroundColor: PColors.primary,
+      disabledForegroundColor: PColors.darkGrey,
+      disabledBackgroundColor: PColors.darkerGrey,
+      side: const BorderSide(color: PColors.primary),
       padding: const EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
       textStyle: const TextStyle(
-          fontSize: 16, color: TColors.textWhite, fontWeight: FontWeight.w600),
+          fontSize: 16, color: PColors.textWhite, fontWeight: FontWeight.w600),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(TSizes.buttonRadius)),
     ),

@@ -56,7 +56,7 @@ class _SpendingNumpadViewState extends State<SpendingNumpadView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TColors.background(context),
+      backgroundColor: PColors.background(context),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,11 +66,11 @@ class _SpendingNumpadViewState extends State<SpendingNumpadView> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
               child: CircleAvatar(
-                backgroundColor: TColors.textField(context),
+                backgroundColor: PColors.textField(context),
                 child: IconButton(
                   icon: const Icon(
                     Iconsax.arrow_left_2,
-                    color: TColors.white,
+                    color: PColors.white,
                   ),
                   onPressed: () {
                     navigatorKey.currentState!.pop();
@@ -88,7 +88,7 @@ class _SpendingNumpadViewState extends State<SpendingNumpadView> {
                     child: Text(
                       '\$${controller.amount}',
                       style: TextStyle(
-                        color: TColors.white,
+                        color: PColors.white,
                         fontSize: TSizes.displayWidth(context) * 0.2,
                         fontWeight: FontWeight.bold,
                       ),
@@ -100,7 +100,7 @@ class _SpendingNumpadViewState extends State<SpendingNumpadView> {
 
             const Spacer(),
             Divider(
-              color: TColors.textSecondary.withOpacity(0.4),
+              color: PColors.textSecondary.withOpacity(0.4),
               thickness: 1,
             ),
             Row(
@@ -193,20 +193,20 @@ class _SpendingNumpadViewState extends State<SpendingNumpadView> {
         log(text);
         onBussonPress(text, clearAll: true);
       },
-      splashColor: TColors.white.withOpacity(0.1),
+      splashColor: PColors.white.withOpacity(0.1),
       splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
       child: Container(
         width: 100,
         height: 100,
         decoration: BoxDecoration(
-          color: TColors.transparent,
+          color: PColors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: text == '⌫'
               ? Icon(
                   Icons.backspace_rounded,
-                  color: TColors.white,
+                  color: PColors.white,
                   size: TSizes.displayWidth(context) * 0.08,
                 )
               : Text(
@@ -214,7 +214,7 @@ class _SpendingNumpadViewState extends State<SpendingNumpadView> {
                   style: TextStyle(
                     fontSize: TSizes.displayWidth(context) * 0.08,
                     fontWeight: FontWeight.bold,
-                    color: TColors.white,
+                    color: PColors.white,
                   ),
                 ),
         ),

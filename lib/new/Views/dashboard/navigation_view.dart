@@ -7,6 +7,7 @@ import 'package:paysa/new/Views/settings/setting_view.dart';
 import 'package:paysa/new/Views/statistics/statistics_view.dart';
 import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
+import 'package:paysa/utils/theme/theme.dart';
 
 import '../../../main.dart';
 import '../../Models/menu.dart';
@@ -39,7 +40,7 @@ class _NavigationViewState extends State<NavigationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TColors.background(context),
+      backgroundColor: PColors.background(context),
       body: SafeArea(
         child: PageView(
           controller: pageController,
@@ -64,11 +65,12 @@ class _NavigationViewState extends State<NavigationView> {
           Container(
             height: TSizes.displayHeight(context) * 0.07,
             width: TSizes.displayWidth(context) * 0.7,
-            padding: EdgeInsets.only(left: 15, top: 9, right: 15, bottom: 15),
-            margin: EdgeInsets.symmetric(vertical: 10),
+            padding:
+                const EdgeInsets.only(left: 15, top: 9, right: 15, bottom: 15),
+            margin: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(40)),
-              color: TColors.lightDarkBackground,
+              borderRadius: const BorderRadius.all(Radius.circular(40)),
+              color: PColors.bottomBar(context),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,10 +113,10 @@ class _NavigationViewState extends State<NavigationView> {
             child: Container(
               height: TSizes.displayHeight(context) * 0.07,
               width: TSizes.displayWidth(context) * 0.15,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color.fromARGB(255, 39, 100, 85)),
-              child: Icon(Iconsax.add, color: TColors.white),
+                  color: Color.fromARGB(255, 39, 100, 85)),
+              child: const Icon(Iconsax.add, color: PColors.white),
             ),
           )
         ],
@@ -134,14 +136,14 @@ class AnimateBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 100),
       height: TSizes.displayHeight(context) * 0.005,
       width: isActived ? TSizes.displayWidth(context) * 0.05 : 0,
-      margin: EdgeInsets.only(bottom: 3),
-      decoration: BoxDecoration(
+      margin: const EdgeInsets.only(bottom: 3),
+      decoration: const BoxDecoration(
           // shape: BoxShape.circle,
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Color(0xFF8184FF)),
+          color: PColors.primary),
     );
   }
 }

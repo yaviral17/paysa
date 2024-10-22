@@ -19,10 +19,10 @@ class SpendingsIconWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: TColors.primary.withOpacity(0.1),
+        color: PColors.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: TColors.light.withOpacity(0.2),
+          color: PColors.light.withOpacity(0.2),
         ),
       ),
       padding: const EdgeInsets.all(20),
@@ -31,7 +31,7 @@ class SpendingsIconWidget extends StatelessWidget {
           const Text(
             "Select Icon",
             style: TextStyle(
-              color: TColors.textWhite,
+              color: PColors.textWhite,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -56,7 +56,7 @@ class SpendingsIconWidget extends StatelessWidget {
                         // duration: const Duration(milliseconds: 300),
                         // curve: Curves.easeInOut,
                         decoration: BoxDecoration(
-                          color: TColors.white,
+                          color: PColors.white,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         padding: const EdgeInsets.symmetric(
@@ -81,16 +81,16 @@ class SpendingsIconWidget extends StatelessWidget {
                   margin: const EdgeInsets.only(left: 20),
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
-                    color: TColors.primary.withOpacity(0.1),
+                    color: PColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: TColors.light.withOpacity(0.1),
+                        color: PColors.light.withOpacity(0.1),
                       ),
                     ],
                     border: Border.symmetric(
                       horizontal: BorderSide(
-                        color: TColors.light.withOpacity(0.2),
+                        color: PColors.light.withOpacity(0.2),
                       ),
                     ),
                   ),
@@ -114,7 +114,7 @@ class SpendingsIconWidget extends StatelessWidget {
                           },
                           child: CircleAvatar(
                             radius: 20,
-                            backgroundColor: TColors.primary.withOpacity(0.3),
+                            backgroundColor: PColors.primary.withOpacity(0.3),
                             child: CircleAvatar(
                               radius: 18,
                               backgroundImage: AssetImage(

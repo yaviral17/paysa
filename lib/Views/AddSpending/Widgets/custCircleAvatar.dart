@@ -16,7 +16,7 @@ class CustomCircleAvatar extends StatelessWidget {
             onTap: () {},
             borderRadius: BorderRadius.circular(14),
             child: CircleAvatar(
-              backgroundColor: TColors.primary,
+              backgroundColor: PColors.primary,
               child: Image.asset(
                 'assets/images/google.png',
                 height: 20,
@@ -27,7 +27,7 @@ class CustomCircleAvatar extends StatelessWidget {
           const Text(
             'You',
             style: TextStyle(
-              color: TColors.textWhite,
+              color: PColors.textWhite,
             ),
           ),
         ],

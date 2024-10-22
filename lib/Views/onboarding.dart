@@ -60,11 +60,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: TColors.primaryBackground.withOpacity(0.1),
-                        borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                        color: PColors.primaryBackground.withOpacity(0.1),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50.0)),
                         border: Border.all(
                           width: 1.5,
-                          color: TColors.primaryBackground.withOpacity(0.2),
+                          color: PColors.primaryBackground.withOpacity(0.2),
                         ),
                       ),
                       child: InkWell(
@@ -73,12 +74,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           Navigator.pushNamed(context, '/login');
                         },
                         child: Container(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           child: const Text(
                             'Skip',
                             style: TextStyle(
-                              color: TColors.textWhite,
+                              color: PColors.textWhite,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -126,13 +127,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: Container(
                             width: TSizes.displayWidth(context) * 0.4,
                             decoration: BoxDecoration(
-                              color: TColors.primaryBackground.withOpacity(0.1),
+                              color: PColors.primaryBackground.withOpacity(0.1),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(50.0)),
                               border: Border.all(
                                 width: 1.5,
                                 color:
-                                    TColors.primaryBackground.withOpacity(0.2),
+                                    PColors.primaryBackground.withOpacity(0.2),
                               ),
                             ),
                             child: InkWell(
@@ -145,7 +146,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 child: Text(
                                   'Done',
                                   style: TextStyle(
-                                    color: TColors.textWhite,
+                                    color: PColors.textWhite,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.center,
@@ -170,13 +171,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: Container(
                             width: TSizes.displayWidth(context) * 0.4,
                             decoration: BoxDecoration(
-                              color: TColors.primaryBackground.withOpacity(0.1),
+                              color: PColors.primaryBackground.withOpacity(0.1),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(50.0)),
                               border: Border.all(
                                 width: 1.5,
                                 color:
-                                    TColors.primaryBackground.withOpacity(0.2),
+                                    PColors.primaryBackground.withOpacity(0.2),
                               ),
                             ),
                             child: InkWell(
@@ -200,7 +201,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 child: Text(
                                   'Next',
                                   style: TextStyle(
-                                    color: TColors.textWhite,
+                                    color: PColors.textWhite,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.center,
@@ -320,8 +321,8 @@ class DotIndicator extends StatelessWidget {
       height: 8,
       width: isActive ? 24 : 8,
       decoration: BoxDecoration(
-        color: isActive ? TColors.primary : Colors.white,
-        border: Border.all(color: TColors.white, width: 1.5),
+        color: isActive ? PColors.primary : Colors.white,
+        border: Border.all(color: PColors.white, width: 1.5),
         borderRadius: const BorderRadius.all(
           Radius.circular(12),
         ),

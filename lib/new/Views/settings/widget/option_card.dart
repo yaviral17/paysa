@@ -20,14 +20,14 @@ class SettingsOptionCard extends StatelessWidget {
 
   const SettingsOptionCard({
     super.key,
-    this.color = TColors.darkTextField,
+    this.color = PColors.darkTextField,
     this.text = "",
     this.onTap,
     this.width = double.infinity,
     this.height = 54,
     this.fontSize = 16.0,
     this.borderRadius = 12.0,
-    this.textColor = TColors.textWhite,
+    this.textColor = PColors.textWhite,
     this.fontWeight = FontWeight.bold,
     this.fontFamily = 'OpenSans',
     this.prefixWidget,

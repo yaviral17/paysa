@@ -32,8 +32,8 @@ class _AppState extends State<App> {
       onGenerateRoute: RouteGenerator.generateRoute,
       title: 'Paysa',
       // dark only theme
-      darkTheme: TFlexTheme.darkTheme,
-      theme: TFlexTheme.lightTheme,
+      darkTheme: PAppTheme.darkTheme,
+      theme: PAppTheme.lightTheme,
       themeMode: ThemeMode.system,
 
       home: StreamBuilder(

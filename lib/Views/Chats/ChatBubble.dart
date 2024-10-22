@@ -41,7 +41,7 @@ class ChatBubble extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 4),
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: isYou ? TColors.primary : TColors.darkerGrey,
+            color: isYou ? PColors.primary : PColors.darkerGrey,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(isYou ? 12 : 0),
               topRight: Radius.circular(isYou ? 0 : 12),
@@ -59,8 +59,8 @@ class ChatBubble extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   color: isYou
-                      ? TColors.white.withOpacity(0.6)
-                      : TColors.grey.withOpacity(0.6),
+                      ? PColors.white.withOpacity(0.6)
+                      : PColors.grey.withOpacity(0.6),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -109,7 +109,7 @@ class ChatBubble extends StatelessWidget {
           THelperFunctions.getDateDifference(timestamp),
           style: TextStyle(
             fontSize: 10,
-            color: isYou ? TColors.primary : TColors.grey.withOpacity(0.6),
+            color: isYou ? PColors.primary : PColors.grey.withOpacity(0.6),
             fontWeight: FontWeight.normal,
           ),
         ),

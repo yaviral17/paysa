@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 32,
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.bold,
-                  color: TColors.textWhite.withOpacity(0.9),
+                  color: PColors.textWhite.withOpacity(0.9),
                 ),
               ),
             ),
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Spacer(),
 
             Divider(
-              color: TColors.textWhite.withOpacity(0.8),
+              color: PColors.textWhite.withOpacity(0.8),
               thickness: 2,
               indent: 10,
               endIndent: 10,
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.bold,
-                    color: TColors.textWhite.withOpacity(0.8),
+                    color: PColors.textWhite.withOpacity(0.8),
                   ),
                   textAlign: TextAlign.start,
                 ),
@@ -94,10 +94,10 @@ class _LoginScreenState extends State<LoginScreen> {
           height: TSizes.appBarHeight,
           width: (TSizes.buttonWidth * 3) - 20,
           decoration: BoxDecoration(
-            color: TColors.primaryBackground.withOpacity(0.1),
+            color: PColors.primaryBackground.withOpacity(0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: TColors.primaryBackground.withOpacity(0.2),
+              color: PColors.primaryBackground.withOpacity(0.2),
               width: 2,
             ),
           ),
@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'Sign in with Google',
                         style: TextStyle(
-                          color: TColors.primaryBackground,
+                          color: PColors.primaryBackground,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:paysa/utils/helpers/helper_functions.dart';
 
-class TColors {
+class PColors {
   // App theme colors
-  static const Color primary = Color(0xFF4b68ff);
-  static const Color primaryDark = Color(0xFF1A1919);
+  static const Color primary = Color(0xFF2EAB57);
+  static const Color primaryDark = Color(0xFF0C0C0C);
   static const Color secondary = Color(0xFFFFE24B);
   static const Color accent = Color(0xFFb0c7ff);
   static const Color transparent = Colors.transparent;
@@ -26,12 +26,12 @@ class TColors {
   // Background colors
   static const Color light = Color(0xFFF5F7FB);
   // static const Color dark = Color(0xFF272727);
-  static const Color dark = Color(0xFF121933);
+  static const Color dark = Color(0xFF0C0C0C);
   static const Color primaryBackground = Color(0xFFF3F5FF);
   static const Color darkBackground = Colors.black12;
 
   // Light and Dark Background colors
-  static const Color lightBackground = Color(0xFFEBEFFF);
+  static const Color lightBackground = Color(0xFFf4f3f7);
   static const Color lightDarkBackground = Color(0xFF172F53);
   static Color background(BuildContext context) {
     return THelperFunctions.isDarkMode(context)
@@ -41,7 +41,7 @@ class TColors {
 
   // Background Container colors
   static const Color lightContainer = Color(0xFFF5F7FB);
-  static Color darkContainer = TColors.white.withOpacity(0.1);
+  static Color darkContainer = PColors.white.withOpacity(0.1);
 
   // Button colors
   static const Color buttonPrimary = Color(0xFF4b68ff);

@@ -31,10 +31,10 @@ class AddSplitWidget extends StatelessWidget {
           () => Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: TColors.primary.withOpacity(0.1),
+              color: PColors.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: TColors.light.withOpacity(0.2),
+                color: PColors.light.withOpacity(0.2),
               ),
             ),
             padding: const EdgeInsets.all(20),
@@ -46,7 +46,7 @@ class AddSplitWidget extends StatelessWidget {
                     const Text(
                       'Splits',
                       style: TextStyle(
-                        color: TColors.textWhite,
+                        color: PColors.textWhite,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -55,7 +55,7 @@ class AddSplitWidget extends StatelessWidget {
                     // Add myself
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: TColors.primary.withOpacity(0.4),
+                        backgroundColor: PColors.primary.withOpacity(0.4),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -125,12 +125,12 @@ class AddSplitWidget extends StatelessWidget {
                     if (index == addSpendingController.splits.length) {
                       return TextButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: TColors.white.withOpacity(0.1),
-                            foregroundColor: TColors.white,
+                            backgroundColor: PColors.white.withOpacity(0.1),
+                            foregroundColor: PColors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: BorderSide(
-                                color: TColors.white.withOpacity(0.6),
+                                color: PColors.white.withOpacity(0.6),
                               ),
                             ),
                             minimumSize: const Size(double.infinity, 54),
@@ -154,11 +154,11 @@ class AddSplitWidget extends StatelessWidget {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  backgroundColor: TColors.dark,
+                                  backgroundColor: PColors.dark,
                                   title: const Text(
                                     'SplitMode member',
                                     style: TextStyle(
-                                      color: TColors.textWhite,
+                                      color: PColors.textWhite,
                                     ),
                                   ),
                                   content: Column(
@@ -167,31 +167,31 @@ class AddSplitWidget extends StatelessWidget {
                                       TextField(
                                         controller: emailController,
                                         style: const TextStyle(
-                                          color: TColors.textWhite,
+                                          color: PColors.textWhite,
                                         ),
                                         decoration: InputDecoration(
                                           hintText: 'Enter Email',
                                           hintStyle: TextStyle(
-                                            color: TColors.textWhite
+                                            color: PColors.textWhite
                                                 .withOpacity(0.5),
                                           ),
                                           fillColor: Colors.transparent,
                                           disabledBorder:
                                               const OutlineInputBorder(
                                             borderSide: BorderSide(
-                                              color: TColors.white,
+                                              color: PColors.white,
                                             ),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                              color: TColors.white
+                                              color: PColors.white
                                                   .withOpacity(0.5),
                                             ),
                                           ),
                                           focusedBorder:
                                               const OutlineInputBorder(
                                             borderSide: BorderSide(
-                                              color: TColors.white,
+                                              color: PColors.white,
                                             ),
                                           ),
                                           border: InputBorder.none,
@@ -215,7 +215,7 @@ class AddSplitWidget extends StatelessWidget {
                                                     amount.toStringAsFixed(2);
                                               },
                                               icon: const Icon(Iconsax.minus),
-                                              color: TColors.textWhite,
+                                              color: PColors.textWhite,
                                             ),
                                           ),
                                           SizedBox(
@@ -241,7 +241,7 @@ class AddSplitWidget extends StatelessWidget {
                                                         vertical: 10),
                                                 prefixText: '₹ ',
                                                 prefixStyle: const TextStyle(
-                                                  color: TColors.textWhite,
+                                                  color: PColors.textWhite,
                                                 ),
                                                 constraints: BoxConstraints(
                                                   minHeight: 54,
@@ -251,10 +251,10 @@ class AddSplitWidget extends StatelessWidget {
                                                 ),
                                                 hintText: '0.0',
                                                 hintStyle: TextStyle(
-                                                  color: TColors.textWhite
+                                                  color: PColors.textWhite
                                                       .withOpacity(0.5),
                                                 ),
-                                                fillColor: TColors
+                                                fillColor: PColors
                                                     .darkBackground
                                                     .withOpacity(0.8),
                                                 disabledBorder:
@@ -262,7 +262,7 @@ class AddSplitWidget extends StatelessWidget {
                                                   borderRadius:
                                                       BorderRadius.circular(16),
                                                   borderSide: const BorderSide(
-                                                    color: TColors.transparent,
+                                                    color: PColors.transparent,
                                                   ),
                                                 ),
                                                 enabledBorder:
@@ -270,7 +270,7 @@ class AddSplitWidget extends StatelessWidget {
                                                   borderRadius:
                                                       BorderRadius.circular(16),
                                                   borderSide: const BorderSide(
-                                                    color: TColors.transparent,
+                                                    color: PColors.transparent,
                                                   ),
                                                 ),
                                                 focusedBorder:
@@ -278,13 +278,13 @@ class AddSplitWidget extends StatelessWidget {
                                                   borderRadius:
                                                       BorderRadius.circular(16),
                                                   borderSide: const BorderSide(
-                                                    color: TColors.transparent,
+                                                    color: PColors.transparent,
                                                   ),
                                                 ),
                                                 border: InputBorder.none,
                                               ),
                                               style: const TextStyle(
-                                                color: TColors.textWhite,
+                                                color: PColors.textWhite,
                                               ),
                                             ),
                                           ),
@@ -308,7 +308,7 @@ class AddSplitWidget extends StatelessWidget {
                                                     amount.toStringAsFixed(2);
                                               },
                                               icon: const Icon(Iconsax.add),
-                                              color: TColors.textWhite,
+                                              color: PColors.textWhite,
                                             ),
                                           ),
                                         ],
@@ -319,7 +319,7 @@ class AddSplitWidget extends StatelessWidget {
                                           const Text(
                                             'Paid',
                                             style: TextStyle(
-                                              color: TColors.textWhite,
+                                              color: PColors.textWhite,
                                             ),
                                           ),
                                           Obx(
@@ -331,7 +331,7 @@ class AddSplitWidget extends StatelessWidget {
                                               activeColor: Theme.of(context)
                                                   .colorScheme
                                                   .primary,
-                                              activeTrackColor: TColors.primary
+                                              activeTrackColor: PColors.primary
                                                   .withOpacity(0.5),
                                             ),
                                           ),
@@ -347,7 +347,7 @@ class AddSplitWidget extends StatelessWidget {
                                       child: const Text(
                                         'Cancel',
                                         style: TextStyle(
-                                          color: TColors.textWhite,
+                                          color: PColors.textWhite,
                                         ),
                                       ),
                                     ),
@@ -400,7 +400,7 @@ class AddSplitWidget extends StatelessWidget {
                                       child: const Text(
                                         'Add Member',
                                         style: TextStyle(
-                                          color: TColors.textWhite,
+                                          color: PColors.textWhite,
                                         ),
                                       ),
                                     ),
@@ -421,10 +421,10 @@ class AddSplitWidget extends StatelessWidget {
                               margin: const EdgeInsets.only(bottom: 10),
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: TColors.primary.withOpacity(0.1),
+                                color: PColors.primary.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: TColors.light.withOpacity(0.2),
+                                  color: PColors.light.withOpacity(0.2),
                                 ),
                               ),
                               child: FutureBuilder(
@@ -475,13 +475,13 @@ class AddSplitWidget extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(16),
                           // decoration: BoxDecoration(
-                          //   color: TColors.white.withOpacity(0.1),
+                          //   color: PColors.white.withOpacity(0.1),
                           //   borderRadius: BorderRadius.circular(16),
                           // ),
                           child: Text(
                             '₹ ${addSpendingController.splits[index].amount}',
                             style: const TextStyle(
-                              color: TColors.textWhite,
+                              color: PColors.textWhite,
                               fontSize: 18,
                             ),
                           ),
@@ -496,15 +496,15 @@ class AddSplitWidget extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: TColors.error,
+                              color: PColors.error,
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: TColors.light.withOpacity(0.2),
+                                color: PColors.light.withOpacity(0.2),
                               ),
                             ),
                             child: const Icon(
                               Icons.delete,
-                              color: TColors.white,
+                              color: PColors.white,
                             ),
                           ),
                         ),

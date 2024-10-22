@@ -28,13 +28,13 @@ class TransactionBubble extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
           decoration: BoxDecoration(
-            color: isYou ? TColors.primary : TColors.darkerGrey,
+            color: isYou ? PColors.primary : PColors.darkerGrey,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               width: 2,
               style: BorderStyle.solid,
               strokeAlign: 1,
-              color: TColors.white,
+              color: PColors.white,
             ),
             image: const DecorationImage(
               image: AssetImage('assets/images/money_bg.jpg'),
@@ -50,8 +50,8 @@ class TransactionBubble extends StatelessWidget {
               //   style: TextStyle(
               //     fontSize: 12,
               //     color: isYou
-              //         ? TColors.white.withOpacity(0.6)
-              //         : TColors.grey.withOpacity(0.6),
+              //         ? PColors.white.withOpacity(0.6)
+              //         : PColors.grey.withOpacity(0.6),
               //     fontWeight: FontWeight.bold,
               //   ),
               // ),
@@ -75,7 +75,7 @@ class TransactionBubble extends StatelessWidget {
                   Text(
                     '₹ ${transaction.amount}',
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          color: TColors.primaryBackground,
+                          color: PColors.primaryBackground,
                         ),
                   ),
                 ],
@@ -97,10 +97,10 @@ class TransactionBubble extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       top: BorderSide(
-                        color: TColors.white.withOpacity(0.3),
+                        color: PColors.white.withOpacity(0.3),
                       ),
                       bottom: BorderSide(
-                        color: TColors.white.withOpacity(0.3),
+                        color: PColors.white.withOpacity(0.3),
                         width: 1,
                       ),
                     ),
@@ -130,7 +130,7 @@ class TransactionBubble extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: transaction.members[index]['paid']
-                              ? TColors.lightContainer
+                              ? PColors.lightContainer
                               : Colors.red.shade400,
                         ),
                       ),
@@ -153,9 +153,9 @@ class TransactionBubble extends StatelessWidget {
                         TextButton(
                           style: ButtonStyle(
                             foregroundColor:
-                                MaterialStateProperty.all(TColors.primary),
+                                MaterialStateProperty.all(PColors.primary),
                             backgroundColor: MaterialStateProperty.all(
-                              TColors.white,
+                              PColors.white,
                             ),
                             minimumSize:
                                 MaterialStateProperty.all(const Size(100, 38)),
@@ -186,9 +186,9 @@ class TransactionBubble extends StatelessWidget {
                           child: TextButton(
                             style: ButtonStyle(
                               foregroundColor:
-                                  MaterialStateProperty.all(TColors.primary),
+                                  MaterialStateProperty.all(PColors.primary),
                               backgroundColor: MaterialStateProperty.all(
-                                TColors.lightDarkBackground,
+                                PColors.lightDarkBackground,
                               ),
                               // minimumSize: MaterialStateProperty.all(Size(60, 38)),
                             ),
@@ -207,7 +207,7 @@ class TransactionBubble extends StatelessWidget {
                                     .textTheme
                                     .titleMedium!
                                     .copyWith(
-                                      color: TColors.white,
+                                      color: PColors.white,
                                       fontSize: 12,
                                     )),
                           ),
@@ -237,7 +237,7 @@ class TransactionBubble extends StatelessWidget {
           THelperFunctions.getDateDifference(transaction.timestamp),
           style: TextStyle(
             fontSize: 10,
-            color: isYou ? TColors.primary : TColors.grey.withOpacity(0.6),
+            color: isYou ? PColors.primary : PColors.grey.withOpacity(0.6),
             fontWeight: FontWeight.normal,
           ),
         ),

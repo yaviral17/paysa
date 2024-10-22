@@ -37,7 +37,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icon(
                   Iconsax.arrow_left,
                   color:
-                      leadingIconColor ?? (dark ? TColors.light : TColors.dark),
+                      leadingIconColor ?? (dark ? PColors.light : PColors.dark),
                 ))
             : leadingIcon != null
                 ? IconButton(
@@ -45,7 +45,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
                     icon: Icon(
                       leadingIcon,
                       color: leadingIconColor ??
-                          (dark ? TColors.light : TColors.dark),
+                          (dark ? PColors.light : PColors.dark),
                     ))
                 : null,
         title: title,

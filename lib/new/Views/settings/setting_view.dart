@@ -29,7 +29,7 @@ class _SettingsViewState extends State<SettingsView> {
 
     return Scaffold(
       backgroundColor:
-          isDark ? TColors.darkBackground : TColors.lightBackground,
+          isDark ? PColors.darkBackground : PColors.lightBackground,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -80,13 +80,13 @@ class _SettingsViewState extends State<SettingsView> {
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: isDark
-                                ? TColors.black.withOpacity(0.8)
-                                : TColors.white.withOpacity(0.8),
+                                ? PColors.black.withOpacity(0.8)
+                                : PColors.white.withOpacity(0.8),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Icon(CupertinoIcons.pencil,
                               size: 20,
-                              color: isDark ? TColors.white : TColors.black),
+                              color: isDark ? PColors.white : PColors.black),
                         ),
                       ),
                     ),
@@ -103,10 +103,10 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 onTap: () {},
                 text: 'Name',
-                textColor: isDark ? TColors.white : TColors.black,
+                textColor: isDark ? PColors.white : PColors.black,
                 fontSize: 15,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: isDark ? TColors.darkTextField : TColors.lightTextField,
+                color: isDark ? PColors.darkTextField : PColors.lightTextField,
                 suffixWidget: Text(
                   FirebaseAuth.instance.currentUser?.displayName ?? 'John Doe',
                   style: TextStyle(
@@ -118,9 +118,9 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 text: 'Email',
                 fontSize: 15,
-                textColor: isDark ? TColors.white : TColors.black,
+                textColor: isDark ? PColors.white : PColors.black,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: isDark ? TColors.darkTextField : TColors.lightTextField,
+                color: isDark ? PColors.darkTextField : PColors.lightTextField,
                 suffixWidget: Text(
                   FirebaseAuth.instance.currentUser?.email ??
                       'johan.example.com',
@@ -133,9 +133,9 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 text: 'Change Password',
                 fontSize: 15,
-                textColor: isDark ? TColors.white : TColors.black,
+                textColor: isDark ? PColors.white : PColors.black,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: isDark ? TColors.darkTextField : TColors.lightTextField,
+                color: isDark ? PColors.darkTextField : PColors.lightTextField,
                 suffixWidget: Icon(
                   Icons.arrow_forward_ios,
                   color: isDark ? Colors.grey : Colors.grey[700],
@@ -151,9 +151,9 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 text: 'Currency',
                 fontSize: 15,
-                textColor: isDark ? TColors.white : TColors.black,
+                textColor: isDark ? PColors.white : PColors.black,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: isDark ? TColors.darkTextField : TColors.lightTextField,
+                color: isDark ? PColors.darkTextField : PColors.lightTextField,
                 suffixWidget: Text(
                   'INR',
                   style: TextStyle(
@@ -165,9 +165,9 @@ class _SettingsViewState extends State<SettingsView> {
               SettingsOptionCard(
                 text: 'Reminder notification',
                 fontSize: 15,
-                textColor: isDark ? TColors.white : TColors.black,
+                textColor: isDark ? PColors.white : PColors.black,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: isDark ? TColors.darkTextField : TColors.lightTextField,
+                color: isDark ? PColors.darkTextField : PColors.lightTextField,
                 suffixWidget: Text(
                   'Off',
                   style: TextStyle(
@@ -181,7 +181,7 @@ class _SettingsViewState extends State<SettingsView> {
                 textColor: Colors.red,
                 fontSize: 15,
                 height: MediaQuery.of(context).size.height * 0.08,
-                color: TColors.error.withOpacity(0.2),
+                color: PColors.error.withOpacity(0.2),
                 suffixWidget: const Icon(
                   Icons.logout,
                   color: Colors.red,

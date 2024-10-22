@@ -23,7 +23,7 @@ class LoginView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor:
-          isDark ? TColors.darkBackground : TColors.lightBackground,
+          isDark ? PColors.darkBackground : PColors.lightBackground,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
@@ -70,7 +70,7 @@ class LoginView extends StatelessWidget {
                     'Paysa helps you track your expenses effortlessly. 💸\nStay on top of your spending and save more!',
                     style: TextStyle(
                       fontSize: TSizes.displayWidth(context) * 0.044,
-                      color: isDark ? TColors.textWhite : TColors.textSecondary,
+                      color: isDark ? PColors.textWhite : PColors.textSecondary,
                     ),
                   ),
                 ],
@@ -97,10 +97,10 @@ class LoginView extends StatelessWidget {
                     controller: emailController,
                     hintText: "Email",
                     fillColor:
-                        isDark ? TColors.darkTextField : TColors.lightTextField,
+                        isDark ? PColors.darkTextField : PColors.lightTextField,
                     prefixIcon: const Icon(
                       Icons.alternate_email,
-                      color: TColors.textSecondary,
+                      color: PColors.textSecondary,
                     ),
                   ),
                   SizedBox(
@@ -121,10 +121,10 @@ class LoginView extends StatelessWidget {
                     controller: passwordController,
                     hintText: "Password",
                     fillColor:
-                        isDark ? TColors.darkTextField : TColors.lightTextField,
+                        isDark ? PColors.darkTextField : PColors.lightTextField,
                     prefixIcon: const Icon(
                       Iconsax.lock,
-                      color: TColors.textSecondary,
+                      color: PColors.textSecondary,
                     ),
                     obscureText: true,
                   ),
@@ -142,7 +142,7 @@ class LoginView extends StatelessWidget {
                           'Forgot Password?',
                           style: TextStyle(
                             fontSize: TSizes.displayWidth(context) * 0.04,
-                            color: TColors.textSecondary,
+                            color: PColors.textSecondary,
                             fontFamily: 'OpenSans',
                           ),
                         ),
@@ -189,7 +189,7 @@ class LoginView extends StatelessWidget {
                       },
                       width: TSizes.displayWidth(context),
                       height: TSizes.displayHeight(context) * 0.058,
-                      textColor: TColors.textWhite,
+                      textColor: PColors.textWhite,
                       fontSize: TSizes.displayWidth(context) * 0.05,
                     ),
                   ),
@@ -206,7 +206,7 @@ class LoginView extends StatelessWidget {
                     'Don\'t have an account? Register',
                     style: TextStyle(
                       fontSize: TSizes.displayWidth(context) * 0.04,
-                      color: isDark ? TColors.textWhite : TColors.textSecondary,
+                      color: isDark ? PColors.textWhite : PColors.textSecondary,
                       fontFamily: 'OpenSans',
                     ),
                   ),
@@ -275,7 +275,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
         ),
         prefixIcon: prefixIcon,
         fillColor: fillColor ??
-            (isDark ? TColors.darkTextField : TColors.lightTextField),
+            (isDark ? PColors.darkTextField : PColors.lightTextField),
 
         // focusColor: Theme.of(context).colorScheme.onBackground,
       ),

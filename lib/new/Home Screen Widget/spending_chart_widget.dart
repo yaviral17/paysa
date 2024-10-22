@@ -29,7 +29,7 @@ class SpendingChartWidget extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           // borderRadius: BorderRadius.circular(20),
-          color: TColors.black,
+          color: PColors.black,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +49,7 @@ class SpendingChartWidget extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      color: TColors.white,
+                      color: PColors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'OpenSans',
@@ -62,7 +62,7 @@ class SpendingChartWidget extends StatelessWidget {
                       Text(
                         '$currency${amount.toInt()}',
                         style: TextStyle(
-                          color: TColors.white,
+                          color: PColors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'OpenSans',
@@ -71,7 +71,7 @@ class SpendingChartWidget extends StatelessWidget {
                       Text(
                         ".${amount.toString().split('.').last.padRight(2, '0')}",
                         style: TextStyle(
-                          color: TColors.white,
+                          color: PColors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'OpenSans',

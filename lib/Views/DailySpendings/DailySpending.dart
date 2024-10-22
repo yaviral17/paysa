@@ -150,7 +150,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                           vertical: 10, horizontal: 12),
                       child: Ink(
                           decoration: BoxDecoration(
-                            color: TColors.primary.withOpacity(0.1),
+                            color: PColors.primary.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: BarChartSample1(
@@ -193,7 +193,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                             right: 12,
                           ),
                           decoration: BoxDecoration(
-                            color: TColors.grey.withOpacity(0.1),
+                            color: PColors.grey.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
@@ -246,7 +246,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
                   height: canRefresh.value ? 36 : 0,
                   width: canRefresh.value ? 90 : 0,
                   decoration: BoxDecoration(
-                    color: TColors.primary.withOpacity(0.1),
+                    color: PColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: FittedBox(
@@ -281,7 +281,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
       ),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: TColors.primary.withOpacity(0.1),
+        color: PColors.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -386,7 +386,7 @@ class _DailySpendingScreenState extends State<DailySpendingScreen> {
         padding: const EdgeInsets.all(4),
         width: TSizes.displayWidth(context) * 0.4,
         decoration: BoxDecoration(
-          color: TColors.primary.withOpacity(0.1),
+          color: PColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -527,7 +527,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                   // 'Daily Spendings',
 
                   style: TextStyle(
-                    color: TColors.primary,
+                    color: PColors.primary,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -538,7 +538,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                 Text(
                   'Max: ₹ ${getMaxOfLast7Day()}\nMin: ₹ ${getMinOfLast7Day()}',
                   style: const TextStyle(
-                    color: TColors.accent,
+                    color: PColors.accent,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -568,7 +568,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           //     child: IconButton(
           //       icon: Icon(
           //         isPlaying ? Icons.pause : Icons.play_arrow,
-          //         color: TColors.accent,
+          //         color: PColors.accent,
           //       ),
           //       onPressed: () {
           //         setState(() {
@@ -632,7 +632,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             // toY: maxHight.toDouble(),
-            color: TColors.grey.withOpacity(0.1),
+            color: PColors.grey.withOpacity(0.1),
           ),
         ),
       ],

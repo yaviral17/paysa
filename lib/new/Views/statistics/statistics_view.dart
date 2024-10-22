@@ -39,7 +39,7 @@ class _StatisticsViewState extends State<StatisticsView> {
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
     return Scaffold(
-        backgroundColor: TColors.background(context),
+        backgroundColor: PColors.background(context),
         appBar: _buildAppBar(isDark, context),
         body: SafeArea(
           child: Padding(
@@ -74,13 +74,13 @@ class _StatisticsViewState extends State<StatisticsView> {
                       source: getChips, value: (i, v) => i, label: (i, v) => v),
                   choiceActiveStyle: C2ChoiceStyle(
                     color: Colors.white,
-                    backgroundColor: TColors.primary,
-                    borderColor: TColors.primary,
+                    backgroundColor: PColors.primary,
+                    borderColor: PColors.primary,
                   ),
                   choiceStyle: C2ChoiceStyle(
                     color: Colors.white,
-                    backgroundColor: TColors.primary.withOpacity(0.5),
-                    borderColor: TColors.primary,
+                    backgroundColor: PColors.primary.withOpacity(0.5),
+                    borderColor: PColors.primary,
                   ),
                 ),
                 SizedBox(height: TSizes.displayHeight(context) * 0.02),
@@ -112,7 +112,7 @@ class _StatisticsViewState extends State<StatisticsView> {
       width: TSizes.displayWidth(context) * 0.42,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: isDark ? TColors.darkContainer : TColors.lightContainer,
+        color: isDark ? PColors.darkContainer : PColors.lightContainer,
       ),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
@@ -161,52 +161,52 @@ class _StatisticsViewState extends State<StatisticsView> {
                     case 1:
                       return Text('Jan',
                           style: TextStyle(
-                              color: TColors.textSecondary,
+                              color: PColors.textSecondary,
                               fontSize: value == 1 ? 12 : 10));
                     case 2:
                       return Text('Feb',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 3:
                       return Text('Mar',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 4:
                       return Text('Apr',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 5:
                       return Text('May',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 6:
                       return Text('Jun',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 7:
                       return Text('Jul',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 8:
                       return Text('Aug',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 9:
                       return Text('Sep',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 10:
                       return Text('Oct',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 11:
                       return Text('Nov',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     case 12:
                       return Text('Dec',
                           style: TextStyle(
-                              color: TColors.textSecondary, fontSize: 12));
+                              color: PColors.textSecondary, fontSize: 12));
                     default:
                       return Container();
                   }
@@ -223,7 +223,7 @@ class _StatisticsViewState extends State<StatisticsView> {
             LineChartBarData(
               spots: getChartData(),
               isCurved: true,
-              color: TColors.primary,
+              color: PColors.primary,
               barWidth: 4,
               belowBarData: BarAreaData(
                 show: true,
@@ -250,8 +250,8 @@ class _StatisticsViewState extends State<StatisticsView> {
         style: IconButton.styleFrom(
           shape: CircleBorder(),
           backgroundColor: isDark
-              ? TColors.lightBackground.withOpacity(0.2)
-              : TColors.darkGrey.withOpacity(0.2),
+              ? PColors.lightBackground.withOpacity(0.2)
+              : PColors.darkGrey.withOpacity(0.2),
         ),
         onPressed: () {
           Get.back();
@@ -266,8 +266,8 @@ class _StatisticsViewState extends State<StatisticsView> {
           style: IconButton.styleFrom(
             shape: CircleBorder(),
             backgroundColor: isDark
-                ? TColors.lightBackground.withOpacity(0.2)
-                : TColors.darkGrey.withOpacity(0.2),
+                ? PColors.lightBackground.withOpacity(0.2)
+                : PColors.darkGrey.withOpacity(0.2),
           ),
           onPressed: () {
             Get.toNamed('/settings');
@@ -279,7 +279,7 @@ class _StatisticsViewState extends State<StatisticsView> {
         ),
       ],
       centerTitle: true,
-      backgroundColor: TColors.background(context),
+      backgroundColor: PColors.background(context),
       elevation: 0,
       title: Text(
         'Statistics',

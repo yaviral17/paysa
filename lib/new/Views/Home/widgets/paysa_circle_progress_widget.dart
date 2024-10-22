@@ -37,13 +37,13 @@ class PaysaCircleProgressWidget extends StatelessWidget {
         progress: value,
         maxProgress: targetValue,
         corners: StrokeCap.butt,
-        foregroundColor: TColors.primary,
+        foregroundColor: PColors.primary,
         backgroundColor: isDark
-            ? TColors.white.withOpacity(0.1)
-            : TColors.black.withOpacity(0.1),
+            ? PColors.white.withOpacity(0.1)
+            : PColors.black.withOpacity(0.1),
         foregroundStrokeWidth: foregroundStrokeWidth,
         backgroundStrokeWidth: backgroundStrokeWidth,
-        seekColor: TColors.primary,
+        seekColor: PColors.primary,
 
         circleCenterAlignment: Alignment.center,
         seekSize: 0,

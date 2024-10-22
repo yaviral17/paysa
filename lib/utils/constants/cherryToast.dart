@@ -37,7 +37,7 @@ void showErrorToast(
     animationType: AnimationType.fromRight,
     animationDuration: duration!,
     autoDismiss: true,
-    backgroundColor: backgroundColor ?? TColors.light,
+    backgroundColor: backgroundColor ?? PColors.light,
     height: height,
     animationCurve: animationCurve ?? Curves.ease,
   ).show(context);
@@ -72,7 +72,7 @@ void showSuccessToast(
     animationType: AnimationType.fromRight,
     animationDuration: duration!,
     autoDismiss: true,
-    backgroundColor: backgroundColor ?? TColors.light,
+    backgroundColor: backgroundColor ?? PColors.light,
     height: height,
     animationCurve: animationCurve ?? Curves.ease,
   ).show(context);

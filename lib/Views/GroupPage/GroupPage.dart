@@ -355,7 +355,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                                   //   margin: EdgeInsets.symmetric(vertical: 4),
                                   //   padding: EdgeInsets.all(8),
                                   //   decoration: BoxDecoration(
-                                  //     color: TColors.primary,
+                                  //     color: PColors.primary,
                                   //     borderRadius: BorderRadius.only(
                                   //       topLeft: Radius.circular(12),
                                   //       topRight: Radius.circular(12),
@@ -369,7 +369,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                                   //         'Split',
                                   //         style: TextStyle(
                                   //           fontSize: 12,
-                                  //           color: TColors.white.withOpacity(0.6),
+                                  //           color: PColors.white.withOpacity(0.6),
                                   //           fontWeight: FontWeight.bold,
                                   //         ),
                                   //       ),
@@ -559,10 +559,10 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: TColors.primary,
+                        color: PColors.primary,
                         borderRadius: BorderRadius.circular(24),
                       ),
-                      child: const Icon(Iconsax.send_2, color: TColors.white),
+                      child: const Icon(Iconsax.send_2, color: PColors.white),
                     ),
                   ),
                 ),
@@ -587,11 +587,11 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                     width: _listning.value ? 50 : 45,
                     height: _listning.value ? 50 : 45,
                     decoration: BoxDecoration(
-                      color: _listning.value ? TColors.error : TColors.primary,
+                      color: _listning.value ? PColors.error : PColors.primary,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child:
-                        const Icon(Iconsax.microphone_2, color: TColors.white),
+                        const Icon(Iconsax.microphone_2, color: PColors.white),
                   ),
                 ),
               ),
@@ -654,13 +654,13 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                 Text(
                   "Split Amount : ",
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: TColors.white.withOpacity(0.6),
+                        color: PColors.white.withOpacity(0.6),
                       ),
                 ),
                 Text(
                   "₹ ${_userAmount.toString()}",
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: TColors.white,
+                        color: PColors.white,
                         fontSize: 18,
                       ),
                 ),
@@ -678,13 +678,13 @@ class _GroupPageScreenState extends State<GroupPageScreen>
                 Text(
                   "Total Spending with this person : ",
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: TColors.white.withOpacity(0.6),
+                        color: PColors.white.withOpacity(0.6),
                       ),
                 ),
                 Text(
                   "₹ ${_totalAmount.toString()}",
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: TColors.white,
+                        color: PColors.white,
                         fontSize: 18,
                       ),
                 ),
@@ -784,7 +784,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
       ),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: TColors.primary.withOpacity(0.1),
+        color: PColors.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -859,8 +859,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                   child: CircularProgressIndicator(),
                 );
               }
@@ -890,7 +889,7 @@ class _GroupPageScreenState extends State<GroupPageScreen>
         padding: const EdgeInsets.all(4),
         width: TSizes.displayWidth(context) * 0.4,
         decoration: BoxDecoration(
-          color: TColors.primary.withOpacity(0.1),
+          color: PColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(

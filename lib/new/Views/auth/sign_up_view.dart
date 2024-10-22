@@ -25,7 +25,7 @@ class SignUpView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor:
-          isDark ? TColors.darkBackground : TColors.lightBackground,
+          isDark ? PColors.darkBackground : PColors.lightBackground,
       // resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
@@ -76,8 +76,8 @@ class SignUpView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: TSizes.displayWidth(context) * 0.044,
                             color: isDark
-                                ? TColors.textWhite
-                                : TColors.textSecondary,
+                                ? PColors.textWhite
+                                : PColors.textSecondary,
                           ),
                         ),
                       ],
@@ -97,8 +97,8 @@ class SignUpView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: TSizes.displayWidth(context) * 0.04,
                               color: isDark
-                                  ? TColors.textWhite
-                                  : TColors.textSecondary,
+                                  ? PColors.textWhite
+                                  : PColors.textSecondary,
                               fontFamily: 'OpenSans',
                             ),
                           ),
@@ -107,11 +107,11 @@ class SignUpView extends StatelessWidget {
                           controller: nameController,
                           hintText: "Name",
                           fillColor: isDark
-                              ? TColors.darkTextField
-                              : TColors.lightTextField,
+                              ? PColors.darkTextField
+                              : PColors.lightTextField,
                           prefixIcon: const Icon(
                             Icons.person,
-                            color: TColors.textSecondary,
+                            color: PColors.textSecondary,
                           ),
                         ),
                         SizedBox(
@@ -125,8 +125,8 @@ class SignUpView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: TSizes.displayWidth(context) * 0.04,
                               color: isDark
-                                  ? TColors.textWhite
-                                  : TColors.textSecondary,
+                                  ? PColors.textWhite
+                                  : PColors.textSecondary,
                               fontFamily: 'OpenSans',
                             ),
                           ),
@@ -135,11 +135,11 @@ class SignUpView extends StatelessWidget {
                           controller: emailController,
                           hintText: "Email",
                           fillColor: isDark
-                              ? TColors.darkTextField
-                              : TColors.lightTextField,
+                              ? PColors.darkTextField
+                              : PColors.lightTextField,
                           prefixIcon: const Icon(
                             Icons.alternate_email,
-                            color: TColors.textSecondary,
+                            color: PColors.textSecondary,
                           ),
                         ),
                         SizedBox(
@@ -153,8 +153,8 @@ class SignUpView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: TSizes.displayWidth(context) * 0.04,
                               color: isDark
-                                  ? TColors.textWhite
-                                  : TColors.textSecondary,
+                                  ? PColors.textWhite
+                                  : PColors.textSecondary,
                               fontFamily: 'OpenSans',
                             ),
                           ),
@@ -163,11 +163,11 @@ class SignUpView extends StatelessWidget {
                           controller: passwordController,
                           hintText: "Password",
                           fillColor: isDark
-                              ? TColors.darkTextField
-                              : TColors.lightTextField,
+                              ? PColors.darkTextField
+                              : PColors.lightTextField,
                           prefixIcon: const Icon(
                             Iconsax.lock,
-                            color: TColors.textSecondary,
+                            color: PColors.textSecondary,
                           ),
                           obscureText: true,
                         ),
@@ -182,8 +182,8 @@ class SignUpView extends StatelessWidget {
                             style: TextStyle(
                               fontSize: TSizes.displayWidth(context) * 0.04,
                               color: isDark
-                                  ? TColors.textWhite
-                                  : TColors.textSecondary,
+                                  ? PColors.textWhite
+                                  : PColors.textSecondary,
                               fontFamily: 'OpenSans',
                             ),
                           ),
@@ -192,11 +192,11 @@ class SignUpView extends StatelessWidget {
                           controller: confirmPasswordController,
                           hintText: "Confirm Password",
                           fillColor: isDark
-                              ? TColors.darkTextField
-                              : TColors.lightTextField,
+                              ? PColors.darkTextField
+                              : PColors.lightTextField,
                           prefixIcon: const Icon(
                             Iconsax.lock,
-                            color: TColors.textSecondary,
+                            color: PColors.textSecondary,
                           ),
                           obscureText: true,
                         ),
@@ -265,7 +265,7 @@ class SignUpView extends StatelessWidget {
                             },
                             width: TSizes.displayWidth(context),
                             height: TSizes.displayHeight(context) * 0.058,
-                            textColor: TColors.textWhite,
+                            textColor: PColors.textWhite,
                             fontSize: TSizes.displayWidth(context) * 0.05,
                           ),
                         ),
@@ -284,7 +284,7 @@ class SignUpView extends StatelessWidget {
                       style: TextStyle(
                         fontSize: TSizes.displayWidth(context) * 0.04,
                         color:
-                            isDark ? TColors.textWhite : TColors.textSecondary,
+                            isDark ? PColors.textWhite : PColors.textSecondary,
                         fontFamily: 'OpenSans',
                       ),
                     ),

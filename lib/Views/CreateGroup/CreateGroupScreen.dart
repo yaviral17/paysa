@@ -32,7 +32,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 : const Text('Create Group'),
           ),
           icon: const Icon(Icons.add),
-          backgroundColor: TColors.primary,
+          backgroundColor: PColors.primary,
         ),
       ),
       body: SingleChildScrollView(
@@ -101,7 +101,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               Text(
                 "Add Members",
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: TColors.primary,
+                      color: PColors.primary,
                       fontWeight: FontWeight.w500,
                     ),
               ),
@@ -136,7 +136,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                           contentPadding: EdgeInsets.symmetric(horizontal: 20),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: TColors.primary,
+                              color: PColors.primary,
                             ),
                             borderRadius: BorderRadius.all(
                               Radius.circular(100),
@@ -151,12 +151,12 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                     ElevatedButton(
                       onPressed: () => controller.onPressAddButton(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: TColors.primary,
+                        backgroundColor: PColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100),
                         ),
                         side: const BorderSide(
-                          color: TColors.primary,
+                          color: PColors.primary,
                         ),
                         minimumSize: const Size(72, 48),
                       ),

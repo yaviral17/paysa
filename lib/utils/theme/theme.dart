@@ -11,64 +11,19 @@ import 'package:paysa/utils/theme/widget_themes/text_theme.dart';
 
 import '../constants/colors.dart';
 
-class TFlexTheme {
-  TFlexTheme._();
-
-  static FlexScheme theme = FlexScheme.purpleM3;
-
-  static ThemeData lightTheme = FlexThemeData.light(
-    scheme: theme,
-    surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-    blendLevel: 7,
-    subThemesData: const FlexSubThemesData(
-      blendOnLevel: 10,
-      blendOnColors: false,
-      useTextTheme: true,
-      useM2StyleDividerInM3: true,
-      chipSchemeColor: SchemeColor.primary,
-      alignedDropdown: true,
-      useInputDecoratorThemeInDialogs: true,
-    ),
-    visualDensity: FlexColorScheme.comfortablePlatformDensity,
-    useMaterial3: true,
-    swapLegacyOnMaterial3: true,
-    // To use the Playground font, add GoogleFonts package and uncomment
-    fontFamily: 'OpenSans',
-  );
-
-  static ThemeData darkTheme = FlexThemeData.dark(
-    scheme: theme,
-    surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-    blendLevel: 13,
-    subThemesData: const FlexSubThemesData(
-      blendOnLevel: 20,
-      useTextTheme: true,
-      useM2StyleDividerInM3: true,
-      chipSchemeColor: SchemeColor.primary,
-      alignedDropdown: true,
-      useInputDecoratorThemeInDialogs: true,
-    ),
-    visualDensity: FlexColorScheme.comfortablePlatformDensity,
-    useMaterial3: true,
-    swapLegacyOnMaterial3: true,
-    // To use the Playground font, add GoogleFonts package and uncomment
-    fontFamily: 'OpenSans', 
-  );
-}
-
-class TAppTheme {
-  TAppTheme._();
+class PAppTheme {
+  PAppTheme._();
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    fontFamily: 'Poppins',
-    disabledColor: TColors.grey,
+    fontFamily: 'OpenSans',
+    disabledColor: PColors.grey,
     brightness: Brightness.light,
-    primaryColor: TColors.primary,
+    primaryColor: PColors.primary,
     textTheme: TTextTheme.lightTextTheme,
     chipTheme: TChipTheme.lightChipTheme,
-    colorScheme: const ColorScheme.light(primary: TColors.primary),
-    scaffoldBackgroundColor: TColors.white,
+    colorScheme: const ColorScheme.light(primary: PColors.primary),
+    scaffoldBackgroundColor: PColors.white,
     appBarTheme: TAppBarTheme.lightAppBarTheme,
     checkboxTheme: TCheckboxTheme.lightCheckboxTheme,
     bottomSheetTheme: TBottomSheetTheme.lightBottomSheetTheme,
@@ -79,14 +34,14 @@ class TAppTheme {
 
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
-    fontFamily: 'Poppins',
-    disabledColor: TColors.grey,
+    primaryColor: PColors.primary,
+    fontFamily: 'OpenSans',
+    disabledColor: PColors.grey,
     brightness: Brightness.dark,
-    primaryColor: TColors.primary,
     textTheme: TTextTheme.darkTextTheme,
     chipTheme: TChipTheme.darkChipTheme,
-    scaffoldBackgroundColor: TColors.dark,
-    colorScheme: const ColorScheme.dark(primary: TColors.primary),
+    scaffoldBackgroundColor: PColors.dark,
+    colorScheme: const ColorScheme.dark(primary: PColors.primary),
     appBarTheme: TAppBarTheme.darkAppBarTheme,
     checkboxTheme: TCheckboxTheme.darkCheckboxTheme,
     bottomSheetTheme: TBottomSheetTheme.darkBottomSheetTheme,

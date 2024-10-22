@@ -34,10 +34,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               margin: const EdgeInsets.all(20),
               width: TSizes.displayWidth(context),
               decoration: BoxDecoration(
-                color: TColors.primary.withOpacity(0.1),
+                color: PColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: TColors.light.withOpacity(0.5),
+                  color: PColors.light.withOpacity(0.5),
                 ),
               ),
               child: Column(
@@ -115,13 +115,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             MenuOptionsTile(
               tileText: "My Profile",
               icon: Iconsax.user_edit,
-              bgColor: TColors.primary.withOpacity(0.1),
+              bgColor: PColors.primary.withOpacity(0.1),
               onTap: () {},
             ),
             MenuOptionsTile(
               tileText: "Change Password",
               icon: Iconsax.password_check,
-              bgColor: TColors.primary.withOpacity(0.1),
+              bgColor: PColors.primary.withOpacity(0.1),
               onTap: () {
                 Get.toNamed('/change-password');
               },
@@ -129,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             MenuOptionsTile(
               tileText: "Privacy Policy",
               icon: Iconsax.security_card,
-              bgColor: TColors.primary.withOpacity(0.1),
+              bgColor: PColors.primary.withOpacity(0.1),
               onTap: () {
                 Get.toNamed('/privacy-policy');
               },
@@ -138,14 +138,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             MenuOptionsTile(
               tileText: "Log Out",
               icon: Iconsax.logout,
-              bgColor: TColors.error.withOpacity(0.1),
+              bgColor: PColors.error.withOpacity(0.1),
               onTap: () {
                 showCupertinoDialog(
                     context: context,
                     builder: (ctx) {
                       return CupertinoAlertDialog(
                         title: const Text("Log Out"),
-                        content: const Text("Are you sure you want to log out?"),
+                        content:
+                            const Text("Are you sure you want to log out?"),
                         actions: [
                           CupertinoDialogAction(
                             child: const Text("Cancel"),
@@ -204,7 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(color: TColors.primary),
+                              .copyWith(color: PColors.primary),
                         ),
                       ),
                       GestureDetector(
@@ -225,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(color: TColors.primary),
+                              .copyWith(color: PColors.primary),
                         ),
                       ),
                     ],

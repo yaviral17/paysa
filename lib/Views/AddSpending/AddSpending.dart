@@ -9,7 +9,8 @@ import 'package:paysa/utils/constants/colors.dart';
 import 'package:paysa/utils/constants/sizes.dart';
 
 class AddDailySpendingScreen extends StatefulWidget {
-  const AddDailySpendingScreen({super.key, 
+  const AddDailySpendingScreen({
+    super.key,
     required this.fromEdit,
   });
 
@@ -91,7 +92,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                       width: TSizes.displayWidth(context),
                       padding: const EdgeInsets.all(20),
                       decoration: const BoxDecoration(
-                        color: TColors.primary,
+                        color: PColors.primary,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
@@ -103,8 +104,8 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                             'Total Amount',
                             style: TextStyle(
                               color: addSpendingController.isSplit.value
-                                  ? TColors.textWhite.withOpacity(0.5)
-                                  : TColors.textWhite,
+                                  ? PColors.textWhite.withOpacity(0.5)
+                                  : PColors.textWhite,
                               fontSize: 20,
                             ),
                           ),
@@ -127,14 +128,14 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                                     controller: splitAmount,
                                     keyboardType: TextInputType.number,
                                     style: const TextStyle(
-                                      color: TColors.textWhite,
+                                      color: PColors.textWhite,
                                     ),
                                     decoration: InputDecoration(
                                       hintText: '0',
                                       fillColor: Colors.transparent,
                                       hintStyle: TextStyle(
                                         color:
-                                            TColors.textWhite.withOpacity(0.5),
+                                            PColors.textWhite.withOpacity(0.5),
                                       ),
                                       focusedBorder: InputBorder.none,
                                       border: InputBorder.none,
@@ -166,14 +167,14 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                                         .descriptionController,
                                     keyboardType: TextInputType.text,
                                     style: const TextStyle(
-                                      color: TColors.textWhite,
+                                      color: PColors.textWhite,
                                     ),
                                     decoration: InputDecoration(
                                       hintText: 'Enter Description',
                                       fillColor: Colors.transparent,
                                       hintStyle: TextStyle(
                                         color:
-                                            TColors.textWhite.withOpacity(0.5),
+                                            PColors.textWhite.withOpacity(0.5),
                                       ),
                                       focusedBorder: InputBorder.none,
                                       border: InputBorder.none,
@@ -190,7 +191,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                     ),
                     (!nextpage)
                         ? Divider(
-                            color: TColors.primary.withOpacity(0.2),
+                            color: PColors.primary.withOpacity(0.2),
                             thickness: 2,
                           )
                         : Container(),
@@ -199,7 +200,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                             width: TSizes.displayWidth(context),
                             padding: const EdgeInsets.all(2),
                             decoration: const BoxDecoration(
-                                color: TColors.primary,
+                                color: PColors.primary,
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(30),
                                   bottomRight: Radius.circular(30),
@@ -213,7 +214,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                                   onPressed: () {},
                                   icon: const Icon(
                                     Iconsax.search_normal,
-                                    color: TColors.textWhite,
+                                    color: PColors.textWhite,
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -222,14 +223,14 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
                                     controller: splitMemberEmail,
                                     keyboardType: TextInputType.emailAddress,
                                     style: const TextStyle(
-                                      color: TColors.textWhite,
+                                      color: PColors.textWhite,
                                     ),
                                     decoration: InputDecoration(
                                       hintText: 'Find Your Buddy',
                                       fillColor: Colors.transparent,
                                       hintStyle: TextStyle(
                                         color:
-                                            TColors.textWhite.withOpacity(0.5),
+                                            PColors.textWhite.withOpacity(0.5),
                                       ),
                                       focusedBorder: InputBorder.none,
                                       border: InputBorder.none,
@@ -339,17 +340,17 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
           height: TSizes.displayHeight(context) * 0.07,
           width: TSizes.displayWidth(context) * 0.8,
           decoration: BoxDecoration(
-            color: TColors.primaryDark,
+            color: PColors.primaryDark,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: TColors.dark.withOpacity(0.2),
+              color: PColors.dark.withOpacity(0.2),
             ),
           ),
           child: const Center(
             child: Text(
               'Continue',
               style: TextStyle(
-                color: TColors.textWhite,
+                color: PColors.textWhite,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -377,10 +378,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   //                 decoration: BoxDecoration(
   //                   color: !addSpendingController.isSplit.value
   //                       ? Colors.white.withOpacity(0.1)
-  //                       : TColors.primary.withOpacity(0.1),
+  //                       : PColors.primary.withOpacity(0.1),
   //                   borderRadius: BorderRadius.circular(20),
   //                   border: Border.all(
-  //                     color: TColors.light.withOpacity(0.2),
+  //                     color: PColors.light.withOpacity(0.2),
   //                   ),
   //                 ),
   //                 child: Center(
@@ -388,8 +389,8 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   //                     'Add Spending',
   //                     style: TextStyle(
   //                       color: addSpendingController.isSplit.value
-  //                           ? TColors.textWhite.withOpacity(0.5)
-  //                           : TColors.textWhite,
+  //                           ? PColors.textWhite.withOpacity(0.5)
+  //                           : PColors.textWhite,
   //                     ),
   //                   ),
   //                 ),
@@ -408,10 +409,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   //                 decoration: BoxDecoration(
   //                   color: addSpendingController.isSplit.value
   //                       ? Colors.white.withOpacity(0.1)
-  //                       : TColors.primary.withOpacity(0.1),
+  //                       : PColors.primary.withOpacity(0.1),
   //                   borderRadius: BorderRadius.circular(20),
   //                   border: Border.all(
-  //                     color: TColors.light.withOpacity(0.2),
+  //                     color: PColors.light.withOpacity(0.2),
   //                   ),
   //                 ),
   //                 padding: const EdgeInsets.all(20),
@@ -420,8 +421,8 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   //                     'Add Split',
   //                     style: TextStyle(
   //                       color: addSpendingController.isSplit.value
-  //                           ? TColors.textWhite
-  //                           : TColors.textWhite.withOpacity(0.5),
+  //                           ? PColors.textWhite
+  //                           : PColors.textWhite.withOpacity(0.5),
   //                     ),
   //                   ),
   //                 ),
@@ -477,10 +478,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 
   //       Container(
   //         decoration: BoxDecoration(
-  //           color: TColors.primary.withOpacity(0.1),
+  //           color: PColors.primary.withOpacity(0.1),
   //           borderRadius: BorderRadius.circular(20),
   //           border: Border.all(
-  //             color: TColors.light.withOpacity(0.2),
+  //             color: PColors.light.withOpacity(0.2),
   //           ),
   //         ),
   //         padding: const EdgeInsets.all(20),
@@ -490,7 +491,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   //             const Text(
   //               'Date',
   //               style: TextStyle(
-  //                 color: TColors.textWhite,
+  //                 color: PColors.textWhite,
   //                 fontSize: 20,
   //                 fontWeight: FontWeight.bold,
   //               ),
@@ -509,10 +510,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   //               child: Container(
   //                 padding: const EdgeInsets.all(12),
   //                 decoration: BoxDecoration(
-  //                   color: TColors.primary.withOpacity(0.1),
+  //                   color: PColors.primary.withOpacity(0.1),
   //                   borderRadius: BorderRadius.circular(20),
   //                   border: Border.all(
-  //                     color: TColors.light.withOpacity(0.2),
+  //                     color: PColors.light.withOpacity(0.2),
   //                   ),
   //                 ),
   //                 child: Row(
@@ -524,13 +525,13 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   //                         format: 'dd MMM yyyy : hh:mm a',
   //                       ),
   //                       style: TextStyle(
-  //                         color: TColors.textWhite,
+  //                         color: PColors.textWhite,
   //                         fontSize: 18,
   //                       ),
   //                     ),
   //                     Icon(
   //                       Iconsax.calendar_2,
-  //                       color: TColors.textWhite,
+  //                       color: PColors.textWhite,
   //                     ),
   //                   ],
   //                 ),
@@ -608,10 +609,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
   //             child: Container(
   //               padding: const EdgeInsets.all(20),
   //               decoration: BoxDecoration(
-  //                 color: TColors.light,
+  //                 color: PColors.light,
   //                 borderRadius: BorderRadius.circular(20),
   //                 border: Border.all(
-  //                   color: TColors.light.withOpacity(0.2),
+  //                   color: PColors.light.withOpacity(0.2),
   //                 ),
   //               ),
   //               child: Center(
@@ -659,10 +660,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 //             // Paid By
 //             Container(
 //               decoration: BoxDecoration(
-//                 color: TColors.primary.withOpacity(0.1),
+//                 color: PColors.primary.withOpacity(0.1),
 //                 borderRadius: BorderRadius.circular(16),
 //                 border: Border.all(
-//                   color: TColors.light.withOpacity(0.2),
+//                   color: PColors.light.withOpacity(0.2),
 //                 ),
 //               ),
 //               padding: const EdgeInsets.all(20),
@@ -672,7 +673,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 //                   const Text(
 //                     'Paid By',
 //                     style: TextStyle(
-//                       color: TColors.textWhite,
+//                       color: PColors.textWhite,
 //                       fontSize: 20,
 //                       fontWeight: FontWeight.bold,
 //                     ),
@@ -702,10 +703,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 //                         child: Container(
 //                           padding: const EdgeInsets.all(12),
 //                           decoration: BoxDecoration(
-//                             color: TColors.primary.withOpacity(0.1),
+//                             color: PColors.primary.withOpacity(0.1),
 //                             borderRadius: BorderRadius.circular(8),
 //                             border: Border.all(
-//                               color: TColors.light.withOpacity(0.2),
+//                               color: PColors.light.withOpacity(0.2),
 //                             ),
 //                           ),
 //                           child: Row(
@@ -716,13 +717,13 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 //                                     ? "Tap to select"
 //                                     : addSpendingController.paidBy.value.name,
 //                                 style: const TextStyle(
-//                                   color: TColors.textWhite,
+//                                   color: PColors.textWhite,
 //                                   fontSize: 18,
 //                                 ),
 //                               ),
 //                               const Icon(
 //                                 Iconsax.user,
-//                                 color: TColors.textWhite,
+//                                 color: PColors.textWhite,
 //                               ),
 //                             ],
 //                           ),
@@ -781,10 +782,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 //               child: Container(
 //                 padding: const EdgeInsets.all(20),
 //                 decoration: BoxDecoration(
-//                   color: TColors.light,
+//                   color: PColors.light,
 //                   borderRadius: BorderRadius.circular(20),
 //                   border: Border.all(
-//                     color: TColors.light.withOpacity(0.2),
+//                     color: PColors.light.withOpacity(0.2),
 //                   ),
 //                 ),
 //                 child: Center(
@@ -825,10 +826,10 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 //   Widget build(BuildContext context) {
 //     return Container(
 //       decoration: BoxDecoration(
-//         color: TColors.primary.withOpacity(0.1),
+//         color: PColors.primary.withOpacity(0.1),
 //         borderRadius: BorderRadius.circular(20),
 //         border: Border.all(
-//           color: TColors.white.withOpacity(0.2),
+//           color: PColors.white.withOpacity(0.2),
 //         ),
 //       ),
 //       padding: const EdgeInsets.all(20),
@@ -838,7 +839,7 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 //           Text(
 //             label,
 //             style: TextStyle(
-//               color: TColors.textWhite,
+//               color: PColors.textWhite,
 //               fontSize: 20,
 //               fontWeight: FontWeight.bold,
 //             ),
@@ -848,28 +849,28 @@ class _AddDailySpendingScreenState extends State<AddDailySpendingScreen> {
 //             controller: textController,
 //             keyboardType: keyboardType,
 //             style: const TextStyle(
-//               color: TColors.textWhite,
+//               color: PColors.textWhite,
 //             ),
 //             decoration: InputDecoration(
 //               hintText: hint,
 //               fillColor: Colors.transparent,
 //               disabledBorder: OutlineInputBorder(
 //                 borderSide: BorderSide(
-//                   color: TColors.white,
+//                   color: PColors.white,
 //                 ),
 //               ),
 //               enabledBorder: OutlineInputBorder(
 //                 borderSide: BorderSide(
-//                   color: TColors.white.withOpacity(0.5),
+//                   color: PColors.white.withOpacity(0.5),
 //                 ),
 //               ),
 //               focusedBorder: OutlineInputBorder(
 //                 borderSide: BorderSide(
-//                   color: TColors.white,
+//                   color: PColors.white,
 //                 ),
 //               ),
 //               hintStyle: TextStyle(
-//                 color: TColors.textWhite.withOpacity(0.5),
+//                 color: PColors.textWhite.withOpacity(0.5),
 //               ),
 //               border: InputBorder.none,
 //             ),
@@ -895,7 +896,7 @@ class AllMembersSplitWidget extends StatelessWidget {
           itemBuilder: (context, index) {
             return ListTile(
               leading: CircleAvatar(
-                backgroundColor: TColors.primary,
+                backgroundColor: PColors.primary,
                 child: Image.asset(
                   'assets/images/google.png',
                   height: 20,
@@ -908,7 +909,7 @@ class AllMembersSplitWidget extends StatelessWidget {
                     "User $index",
                     // addSpendingController.users[index].name,
                     style: const TextStyle(
-                      color: TColors.textWhite,
+                      color: PColors.textWhite,
                     ),
                   ),
                   const Text(
@@ -925,18 +926,18 @@ class AllMembersSplitWidget extends StatelessWidget {
                   //enter amount here in this textfield
                   keyboardType: TextInputType.number,
                   style: const TextStyle(
-                    color: TColors.textWhite,
+                    color: PColors.textWhite,
                   ),
                   decoration: InputDecoration(
                     hintText: '0',
                     fillColor: Colors.transparent,
                     hintStyle: TextStyle(
-                      color: TColors.textWhite.withOpacity(0.5),
+                      color: PColors.textWhite.withOpacity(0.5),
                     ),
                     focusedBorder: InputBorder.none,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: TColors.white.withOpacity(0.5),
+                        color: PColors.white.withOpacity(0.5),
                       ),
                     ),
                     disabledBorder: InputBorder.none,
@@ -964,7 +965,7 @@ class SplitWithWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: TColors.primary.withOpacity(0.2),
+          color: PColors.primary.withOpacity(0.2),
           borderRadius: BorderRadius.circular(20),
         ),
         child: const Column(
@@ -975,7 +976,7 @@ class SplitWithWidget extends StatelessWidget {
               child: Text(
                 'Split with',
                 style: TextStyle(
-                  color: TColors.textWhite,
+                  color: PColors.textWhite,
                   fontSize: 20,
                 ),
               ),

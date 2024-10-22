@@ -22,7 +22,7 @@ class SpendingCounter extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        // color: TColors.white.withOpacity(0.08),
+        // color: PColors.white.withOpacity(0.08),
         borderRadius: BorderRadius.circular(20),
       ),
       width: TSizes.displayWidth(context) * 0.4,
@@ -43,7 +43,6 @@ class SpendingCounter extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: TColors.white,
                     fontSize: TSizes.displayWidth(context) * 0.04,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'OpenSans',
@@ -56,7 +55,6 @@ class SpendingCounter extends StatelessWidget {
                     Text(
                       '$currency${amount.toInt()}',
                       style: TextStyle(
-                        color: TColors.white,
                         fontSize: TSizes.displayWidth(context) * 0.032,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'OpenSans',
@@ -65,7 +63,6 @@ class SpendingCounter extends StatelessWidget {
                     Text(
                       ".${amount.toString().split('.').last.padRight(2, '0')}",
                       style: TextStyle(
-                        color: TColors.white,
                         fontSize: TSizes.displayWidth(context) * 0.03,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'OpenSans',

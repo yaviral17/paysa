@@ -34,6 +34,11 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   //widget not showing in home screen
   updateWidgetUi() async {
     await WidgetsController.update(
@@ -97,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: TColors.background(context),
+      backgroundColor: PColors.background(context),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +119,7 @@ class _HomeViewState extends State<HomeView> {
                   smoothness: 0.8,
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: TColors.primary,
+                      color: PColors.primary,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -129,7 +134,7 @@ class _HomeViewState extends State<HomeView> {
                           FirebaseAuth.instance.currentUser!.photoURL == null
                               ? CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: TColors.primaryDark,
+                                  backgroundColor: PColors.primaryDark,
                                   child: Text(
                                     FirebaseAuth
                                             .instance.currentUser!.displayName
@@ -137,7 +142,7 @@ class _HomeViewState extends State<HomeView> {
                                             .first[0] ??
                                         '',
                                     style: const TextStyle(
-                                      color: TColors.white,
+                                      color: PColors.white,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'OpenSans',
@@ -162,7 +167,7 @@ class _HomeViewState extends State<HomeView> {
                               Text(
                                 'Hello,',
                                 style: TextStyle(
-                                  color: TColors.white,
+                                  color: PColors.white,
                                   fontSize:
                                       TSizes.displayWidth(context) * 0.032,
                                   fontFamily: 'OpenSans',
@@ -174,7 +179,6 @@ class _HomeViewState extends State<HomeView> {
                                         .first ??
                                     '',
                                 style: TextStyle(
-                                  color: TColors.white,
                                   fontSize: TSizes.displayWidth(context) * 0.04,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'OpenSans',
@@ -191,7 +195,7 @@ class _HomeViewState extends State<HomeView> {
                 IconButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      TColors.white.withOpacity(0.12),
+                      PColors.white.withOpacity(0.12),
                     ),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
@@ -205,10 +209,8 @@ class _HomeViewState extends State<HomeView> {
                   icon: const Text(
                     '🔧 change targets',
                     style: TextStyle(
-                      color: TColors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'OpenSans',
                     ),
                   ),
                 ),
@@ -231,7 +233,7 @@ class _HomeViewState extends State<HomeView> {
                 Container(
                   height: 50,
                   width: 2,
-                  color: TColors.textSecondary.withOpacity(0.4),
+                  color: PColors.textPrimary.withOpacity(0.4),
                 ),
                 const SpendingCounter(
                   title: 'Month',
@@ -252,7 +254,6 @@ class _HomeViewState extends State<HomeView> {
                   Text(
                     "Transactions",
                     style: TextStyle(
-                      color: TColors.white,
                       fontSize: TSizes.displayWidth(context) * 0.05,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'OpenSans',
@@ -264,7 +265,6 @@ class _HomeViewState extends State<HomeView> {
                     child: Text(
                       "See all",
                       style: TextStyle(
-                        color: TColors.white,
                         fontSize: TSizes.displayWidth(context) * 0.04,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'OpenSans',
@@ -290,7 +290,7 @@ class _HomeViewState extends State<HomeView> {
       //   onPressed: () {
       //     navigatorKey.currentState!.pushNamed('/spending-numpad');
       //   },
-      //   backgroundColor: TColors.bottomNavItemActive(context),
+      //   backgroundColor: PColors.bottomNavItemActive(context),
       //   child: const Icon(
       //     Icons.add,
       //     color: Colors.white,

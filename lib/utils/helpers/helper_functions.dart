@@ -154,14 +154,14 @@ class THelperFunctions {
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Crop Your Image',
-          toolbarColor: TColors.darkBackground,
-          cropGridColor: TColors.darkBackground,
-          statusBarColor: TColors.lightDarkBackground,
+          toolbarColor: PColors.darkBackground,
+          cropGridColor: PColors.darkBackground,
+          statusBarColor: PColors.lightDarkBackground,
           cropFrameColor: Theme.of(context).colorScheme.primary,
           showCropGrid: false,
-          toolbarWidgetColor: TColors.light,
-          backgroundColor: TColors.darkBackground,
-          dimmedLayerColor: TColors.darkBackground,
+          toolbarWidgetColor: PColors.light,
+          backgroundColor: PColors.darkBackground,
+          dimmedLayerColor: PColors.darkBackground,
           initAspectRatio: CropAspectRatioPreset.square,
           lockAspectRatio: false,
         ),
@@ -230,11 +230,11 @@ class THelperFunctions {
       Get.snackbar(
         "Storage Permission not provided",
         "Please grant storage permission",
-        backgroundColor: TColors.primary,
+        backgroundColor: PColors.primary,
         backgroundGradient: LinearGradient(
           colors: [
-            TColors.primary,
-            TColors.primary,
+            PColors.primary,
+            PColors.primary,
             Colors.blue.shade900,
           ],
         ),
@@ -278,8 +278,8 @@ class THelperFunctions {
     Get.snackbar(
       title,
       message,
-      backgroundColor: TColors.error,
-      colorText: TColors.light,
+      backgroundColor: PColors.error,
+      colorText: PColors.light,
       snackPosition: SnackPosition.TOP,
     );
   }
@@ -291,8 +291,8 @@ class THelperFunctions {
     Get.snackbar(
       title,
       message,
-      backgroundColor: TColors.success,
-      colorText: TColors.light,
+      backgroundColor: PColors.success,
+      colorText: PColors.light,
       snackPosition: SnackPosition.TOP,
     );
   }
@@ -304,8 +304,8 @@ class THelperFunctions {
     Get.snackbar(
       title,
       message,
-      backgroundColor: TColors.warning,
-      colorText: TColors.light,
+      backgroundColor: PColors.warning,
+      colorText: PColors.light,
       snackPosition: SnackPosition.TOP,
     );
   }
@@ -317,8 +317,8 @@ class THelperFunctions {
     Get.snackbar(
       title,
       message,
-      backgroundColor: TColors.info,
-      colorText: TColors.light,
+      backgroundColor: PColors.info,
+      colorText: PColors.light,
       snackPosition: SnackPosition.TOP,
     );
   }

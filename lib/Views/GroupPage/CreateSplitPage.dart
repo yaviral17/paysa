@@ -52,8 +52,8 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: TSizes.defaultSpace),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -164,7 +164,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                             return ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all(TColors.primary),
+                                    MaterialStateProperty.all(PColors.primary),
                                 shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
@@ -212,10 +212,10 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                           TextButton(
                             style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all(
-                                TColors.white,
+                                PColors.white,
                               ),
                               backgroundColor:
-                                  MaterialStateProperty.all(TColors.primary),
+                                  MaterialStateProperty.all(PColors.primary),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -237,10 +237,10 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
                           TextButton(
                             style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all(
-                                TColors.white,
+                                PColors.white,
                               ),
                               backgroundColor:
-                                  MaterialStateProperty.all(TColors.primary),
+                                  MaterialStateProperty.all(PColors.primary),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -396,7 +396,7 @@ class _CreateSplitScreenState extends State<CreateSplitScreen> {
               controller.createSplit(context);
             },
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(TColors.primary),
+              backgroundColor: MaterialStateProperty.all(PColors.primary),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),

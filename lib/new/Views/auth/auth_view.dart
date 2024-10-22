@@ -16,7 +16,7 @@ class AuthView extends StatelessWidget {
     final AuthController controller = Get.find();
     return Scaffold(
       backgroundColor:
-          isDark ? TColors.darkBackground : TColors.lightBackground,
+          isDark ? PColors.darkBackground : PColors.lightBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -47,7 +47,7 @@ class AuthView extends StatelessWidget {
           },
           prefixWidget: const Icon(
             Icons.alternate_email,
-            color: TColors.textWhite,
+            color: PColors.textWhite,
           ),
           text: 'Authenticate with Email',
           fontSize: TSizes.displayWidth(context) * 0.05,
@@ -61,8 +61,8 @@ class AuthView extends StatelessWidget {
           onTap: () async {
             await controller.signInWithGoogle();
           },
-          color: TColors.white,
-          textColor: TColors.black,
+          color: PColors.white,
+          textColor: PColors.black,
           prefixWidget: Image.asset(
             'assets/images/google.png',
             width: TSizes.displayWidth(context) * 0.05,

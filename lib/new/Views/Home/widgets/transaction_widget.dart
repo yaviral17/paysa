@@ -22,12 +22,11 @@ class TransactionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: TColors.white.withOpacity(0.1),
         child: Center(
           child: Text(
             emoji,
             style: const TextStyle(
-              color: TColors.white,
+              color: PColors.white,
               fontSize: 20,
               fontWeight: FontWeight.bold,
               fontFamily: 'OpenSans',
@@ -38,7 +37,6 @@ class TransactionWidget extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
-          color: TColors.white,
           fontSize: TSizes.displayWidth(context) * 0.04,
           fontWeight: FontWeight.bold,
           fontFamily: 'OpenSans',
@@ -47,22 +45,22 @@ class TransactionWidget extends StatelessWidget {
       subtitle: Text(
         subtitle,
         style: TextStyle(
-          color: TColors.textSecondary,
+          color: PColors.textSecondary,
           fontSize: TSizes.displayWidth(context) * 0.036,
           fontWeight: FontWeight.w600,
           fontFamily: 'OpenSans',
         ),
       ),
       trailing: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
-          color: TColors.white.withOpacity(0.1),
+          color: PColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
           isReceived ? '+ \$$amount' : '- \$$amount',
           style: TextStyle(
-            color: isReceived ? TColors.success : TColors.error,
+            color: isReceived ? PColors.success : PColors.error,
             fontSize: TSizes.displayWidth(context) * 0.045,
             fontWeight: FontWeight.bold,
             fontFamily: 'OpenSans',
