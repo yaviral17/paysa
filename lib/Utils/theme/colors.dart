@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:paysa/utils/helpers/helper.dart';
+import 'package:paysa/Utils/helpers/helper.dart';
 
 class PColors {
   // App theme colors
