@@ -35,4 +35,9 @@ class PColors {
   }
 
   //add more on the go
+
+  static const Color success = Color(0xFF2EAB57);
+  static const Color error = Color(0xFFB00020);
+
+  static const Color black = Color(0xFF000000);
 }

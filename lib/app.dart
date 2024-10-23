@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:paysa/route.dart';
+import 'package:paysa/utils/theme/theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -7,18 +9,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Flutter Demo'),
-        ),
-        body: Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      title: 'Paysa',
+      theme: PAppTheme.lightTheme,
+      darkTheme: PAppTheme.darkTheme,
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
+      themeMode: ThemeMode.system,
     );
   }
 }
