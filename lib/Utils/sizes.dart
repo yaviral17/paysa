@@ -4,6 +4,16 @@ class PSize {
   static double? screenHeight;
   static double? screenWidth;
 
+  // Function to get the screen height
+  static double displayHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height;
+  }
+
+  // Function to get the screen width
+  static double displayWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width;
+  }
+
   //rh = responsive height
   static double rh(BuildContext context, double height) {
     return MediaQuery.of(context).size.height * (height / screenHeight!);

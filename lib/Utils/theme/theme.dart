@@ -10,6 +10,7 @@ class PAppTheme {
     disabledColor: PColors.secondaryTextLight,
     brightness: Brightness.light,
     primaryColor: PColors.primaryLight,
+    scaffoldBackgroundColor: PColors.backgroundLight,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -19,5 +20,6 @@ class PAppTheme {
     brightness: Brightness.dark,
     primaryColor: PColors
         .primaryLight, // this should be primaryDark but for we keeping the same light color for primary
+    scaffoldBackgroundColor: PColors.backgroundDark,
   );
 }

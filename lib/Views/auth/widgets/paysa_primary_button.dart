@@ -9,6 +9,7 @@ class PaysaPrimaryButton extends StatelessWidget {
   final void Function()? onTap;
   final double width;
   final double height;
+  final BorderSide? border;
   final double fontSize;
   final Color textColor;
   final FontWeight fontWeight;
@@ -25,6 +26,7 @@ class PaysaPrimaryButton extends StatelessWidget {
     this.onTap,
     this.width = double.infinity,
     this.height = 54,
+    this.border,
     this.fontSize = 16.0,
     this.borderRadius = 12.0,
     this.textColor = PColors.primaryTextLight,
@@ -43,6 +45,7 @@ class PaysaPrimaryButton extends StatelessWidget {
       endCurve: Curves.easeOut,
       child: SmoothClipRRect(
         borderRadius: BorderRadius.circular(18),
+        side: border ?? BorderSide.none,
         smoothness: 0.8,
         child: Container(
           width: width,

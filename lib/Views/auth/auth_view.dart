@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
@@ -9,7 +8,6 @@ class AuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PColors.primary(context),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -35,34 +33,38 @@ class AuthView extends StatelessWidget {
     return Column(
       children: [
         PaysaPrimaryButton(
-          width: PSize.rh(context, 10) * 0.88,
-          height: PSize.rw(context, 10) * 0.06,
+          width: PSize.displayWidth(context),
+          height: PSize.rh(context, 54),
           onTap: () {},
           prefixWidget: Icon(
             Icons.alternate_email,
-            color: PColors.primary(context),
+            color: PColors.primaryTextLight,
+            size: PSize.arw(context, 24),
           ),
           text: 'Authenticate with Email',
-          fontSize: PSize.rh(context, 10) * 0.05,
+          fontSize: PSize.arw(context, 18),
         ),
         SizedBox(
-          height: PSize.rw(context, 10) * 0.01,
+          height: PSize.rh(context, 10),
         ),
         PaysaPrimaryButton(
-          width: PSize.rh(context, 10) * 0.88,
-          height: PSize.rw(context, 10) * 0.06,
+          width: PSize.displayWidth(context),
+          height: PSize.rh(context, 54),
           onTap: () async {},
-          color: PColors.primary(context),
-          textColor: PColors.primary(context),
+          color: PColors.primaryTextDark,
+          textColor: PColors.primaryTextLight,
+          border: BorderSide(
+            color: PColors.primaryText(context),
+          ),
           prefixWidget: Image.asset(
             'assets/images/google.png',
-            width: PSize.rh(context, 10) * 0.05,
+            width: PSize.arw(context, 24),
           ),
           text: 'Authenticate with Google',
-          fontSize: PSize.rh(context, 10) * 0.05,
+          fontSize: PSize.arw(context, 18),
         ),
         SizedBox(
-          height: PSize.rw(context, 10) * 0.01,
+          height: PSize.rh(context, 12),
         ),
       ],
     );
@@ -74,21 +76,24 @@ class AuthView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: PSize.rw(context, 10) * 0.04,
+          height: PSize.rh(context, 36),
         ),
         Center(
-          child: Image.network(
-            'https://framerusercontent.com/images/lduGwGeZiKwSs8YHOIWtXi7PnE.png',
-            width: PSize.rh(context, 10) * 0.4,
+          child: Hero(
+            tag: 'paysa_logo',
+            child: Image.asset(
+              'assets/images/dark_paysa.png',
+              width: PSize.arw(context, 180),
+            ),
           ),
         ),
         SizedBox(
-          height: PSize.rw(context, 10) * 0.04,
+          height: PSize.rh(context, 20),
         ),
         Text(
-          'Welcome\nto Paysa 👋',
+          'Welcome to Paysa 👋',
           style: TextStyle(
-            fontSize: PSize.rh(context, 10) * 0.1,
+            fontSize: PSize.arw(context, 36),
             fontWeight: FontWeight.bold,
             fontFamily: 'OpenSans',
           ),
@@ -98,7 +103,7 @@ class AuthView extends StatelessWidget {
         Text(
           'Manage your expenses with ease. 💸\nBecause who doesn\'t love knowing where all their money went? 🤔💰',
           style: TextStyle(
-            fontSize: PSize.rh(context, 10) * 0.047,
+            fontSize: PSize.arw(context, 18),
             fontFamily: 'OpenSans',
           ),
           textAlign: TextAlign.left,
