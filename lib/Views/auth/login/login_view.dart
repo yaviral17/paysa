@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/Utils/constants/hero_tags.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 
 import 'package:paysa/Utils/sizes.dart';
@@ -15,6 +17,19 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: PColors.primary(context),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Iconsax.arrow_left_2,
+            color: PColors.primaryText(context),
+          ),
+          onPressed: () {
+            PNavigate.back(context);
+          },
+        ),
+      ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
@@ -25,49 +40,41 @@ class LoginView extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          // navigatorKey.currentState!.pop();
-                        },
-                        icon: const Icon(
-                          Iconsax.arrow_left_2,
-                        ),
-                      ),
-                      SizedBox(
-                        height: PSize.rh(context, 10) * 0.04,
-                      ),
-                    ],
+                  SizedBox(
+                    height: PSize.rh(context, 36),
                   ),
                   Center(
-                    child: Image.network(
-                      'https://framerusercontent.com/images/lduGwGeZiKwSs8YHOIWtXi7PnE.png',
-                      width: PSize.rw(context, 10) * 0.4,
+                    child: Hero(
+                      tag: PHeroTags.appLogo,
+                      child: Image.asset(
+                        'assets/images/dark_paysa.png',
+                        width: PSize.arw(context, 140),
+                      ),
                     ),
                   ),
                   SizedBox(
-                    height: PSize.rh(context, 10) * 0.04,
+                    height: PSize.arh(context, 24),
                   ),
                   Text(
                     'Let\'s get started! 🚀',
                     style: TextStyle(
-                      fontSize: PSize.rw(context, 10) * 0.09,
+                      fontSize: PSize.arw(context, 24),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 20),
                   Text(
                     'Paysa helps you track your expenses effortlessly. 💸\nStay on top of your spending and save more!',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: PSize.rw(context, 10) * 0.044,
-                      color: PColors.primaryText(context),
+                      fontSize: PSize.rw(context, 16),
+                      color: PColors.secondaryText(context),
                     ),
                   ),
                 ],
               ),
               SizedBox(
-                height: PSize.rh(context, 10) * 0.04,
+                height: PSize.rh(context, 12),
               ),
               // Add your login form fields here
               Column(
@@ -79,7 +86,7 @@ class LoginView extends StatelessWidget {
                     child: Text(
                       'Email',
                       style: TextStyle(
-                        fontSize: PSize.rw(context, 10) * 0.04,
+                        fontSize: PSize.rw(context, 14),
                         fontFamily: 'OpenSans',
                       ),
                     ),
@@ -94,7 +101,7 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: PSize.rh(context, 10) * 0.01,
+                    height: PSize.arh(context, 4),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -102,7 +109,7 @@ class LoginView extends StatelessWidget {
                     child: Text(
                       'Password',
                       style: TextStyle(
-                        fontSize: PSize.rw(context, 10) * 0.04,
+                        fontSize: PSize.arw(context, 14),
                         fontFamily: 'OpenSans',
                       ),
                     ),
@@ -118,7 +125,7 @@ class LoginView extends StatelessWidget {
                     obscureText: true,
                   ),
                   SizedBox(
-                    height: PSize.rh(context, 10) * 0.004,
+                    height: PSize.arh(context, 14),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -130,7 +137,7 @@ class LoginView extends StatelessWidget {
                         child: Text(
                           'Forgot Password?',
                           style: TextStyle(
-                            fontSize: PSize.rw(context, 10) * 0.04,
+                            fontSize: PSize.arw(context, 14),
                             color: PColors.primaryText(context),
                             fontFamily: 'OpenSans',
                           ),
@@ -139,16 +146,16 @@ class LoginView extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: PSize.rh(context, 10) * 0.01,
+                    height: PSize.arh(context, 12),
                   ),
                   Center(
                     child: PaysaPrimaryButton(
                       text: 'Login',
                       onTap: () {},
-                      width: PSize.rw(context, 10),
-                      height: PSize.rh(context, 10) * 0.058,
+                      width: PSize.displayWidth(context),
+                      height: PSize.arh(context, 54),
                       textColor: PColors.primaryText(context),
-                      fontSize: PSize.rw(context, 10) * 0.05,
+                      fontSize: PSize.arw(context, 16),
                     ),
                   ),
                 ],
@@ -156,14 +163,11 @@ class LoginView extends StatelessWidget {
               const Spacer(),
               Center(
                 child: TextButton(
-                  onPressed: () {
-                    // Navigate to the register screen
-                    // navigatorKey.currentState!.pushNamed('/register');
-                  },
+                  onPressed: () {},
                   child: Text(
                     'Don\'t have an account? Register',
                     style: TextStyle(
-                      fontSize: PSize.rw(context, 10) * 0.04,
+                      fontSize: PSize.rw(context, 14),
                       color: PColors.primaryText(context),
                       fontFamily: 'OpenSans',
                     ),
@@ -171,7 +175,7 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: PSize.rh(context, 10) * 0.02,
+                height: PSize.rh(context, 12),
               ),
             ],
           ),
@@ -223,15 +227,24 @@ class PaysaPrimaryTextField extends StatelessWidget {
         hintText: hintText,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(
+            color: PColors.secondaryText(context),
+          ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(
+            color: PColors.secondaryText(context),
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(
+            color: PColors.secondaryText(context),
+          ),
         ),
         prefixIcon: prefixIcon,
-        fillColor: fillColor ?? PColors.primaryText(context),
+        fillColor: fillColor ?? PColors.secondaryText(context),
 
         // focusColor: Theme.of(context).colorScheme.onBackground,
       ),

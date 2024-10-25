@@ -16,7 +16,7 @@ class PaysaPrimaryButton extends StatelessWidget {
   final double borderRadius;
   final Widget? prefixWidget;
   final Widget? suffixWidget;
-
+  final bool isLoading;
   final String fontFamily;
 
   const PaysaPrimaryButton({
@@ -34,6 +34,7 @@ class PaysaPrimaryButton extends StatelessWidget {
     this.fontFamily = 'OpenSans',
     this.prefixWidget,
     this.suffixWidget,
+    this.isLoading = false,
   });
 
   @override
@@ -54,22 +55,27 @@ class PaysaPrimaryButton extends StatelessWidget {
             color: color,
           ),
           child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                prefixWidget ?? Container(),
-                Text(
-                  text,
-                  style: TextStyle(
+            child: isLoading
+                ? CircularProgressIndicator(
                     color: textColor,
-                    fontSize: fontSize,
-                    fontWeight: fontWeight,
-                    fontFamily: fontFamily,
+                    strokeAlign: -3.2,
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      prefixWidget ?? Container(),
+                      Text(
+                        text,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: fontSize,
+                          fontWeight: fontWeight,
+                          fontFamily: fontFamily,
+                        ),
+                      ),
+                      suffixWidget ?? Container(),
+                    ],
                   ),
-                ),
-                suffixWidget ?? Container(),
-              ],
-            ),
           ),
         ),
       ),

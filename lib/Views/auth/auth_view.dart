@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:paysa/Utils/constants/hero_tags.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/auth/login/login_view.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 
 class AuthView extends StatelessWidget {
   const AuthView({super.key});
+
+  void goToLogin(BuildContext context) {
+    PNavigate.to(context, LoginView());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +43,7 @@ class AuthView extends StatelessWidget {
         PaysaPrimaryButton(
           width: PSize.displayWidth(context),
           height: PSize.rh(context, 54),
-          onTap: () {},
+          onTap: () => goToLogin(context),
           prefixWidget: Icon(
             Icons.alternate_email,
             color: PColors.primaryTextLight,
@@ -80,33 +88,36 @@ class AuthView extends StatelessWidget {
         ),
         Center(
           child: Hero(
-            tag: 'paysa_logo',
+            tag: PHeroTags.appLogo,
             child: Image.asset(
               'assets/images/dark_paysa.png',
-              width: PSize.arw(context, 180),
+              width: PSize.arw(context, 140),
             ),
           ),
         ),
         SizedBox(
           height: PSize.rh(context, 20),
         ),
-        Text(
-          'Welcome to Paysa 👋',
-          style: TextStyle(
-            fontSize: PSize.arw(context, 36),
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
+        Center(
+          child: Text(
+            'Welcome to Paysa 👋',
+            style: TextStyle(
+              fontSize: PSize.arw(context, 36),
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.left,
         ),
         const SizedBox(height: 20),
-        Text(
-          'Manage your expenses with ease. 💸\nBecause who doesn\'t love knowing where all their money went? 🤔💰',
-          style: TextStyle(
-            fontSize: PSize.arw(context, 18),
-            fontFamily: 'OpenSans',
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          child: Text(
+            'Manage your expenses with ease. 💸\nBecause who doesn\'t love knowing where all their money went? 🤔💰',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: PSize.arw(context, 18),
+            ),
           ),
-          textAlign: TextAlign.left,
         ),
       ],
     );

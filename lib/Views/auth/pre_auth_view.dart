@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:paysa/Utils/constants/hero_tags.dart';
+import 'package:paysa/Utils/helpers/helper.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
+import 'package:paysa/Views/auth/auth_view.dart';
 
 class PreAuthView extends StatefulWidget {
   const PreAuthView({super.key});
@@ -13,9 +17,12 @@ class _PreAuthViewState extends State<PreAuthView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(milliseconds: 400), () {
-      Navigator.pushNamed(context, '/auth');
-    });
+    transitToAuthView(context);
+  }
+
+  transitToAuthView(BuildContext context) async {
+    await Future.delayed(const Duration(milliseconds: 500), () {});
+    PNavigate.to(context, const AuthView());
   }
 
   @override
@@ -27,10 +34,10 @@ class _PreAuthViewState extends State<PreAuthView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Hero(
-              tag: 'paysa_logo',
+              tag: PHeroTags.appLogo,
               child: Image.asset(
                 'assets/images/dark_paysa.png',
-                width: PSize.rw(context, 160),
+                width: PSize.rw(context, 140),
               ),
             ),
           ],

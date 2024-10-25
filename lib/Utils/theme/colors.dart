@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 
 class PColors {
+  // Constant colors
+  static const Color transparent = Color(0x00000000);
+
   // App theme colors
   static const Color primaryLight = Color(0xFF2EAB57);
   static const Color primaryDark = Color(0xFF0C0C0C);
@@ -32,6 +35,16 @@ class PColors {
   static const Color secondaryTextDark = Color(0xFF8E8E93);
   static Color secondaryText(context) {
     return PHelper.isDarkMode(context) ? secondaryTextDark : secondaryTextLight;
+  }
+
+  // loading indicator color
+  // not applicable for now
+  static const Color loadingIndicatorLight = Color(0xFFFFFFFF);
+  static const Color loadingIndicatorDark = Color(0xFFFFFFFF);
+  static Color loadingIndicator(context) {
+    return PHelper.isDarkMode(context)
+        ? loadingIndicatorDark
+        : loadingIndicatorLight;
   }
 
   //add more on the go
