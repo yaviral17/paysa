@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/Dashboard/dashboard_view.dart';
 import 'package:paysa/Views/auth/auth_view.dart';
 import 'package:paysa/Views/auth/login/login_view.dart';
 import 'package:paysa/Views/auth/pre_auth_view.dart';
@@ -11,7 +12,7 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         {
-          return MaterialPageRoute(builder: (_) => const PreAuthView());
+          return MaterialPageRoute(builder: (_) => const DashMenuView());
         }
       case '/auth':
         {
@@ -25,6 +26,10 @@ class RouteGenerator {
       case '/signup':
         {
           return MaterialPageRoute(builder: (_) => SignUpView());
+        }
+      case '/dashboard':
+        {
+          return MaterialPageRoute(builder: (_) => DashMenuView());
         }
       default:
         return _errorRoute();

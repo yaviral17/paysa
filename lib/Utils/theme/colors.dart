@@ -47,6 +47,24 @@ class PColors {
         : loadingIndicatorLight;
   }
 
+  // Bottom navigation bar colors
+  static const Color bottomNavIconInactiveLight = Color(0xFF8E8E93);
+  static const Color bottomNavIconInactiveDark = Color(0xFF8E8E93);
+  static Color bottomNavIconInactive(context) {
+    return PHelper.isDarkMode(context)
+        ? bottomNavIconInactiveDark
+        : bottomNavIconInactiveLight;
+  }
+
+  // Bottom navigation bar colors
+  static const Color bottomNavIconActiveLight = Color(0xFF2EAB57);
+  static const Color bottomNavIconActiveDark = Color(0xFF2EAB57);
+  static Color bottomNavIconActive(context) {
+    return PHelper.isDarkMode(context)
+        ? bottomNavIconActiveDark
+        : bottomNavIconActiveLight;
+  }
+
   //add more on the go
 
   static const Color success = Color(0xFF2EAB57);
