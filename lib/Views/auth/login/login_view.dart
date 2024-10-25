@@ -18,8 +18,9 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: PColors.primary(context),
+        backgroundColor: PColors.background(context),
         elevation: 0,
+        scrolledUnderElevation: 0,
         leading: IconButton(
           icon: Icon(
             Iconsax.arrow_left_2,
@@ -63,12 +64,14 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    'Paysa helps you track your expenses effortlessly. 💸\nStay on top of your spending and save more!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: PSize.rw(context, 16),
-                      color: PColors.secondaryText(context),
+                  FittedBox(
+                    child: Text(
+                      'Paysa helps you track your expenses effortlessly.💸\nStay on top of your spending and save more!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: PSize.rw(context, 16),
+                        color: PColors.secondaryText(context),
+                      ),
                     ),
                   ),
                 ],
@@ -150,6 +153,7 @@ class LoginView extends StatelessWidget {
                   ),
                   Center(
                     child: PaysaPrimaryButton(
+                      isLoading: true,
                       text: 'Login',
                       onTap: () {},
                       width: PSize.displayWidth(context),
