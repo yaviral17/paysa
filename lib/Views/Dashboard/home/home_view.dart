@@ -33,7 +33,7 @@ class _HomeViewState extends State<HomeView> {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: PColors.secondaryText(context).withOpacity(0.2),
+                        color: PColors.containerSecondary(context),
                       ),
                       child: Row(
                         children: [
@@ -49,15 +49,6 @@ class _HomeViewState extends State<HomeView> {
                               height: PSize.arw(context, 50),
                             ),
                           ),
-                          // Container(
-                          //   width: PSize.arw(context, 50),
-                          //   height: PSize.arw(context, 50),
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     color: PColors.primary(context),
-                          //   ),
-                          //   child: Image.asset(name),
-                          // ),
                           SizedBox(
                             width: PSize.arw(context, 10),
                           ),
@@ -112,7 +103,7 @@ class _HomeViewState extends State<HomeView> {
                 height: PSize.arh(context, 16),
               ),
 
-              // Caraousel Cards View
+              // Carousel Cards View
               ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 180),
                 child: CarouselView(
@@ -183,290 +174,48 @@ class _HomeViewState extends State<HomeView> {
               SizedBox(
                 height: PSize.arh(context, 16),
               ),
-
-              SingleChildScrollView(
-                child: Column(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Row(
                   children: [
-                    // Balance Bar
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 12),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: PColors.secondaryText(context).withOpacity(0.2),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                HugeIcons.strokeRoundedMoneyExchange01,
-                                color: PColors.primaryText(context),
-                              ),
-                              Icon(
-                                HugeIcons.strokeRoundedArrowRight01,
-                                color: PColors.primaryText(context),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'Balance',
-                                style: TextStyle(
-                                  fontSize: PSize.arw(context, 16),
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: -1,
-                                  color: PColors.primaryText(context),
-                                ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                '\$12,000.00',
-                                style: TextStyle(
-                                  fontSize: PSize.arw(context, 16),
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: -1,
-                                  color: PColors.primaryText(context),
-                                ),
-                              ),
-                              Text(
-                                ' / ',
-                                style: TextStyle(
-                                  fontSize: PSize.arw(context, 16),
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: -1,
-                                  color: PColors.secondaryText(context),
-                                ),
-                              ),
-                              Text(
-                                '\$14,000.00',
-                                style: TextStyle(
-                                  fontSize: PSize.arw(context, 16),
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: -1,
-                                  color: PColors.secondaryText(context),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: PSize.arh(context, 8),
-                          ),
-                          LinearProgressIndicator(
-                            value: 0.7,
-                            backgroundColor:
-                                PColors.primary(context).withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(10),
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              PColors.primary(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Quick add members Row
-                    // --------------------------------
-                    // fix this container's padding and margin for this ui
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 12),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: PColors.secondaryText(context).withOpacity(0.2),
-                      ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Row(
+                    Expanded(
+                      child: SmoothContainer(
+                        height: PSize.arw(context, 200),
+                        width: PSize.arw(context, 200),
+                        borderRadius: BorderRadius.circular(24),
+                        color: PColors.containerSecondary(context),
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                Text(
-                                  'Quick Add Members',
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 16),
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: -1,
+                                SmoothContainer(
+                                  child: HugeIcon(
+                                    icon: HugeIcons.strokeRoundedWallet02,
                                     color: PColors.primaryText(context),
-                                  ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  'View All',
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 14),
-                                    color: PColors.primary(context),
-                                  ),
-                                ),
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {},
-                                  icon: HugeIcon(
-                                    icon: HugeIcons.strokeRoundedArrowRight01,
-                                    color: PColors.primary(context),
-                                    size: PSize.arw(context, 20),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-
-                          // row of profile containers
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  // profile container for each member
-                                  const ProfileContainerWidget(),
-                                  const ProfileContainerWidget(),
-                                  const ProfileContainerWidget(),
-                                  const ProfileContainerWidget(),
-
-                                  // add member button
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      minWidth: PSize.arw(context, 100),
-                                      maxHeight: PSize.arw(context, 100),
-                                      maxWidth: PSize.arw(context, 100),
-                                    ),
-                                    margin: const EdgeInsets.only(right: 8),
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: PColors.primary(context)
-                                          .withOpacity(0.2),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add,
-                                          color: PColors.primaryText(context),
-                                        ),
-                                        Text(
-                                          'Add',
-                                          style: TextStyle(
-                                            fontSize: PSize.arw(context, 12),
-                                            fontWeight: FontWeight.w600,
-                                            color: PColors.primaryText(context),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-
-                    // Recent Transactions
-                    // --------------------------------
-                    // fix this container's padding and margin for this ui
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 12),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: PColors.secondaryText(context).withOpacity(0.2),
-                      ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Recent Transactions',
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 16),
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: -1,
-                                    color: PColors.primaryText(context),
-                                  ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  'View All',
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 14),
-                                    color: PColors.primary(context),
-                                  ),
-                                ),
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {},
-                                  icon: HugeIcon(
-                                    icon: HugeIcons.strokeRoundedArrowRight01,
-                                    color: PColors.primary(context),
-                                    size: PSize.arw(context, 20),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          // List of transactions
-
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                leading: Icon(
-                                  HugeIcons.strokeRoundedMoneyExchange01,
-                                  color: PColors.primaryText(context),
-                                ),
-                                title: Text(
-                                  'Transaction $index',
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 16),
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: -1,
-                                    color: PColors.primaryText(context),
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  'Transaction $index',
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 14),
-                                    color: PColors.secondaryText(context),
-                                  ),
-                                ),
-                                trailing: Text(
-                                  '\$12,000.00',
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 16),
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: -1,
-                                    color: PColors.primaryText(context),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                    SizedBox(
+                      width: PSize.arw(context, 12),
+                    ),
+                    Expanded(
+                      child: SmoothContainer(
+                        height: PSize.arw(context, 200),
+                        width: PSize.arw(context, 200),
+                        borderRadius: BorderRadius.circular(12),
+                        color: PColors.containerSecondary(context),
                       ),
                     ),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -541,67 +290,82 @@ class ProfileContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.topEnd,
-      children: [
-        Container(
-          constraints: BoxConstraints(
-            maxHeight: PSize.arw(context, 100),
-            maxWidth: PSize.arw(context, 100),
-          ),
-          margin: const EdgeInsets.only(left: 2, right: 8),
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(
-                PColors.background(context).withOpacity(0.2),
-                BlendMode.srcOver,
-              ),
-              image: const NetworkImage(
-                  "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4"),
-              fit: BoxFit.cover,
+    return SizedBox(
+      height: PSize.arw(context, 72),
+      width: PSize.arw(context, 80),
+      child: Stack(
+        alignment: AlignmentDirectional.topEnd,
+        children: [
+          Container(
+            constraints: BoxConstraints(
+              maxHeight: PSize.arw(context, 72),
+              maxWidth: PSize.arw(context, 80),
             ),
-            borderRadius: BorderRadius.circular(10),
-            color: PColors.primary(context).withOpacity(0.2),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // Icon(
-              //   HugeIcons.strokeRoundedUserCircle,
-              //   color: PColors.primaryText(context),
-              // ),
-              // SizedBox(
-              //   height: PSize.arh(context, 4),
-              // ),
-              Text(
-                'Aviral Y.kjkasdhashasdbsavdjhsavfjavfhasvhj',
-                softWrap: false,
-                maxLines: 1,
-                overflow: TextOverflow.fade,
-                style: TextStyle(
-                  fontSize: PSize.arw(context, 12),
-                  fontWeight: FontWeight.w600,
-                  color: PColors.primaryText(context),
-                  letterSpacing: -0.6,
+            margin: const EdgeInsets.only(left: 2, right: 8),
+            // padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                  PColors.containerSecondary(context),
+                  BlendMode.srcOver,
                 ),
+                image: const NetworkImage(
+                    "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4"),
+                fit: BoxFit.cover,
               ),
-            ],
+              borderRadius: BorderRadius.circular(10),
+              // color: PColors.primary(context).withOpacity(0.2),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // Icon(
+                //   HugeIcons.strokeRoundedUserCircle,
+                //   color: PColors.primaryText(context),
+                // ),
+                // SizedBox(
+                //   height: PSize.arh(context, 4),
+                // ),
+                Container(
+                  constraints: BoxConstraints(
+                    // maxHeight: PSize.arw(context, 20),
+                    minWidth: PSize.arw(context, 80),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                    color: PColors.background(context).withOpacity(0.9),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Text(
+                    'Aviral Yadav',
+                    softWrap: false,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(
+                      fontSize: PSize.arw(context, 12),
+                      fontWeight: FontWeight.w600,
+                      color: PColors.secondaryText(context),
+                      letterSpacing: -0.6,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        //red dot indicator on top right
-        Container(
-          constraints: BoxConstraints(
-            maxHeight: PSize.arw(context, 20),
-            maxWidth: PSize.arw(context, 20),
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: PColors.error,
-            // PColors.primary(context).withOpacity(0.2),
-          ),
-        ),
-      ],
+          Align(
+            alignment: Alignment.topRight,
+            child: HugeIcon(
+              icon: Iconsax.notification_11,
+              color: PColors.error,
+              size: PSize.arw(context, 45),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

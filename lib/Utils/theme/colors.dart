@@ -65,6 +65,15 @@ class PColors {
         : bottomNavIconActiveLight;
   }
 
+  static const Color containerSecondaryLight = Color(0xFF8E8E93);
+  static const Color containerSecondaryDark = Color(0xFF8E8E93);
+  static Color containerSecondary(context) {
+    return (PHelper.isDarkMode(context)
+            ? containerSecondaryDark
+            : containerSecondaryLight)
+        .withOpacity(0.14);
+  }
+
   //add more on the go
 
   static const Color success = Color(0xFF2EAB57);
