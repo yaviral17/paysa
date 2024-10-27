@@ -74,6 +74,14 @@ class PColors {
         .withOpacity(0.14);
   }
 
+  static const Color accountIconLight = Color(0xFF8E8E93);
+  static const Color accountIconDark = Color(0xFF8E8E93);
+  static Color accountIcon(context) {
+    return PHelper.isDarkMode(context)
+        ? const Color.fromARGB(255, 57, 57, 59)
+        : accountIconLight;
+  }
+
   //add more on the go
 
   static const Color success = Color(0xFF2EAB57);

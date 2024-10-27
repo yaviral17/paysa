@@ -62,6 +62,26 @@ class _DashMenuViewState extends State<DashMenuView> {
                 icon: HugeIcons.strokeRoundedCreditCard,
                 isActive: dashboardController.currentIndex.value == 1,
               ),
+              GlowContainer(
+                glowColor: PColors.primary(context).withOpacity(0.5),
+                spreadRadius: 0.0,
+                borderRadius: BorderRadius.circular(100.0),
+                blurRadius: 10.0,
+                child: FloatingActionButton(
+                  onPressed: () {},
+                  backgroundColor: PColors.primary(context),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                  ),
+                  child: Icon(
+                    HugeIcons.strokeRoundedPlusSign,
+                    color: PColors.primaryText(context),
+                    // glowColor: PColors.primary(context),
+                    // blurRadius: 10.0,
+                    // offset: const Offset(0, 0),
+                  ),
+                ),
+              ),
               PaysaNavbarIcon(
                 label: 'Stats',
                 onPressed: () {
@@ -78,14 +98,14 @@ class _DashMenuViewState extends State<DashMenuView> {
                 icon: HugeIcons.strokeRoundedBubbleChatNotification,
                 isActive: dashboardController.currentIndex.value == 3,
               ),
-              PaysaNavbarIcon(
-                label: 'Profile',
-                onPressed: () {
-                  dashboardController.changePage(4);
-                },
-                icon: HugeIcons.strokeRoundedUserCircle,
-                isActive: dashboardController.currentIndex.value == 4,
-              ),
+              // PaysaNavbarIcon(
+              //   label: 'Profile',
+              //   onPressed: () {
+              //     dashboardController.changePage(4);
+              //   },
+              //   icon: HugeIcons.strokeRoundedUserCircle,
+              //   isActive: dashboardController.currentIndex.value == 4,
+              // ),
             ],
           ),
         ),

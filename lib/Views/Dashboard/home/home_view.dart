@@ -103,66 +103,123 @@ class _HomeViewState extends State<HomeView> {
                 height: PSize.arh(context, 16),
               ),
 
-              // Carousel Cards View
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 180),
-                child: CarouselView(
-                  itemSnapping: true,
-                  controller: CarouselController(
-                    initialItem: 0,
-                  ),
-                  itemExtent: 250,
-                  shrinkExtent: 200,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Row(
                   children: [
-                    // First Card
-                    firstBgBalanceCard(context),
-                    // Second Card
-                    Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: LinearGradient(
-                          tileMode: TileMode.decal,
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            PColors.primary(context),
-                            PColors.primary(context).withOpacity(0.5),
-                          ],
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            HugeIcons
-                                .strokeRoundedCircleArrowDataTransferHorizontal,
-                            color: PColors.primaryText(context),
-                          ),
-                          const Spacer(),
-                          Text(
-                            '5678',
-                            style: TextStyle(
-                              fontSize: PSize.arw(context, 16),
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -1,
-                              color:
-                                  PColors.primaryText(context).withOpacity(0.8),
-                            ),
-                          ),
-                        ],
-                      ),
+                    Expanded(
+                      child: firstBgBalanceCard(context),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: LinearGradient(
-                          tileMode: TileMode.decal,
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            PColors.primary(context),
-                            PColors.primary(context).withOpacity(0.5),
+                    // Second Card
+
+                    Expanded(
+                      child: SmoothContainer(
+                        height: PSize.arw(context, 200),
+                        width: PSize.arw(context, 200),
+                        borderRadius: BorderRadius.circular(24),
+                        color: PColors.containerSecondary(context),
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Pocket',
+                              style: TextStyle(
+                                fontSize: PSize.arw(context, 16),
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -1,
+                                color: PColors.secondaryText(context),
+                              ),
+                            ),
+                            SizedBox(
+                              height: PSize.arh(context, 8),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: PColors.containerSecondary(context),
+                                // border: Border.all(
+                                //   width: 1,
+                                // color: PColors.primaryText(context)
+                                //     .withOpacity(0.5),
+                                // ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: PColors.primary(context)
+                                          .withOpacity(0.5),
+                                    ),
+                                    child: Icon(
+                                      HugeIcons.strokeRoundedWallet02,
+                                      color: PColors.primaryText(context),
+                                      size: PSize.arw(context, 26),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: PSize.arw(context, 8),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Wallet",
+                                        style: TextStyle(
+                                          fontSize: PSize.arw(context, 16),
+                                          fontWeight: FontWeight.w600,
+                                          color: PColors.primaryText(context),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: PSize.arh(context, 8),
+                                      ),
+                                      Text(
+                                        "\$1229.00",
+                                        style: TextStyle(
+                                          fontSize: PSize.arw(context, 24),
+                                          fontWeight: FontWeight.w700,
+                                          color: PColors.primaryText(context),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: PSize.arh(context, 8),
+                            ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: List.generate(
+                                    4,
+                                    (index) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: PColors.containerSecondary(
+                                              context),
+                                        ),
+                                        child: Icon(
+                                          HugeIcons.strokeRoundedWallet02,
+                                          color: PColors.primaryText(context),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -209,8 +266,9 @@ class _HomeViewState extends State<HomeView> {
                       child: SmoothContainer(
                         height: PSize.arw(context, 200),
                         width: PSize.arw(context, 200),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(24),
                         color: PColors.containerSecondary(context),
+                        padding: const EdgeInsets.all(24),
                       ),
                     ),
                   ],
