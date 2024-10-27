@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Utils/constants/hero_tags.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
+import 'package:paysa/Views/auth/signup/sign_up_view.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 
 import 'package:paysa/Utils/sizes.dart';
@@ -153,7 +155,7 @@ class LoginView extends StatelessWidget {
                   ),
                   Center(
                     child: PaysaPrimaryButton(
-                      isLoading: true,
+                      // isLoading: true,
                       text: 'Login',
                       onTap: () {},
                       width: PSize.displayWidth(context),
@@ -167,13 +169,14 @@ class LoginView extends StatelessWidget {
               const Spacer(),
               Center(
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    PNavigate.to(context, SignUpView());
+                  },
                   child: Text(
                     'Don\'t have an account? Register',
                     style: TextStyle(
                       fontSize: PSize.rw(context, 14),
                       color: PColors.primaryText(context),
-                      fontFamily: 'OpenSans',
                     ),
                   ),
                 ),

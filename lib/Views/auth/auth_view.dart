@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:paysa/Utils/constants/hero_tags.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
@@ -15,20 +16,25 @@ class AuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // logo image and heading text with description
-              authHeader(context),
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        SystemNavigator.pop();
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // logo image and heading text with description
+                authHeader(context),
 
-              // login and sign up buttons
-              Center(child: authButtons(context)),
-            ],
+                // login and sign up buttons
+                Center(child: authButtons(context)),
+              ],
+            ),
           ),
         ),
       ),

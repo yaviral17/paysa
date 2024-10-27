@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/Utils/constants/hero_tags.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/auth/login/login_view.dart';
@@ -37,44 +38,42 @@ class SignUpView extends StatelessWidget {
                             IconButton(
                               onPressed: () {
                                 // navigatorKey.currentState!.pop();
+                                PNavigate.back(context);
                               },
                               icon: const Icon(
                                 Iconsax.arrow_left_2,
                               ),
                             ),
                             SizedBox(
-                              height: PSize.rh(context, 10) * 0.04,
+                              height: PSize.rh(context, 10),
                             ),
                           ],
                         ),
                         Center(
-                          child: Image.network(
-                            'https://framerusercontent.com/images/lduGwGeZiKwSs8YHOIWtXi7PnE.png',
-                            width: PSize.rw(context, 10) * 0.4,
+                          child: Hero(
+                            tag: PHeroTags.appLogo,
+                            child: Image.asset(
+                              'assets/images/dark_paysa.png',
+                              width: PSize.arw(context, 140),
+                            ),
                           ),
                         ),
                         SizedBox(
-                          height: PSize.rh(context, 10) * 0.04,
+                          height: PSize.rh(context, 10),
                         ),
                         Text(
-                          'Join us! 🎉',
+                          'Let\'s get you Signed Up! 🚀',
                           style: TextStyle(
-                            fontSize: PSize.rw(context, 10) * 0.09,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'Create an account to start tracking your expenses. 💸\nIt\'s quick and easy!',
-                          style: TextStyle(
-                            fontSize: PSize.rw(context, 10) * 0.044,
+                            fontSize: PSize.rw(context, 24),
                             color: PColors.primaryText(context),
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -1.5,
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: PSize.rh(context, 10) * 0.04,
+                      height: PSize.rh(context, 10),
                     ),
                     // Add your sign-up form fields here
                     Column(
@@ -86,15 +85,14 @@ class SignUpView extends StatelessWidget {
                           child: Text(
                             'Name',
                             style: TextStyle(
-                              fontSize: PSize.rw(context, 10) * 0.04,
+                              fontSize: PSize.rw(context, 14),
                               color: PColors.primaryText(context),
-                              fontFamily: 'OpenSans',
                             ),
                           ),
                         ),
                         PaysaPrimaryTextField(
                           controller: nameController,
-                          hintText: "Name",
+                          hintText: "John Doe",
                           fillColor: PColors.primaryText(context),
                           prefixIcon: Icon(
                             Icons.person,
@@ -102,7 +100,7 @@ class SignUpView extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: PSize.rh(context, 10) * 0.01,
+                          height: PSize.rh(context, 10),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -110,15 +108,14 @@ class SignUpView extends StatelessWidget {
                           child: Text(
                             'Email',
                             style: TextStyle(
-                              fontSize: PSize.rw(context, 10) * 0.04,
+                              fontSize: PSize.rw(context, 14),
                               color: PColors.primaryText(context),
-                              fontFamily: 'OpenSans',
                             ),
                           ),
                         ),
                         PaysaPrimaryTextField(
                           controller: emailController,
-                          hintText: "Email",
+                          hintText: "john@doe.com",
                           fillColor: PColors.primary(context),
                           prefixIcon: Icon(
                             Icons.alternate_email,
@@ -126,7 +123,7 @@ class SignUpView extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: PSize.rh(context, 10) * 0.01,
+                          height: PSize.rh(context, 10),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -134,15 +131,14 @@ class SignUpView extends StatelessWidget {
                           child: Text(
                             'Password',
                             style: TextStyle(
-                              fontSize: PSize.rw(context, 10) * 0.04,
+                              fontSize: PSize.rw(context, 14),
                               color: PColors.primaryText(context),
-                              fontFamily: 'OpenSans',
                             ),
                           ),
                         ),
                         PaysaPrimaryTextField(
                           controller: passwordController,
-                          hintText: "Password",
+                          hintText: "*******",
                           fillColor: PColors.primary(context),
                           prefixIcon: Icon(
                             Iconsax.lock,
@@ -151,7 +147,7 @@ class SignUpView extends StatelessWidget {
                           obscureText: true,
                         ),
                         SizedBox(
-                          height: PSize.rh(context, 10) * 0.01,
+                          height: PSize.rh(context, 10),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -159,15 +155,14 @@ class SignUpView extends StatelessWidget {
                           child: Text(
                             'Confirm Password',
                             style: TextStyle(
-                              fontSize: PSize.rw(context, 10) * 0.04,
+                              fontSize: PSize.rw(context, 14),
                               color: PColors.primaryText(context),
-                              fontFamily: 'OpenSans',
                             ),
                           ),
                         ),
                         PaysaPrimaryTextField(
                           controller: confirmPasswordController,
-                          hintText: "Confirm Password",
+                          hintText: "*******",
                           fillColor: PColors.primary(context),
                           prefixIcon: Icon(
                             Iconsax.lock,
@@ -176,7 +171,7 @@ class SignUpView extends StatelessWidget {
                           obscureText: true,
                         ),
                         SizedBox(
-                          height: PSize.rh(context, 10) * 0.02,
+                          height: PSize.rh(context, 20),
                         ),
                         Center(
                           child: PaysaPrimaryButton(
@@ -184,10 +179,10 @@ class SignUpView extends StatelessWidget {
                             onTap: () {
                               // Add your sign-up logic here
                             },
-                            width: PSize.rw(context, 10),
-                            height: PSize.rh(context, 10) * 0.058,
-                            textColor: PColors.primary(context),
-                            fontSize: PSize.rw(context, 10) * 0.05,
+                            width: PSize.displayWidth(context),
+                            height: PSize.rh(context, 54),
+                            textColor: PColors.primaryText(context),
+                            fontSize: PSize.rw(context, 14),
                           ),
                         ),
                       ],
@@ -197,14 +192,13 @@ class SignUpView extends StatelessWidget {
                 Center(
                   child: TextButton(
                     onPressed: () {
-                      // Navigate to the login screen
+                      PNavigate.back(context);
                     },
                     child: Text(
                       'Already have an account? Login',
                       style: TextStyle(
-                        fontSize: PSize.rw(context, 10) * 0.04,
-                        color: PColors.primary(context),
-                        fontFamily: 'OpenSans',
+                        fontSize: PSize.rw(context, 14),
+                        color: PColors.primaryText(context),
                       ),
                     ),
                   ),
