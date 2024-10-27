@@ -41,8 +41,19 @@ class _DashMenuViewState extends State<DashMenuView> {
         ],
       ),
       bottomNavigationBar: Obx(
-        () => Padding(
-          padding: const EdgeInsets.only(bottom: 24.0),
+        () => Container(
+          padding: const EdgeInsets.only(bottom: 12.0, top: 12.0),
+          decoration: BoxDecoration(
+            color: PColors.background(context),
+            boxShadow: [
+              BoxShadow(
+                color: PColors.background(context),
+                spreadRadius: 4.0,
+                blurRadius: 8.0,
+                // offset: const Offset(0, -10),
+              ),
+            ],
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

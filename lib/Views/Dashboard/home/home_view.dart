@@ -325,6 +325,10 @@ class _HomeViewState extends State<HomeView> {
                     ],
                   ),
                 ),
+
+                SizedBox(
+                  height: PSize.arh(context, 16),
+                ),
               ],
             ),
           ),
@@ -569,7 +573,7 @@ class ProfileContainerWidget extends StatelessWidget {
               color: PColors.error,
               size: PSize.arw(context, 45),
             ),
-          )
+          ),
         ],
       ),
     );
