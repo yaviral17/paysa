@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/Dashboard/home/widget/chart_widget.dart';
 import 'package:smooth_corner/smooth_corner.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -19,16 +22,17 @@ class _HomeViewState extends State<HomeView> {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: ScrollPhysics(),
-          child: Column(
-            children: [
-              SizedBox(
-                height: PSize.arh(context, 12),
-              ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: PSize.arh(context, 12),
+                ),
 
-              // Header AppBar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: Row(
+                // Header AppBar
+                Row(
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -97,15 +101,12 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ],
                 ),
-              ),
 
-              SizedBox(
-                height: PSize.arh(context, 16),
-              ),
+                SizedBox(
+                  height: PSize.arh(context, 16),
+                ),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Row(
+                Row(
                   children: [
                     Expanded(
                       child: firstBgBalanceCard(context),
@@ -134,61 +135,63 @@ class _HomeViewState extends State<HomeView> {
                             SizedBox(
                               height: PSize.arh(context, 8),
                             ),
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: PColors.containerSecondary(context),
-                                // border: Border.all(
-                                //   width: 1,
-                                // color: PColors.primaryText(context)
-                                //     .withOpacity(0.5),
-                                // ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: PColors.primary(context)
-                                          .withOpacity(0.5),
+                            FittedBox(
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: PColors.containerSecondary(context),
+                                  // border: Border.all(
+                                  //   width: 1,
+                                  // color: PColors.primaryText(context)
+                                  //     .withOpacity(0.5),
+                                  // ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: PColors.primary(context)
+                                            .withOpacity(0.5),
+                                      ),
+                                      child: Icon(
+                                        HugeIcons.strokeRoundedWallet02,
+                                        color: PColors.primaryText(context),
+                                        size: PSize.arw(context, 26),
+                                      ),
                                     ),
-                                    child: Icon(
-                                      HugeIcons.strokeRoundedWallet02,
-                                      color: PColors.primaryText(context),
-                                      size: PSize.arw(context, 26),
+                                    SizedBox(
+                                      width: PSize.arw(context, 8),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: PSize.arw(context, 8),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Wallet",
-                                        style: TextStyle(
-                                          fontSize: PSize.arw(context, 16),
-                                          fontWeight: FontWeight.w600,
-                                          color: PColors.primaryText(context),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Wallet",
+                                          style: TextStyle(
+                                            fontSize: PSize.arw(context, 16),
+                                            fontWeight: FontWeight.w600,
+                                            color: PColors.primaryText(context),
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: PSize.arh(context, 8),
-                                      ),
-                                      Text(
-                                        "\$1229.00",
-                                        style: TextStyle(
-                                          fontSize: PSize.arw(context, 24),
-                                          fontWeight: FontWeight.w700,
-                                          color: PColors.primaryText(context),
+                                        SizedBox(
+                                          height: PSize.arh(context, 8),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        Text(
+                                          "\$1229.00",
+                                          style: TextStyle(
+                                            fontSize: PSize.arw(context, 24),
+                                            fontWeight: FontWeight.w700,
+                                            color: PColors.primaryText(context),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -226,55 +229,104 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ],
                 ),
-              ),
 
-              SizedBox(
-                height: PSize.arh(context, 16),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SmoothContainer(
-                        height: PSize.arw(context, 200),
-                        width: PSize.arw(context, 200),
-                        borderRadius: BorderRadius.circular(24),
-                        color: PColors.containerSecondary(context),
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                SizedBox(
+                  height: PSize.arh(context, 18),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Goals',
+                        style: TextStyle(
+                          fontSize: PSize.arw(context, 18),
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0,
+                          color: PColors.primaryText(context),
+                        ),
+                      ),
+                      ZoomTapAnimation(
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                        },
+                        child: Row(
                           children: [
-                            Row(
-                              children: [
-                                SmoothContainer(
-                                  child: HugeIcon(
-                                    icon: HugeIcons.strokeRoundedWallet02,
-                                    color: PColors.primaryText(context),
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              'View All',
+                              style: TextStyle(
+                                fontSize: PSize.arw(context, 14),
+                                color: PColors.primary(context),
+                              ),
+                            ),
+                            SizedBox(
+                              width: PSize.arw(context, 4),
+                            ),
+                            Icon(
+                              HugeIcons.strokeRoundedArrowRight01,
+                              color: PColors.primary(context),
+                              size: PSize.arw(context, 14),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: PSize.arw(context, 12),
-                    ),
-                    Expanded(
-                      child: SmoothContainer(
-                        height: PSize.arw(context, 200),
-                        width: PSize.arw(context, 200),
-                        borderRadius: BorderRadius.circular(24),
-                        color: PColors.containerSecondary(context),
-                        padding: const EdgeInsets.all(24),
-                      ),
-                    ),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              )
-            ],
+                SizedBox(
+                  height: PSize.arh(context, 8),
+                ),
+                const GoalTileWidget(
+                  label: 'Goal 1',
+                  totalAmount: 1000,
+                  currentAmount: 500,
+                ),
+                SizedBox(
+                  height: PSize.arh(context, 8),
+                ),
+                const GoalTileWidget(
+                  label: 'Goal 2',
+                  totalAmount: 2000,
+                  currentAmount: 1000,
+                ),
+
+                SizedBox(
+                  height: PSize.arh(context, 16),
+                ),
+
+                SmoothContainer(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  width: PSize.displayWidth(context),
+                  // height: PSize.arw(context, 200),
+                  borderRadius: BorderRadius.circular(24),
+                  color: PColors.containerSecondary(context),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Text(
+                          'Statistics',
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 16),
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -1,
+                            color: PColors.secondaryText(context),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: PSize.displayWidth(context),
+                        height: PSize.arw(context, 200),
+                        child: LineChartSample4(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -330,6 +382,102 @@ class _HomeViewState extends State<HomeView> {
                 onPressed: () {},
                 icon: HugeIcon(
                   icon: HugeIcons.strokeRoundedArrowRight01,
+                  color: PColors.primary(context),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class GoalTileWidget extends StatelessWidget {
+  final String label;
+  final double totalAmount;
+  final double currentAmount;
+  const GoalTileWidget({
+    super.key,
+    this.label = 'Goal',
+    this.totalAmount = 1000,
+    this.currentAmount = 500,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const double progressBarWidth = 320;
+    return SmoothContainer(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+      width: PSize.displayWidth(context),
+      // height: PSize.arw(context, 200),
+      borderRadius: BorderRadius.circular(24),
+      color: PColors.containerSecondary(context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 16),
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -1,
+                  color: PColors.secondaryText(context),
+                ),
+              ),
+              const Spacer(),
+              Text(
+                '\$$currentAmount',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 14),
+                  color: PColors.secondaryText(context),
+                ),
+              ),
+              Text(
+                ' / \$$totalAmount',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 18),
+                  color: PColors.primaryText(context),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: PSize.arh(context, 8),
+          ),
+          // progress bar
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                height: PSize.arw(context, 8),
+                width: PSize.arw(context, progressBarWidth),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: PColors.containerSecondary(context),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: PSize.arw(context,
+                          (currentAmount * progressBarWidth) / totalAmount),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: PColors.primary(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: PSize.arw(context, 8),
+              ),
+              Text(
+                '${(currentAmount * 100) / totalAmount}%',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 14),
                   color: PColors.primary(context),
                 ),
               ),
