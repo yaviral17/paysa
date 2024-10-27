@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Utils/sizes.dart';
@@ -30,47 +31,53 @@ class _HomeViewState extends State<HomeView> {
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Row(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: PColors.containerSecondary(context),
-                      ),
-                      child: Row(
-                        children: [
-                          SmoothClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: PColors.primary(context).withOpacity(0.7),
-                              width: 2,
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed('/profile');
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: PColors.containerSecondary(context),
+                        ),
+                        child: Row(
+                          children: [
+                            SmoothClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                color:
+                                    PColors.primary(context).withOpacity(0.7),
+                                width: 2,
+                              ),
+                              child: Image.network(
+                                "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
+                                width: PSize.arw(context, 50),
+                                height: PSize.arw(context, 50),
+                              ),
                             ),
-                            child: Image.network(
-                              "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
-                              width: PSize.arw(context, 50),
-                              height: PSize.arw(context, 50),
+                            SizedBox(
+                              width: PSize.arw(context, 10),
                             ),
-                          ),
-                          SizedBox(
-                            width: PSize.arw(context, 10),
-                          ),
-                          Text(
-                            'Aviral Y.',
-                            style: TextStyle(
-                              fontSize: PSize.arw(context, 14),
-                              fontWeight: FontWeight.w600,
+                            Text(
+                              'Aviral Y.',
+                              style: TextStyle(
+                                fontSize: PSize.arw(context, 14),
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            width: PSize.arw(context, 10),
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: PColors.primary(context),
-                            size: PSize.arw(context, 12),
-                          ),
-                          SizedBox(
-                            width: PSize.arw(context, 10),
-                          ),
-                        ],
+                            SizedBox(
+                              width: PSize.arw(context, 10),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: PColors.primary(context),
+                              size: PSize.arw(context, 12),
+                            ),
+                            SizedBox(
+                              width: PSize.arw(context, 10),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const Spacer(),

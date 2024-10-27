@@ -7,6 +7,8 @@ import 'package:paysa/Views/auth/login/login_view.dart';
 import 'package:paysa/Views/auth/pre_auth_view.dart';
 import 'package:paysa/Views/auth/signup/sign_up_view.dart';
 
+import 'Views/Dashboard/home/profile/profile_view.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -30,6 +32,10 @@ class RouteGenerator {
       case '/dashboard':
         {
           return MaterialPageRoute(builder: (_) => DashMenuView());
+        }
+        case '/profile':
+        {
+          return MaterialPageRoute(builder: (_) => ProfileView());
         }
       default:
         return _errorRoute();
