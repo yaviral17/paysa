@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:smooth_corner/smooth_corner.dart';
+
+import 'profile/profile_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -33,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed('/profile');
+                        PNavigate.to(context, ProfileView());
                       },
                       child: Container(
                         decoration: BoxDecoration(
