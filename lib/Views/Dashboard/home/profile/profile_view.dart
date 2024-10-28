@@ -22,21 +22,153 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 24,
+        body: SafeArea(
+          child: Padding(
+              padding: const EdgeInsets.only(
+                top: 20,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildProfileDetailsCard(context),
+                        SizedBox(
+                          height: PSize.arh(context, 40),
+                        ),
+                        ...buildProfileItems(context),
+                        SizedBox(
+                          height: PSize.arh(context, 160),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: PColors.primary(context),
+                    thickness: 5,
+                    height: PSize.arh(context, 15),
+                  ),
+                  Divider(
+                    color: PColors.primary(context),
+                    thickness: 2,
+                    height: PSize.arh(context, 3),
+                  ),
+                  buildBottomProfileCard(context),
+                ],
+              )),
+        ),
+      ),
+    );
+  }
+
+  Expanded buildBottomProfileCard(BuildContext context) {
+    return Expanded(
+      child: Container(
+        color: PHelper.isDarkMode(context)
+            ? const Color.fromARGB(255, 59, 59, 59)
+            : const Color.fromARGB(255, 115, 115, 115),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ListTile(
+              title: Text('Invite friends to unlock extra features',
+                  style: TextStyle(
+                    fontSize: PSize.arw(context, 25),
+                    // color: Colors.white,
+                  )),
+              subtitle: Text(
+                  'Invite friends yo Paysa and get extra limited features which will help you and your friends to track expenses in a very optimal way.',
+                  style: TextStyle(
+                    fontSize: PSize.arw(context, 15),
+                    color: PHelper.isDarkMode(context)
+                        ? Colors.grey
+                        : const Color.fromARGB(255, 43, 43, 43),
+                  )),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildProfileDetailsCard(context),
-                SizedBox(
-                  height: PSize.arh(context, 40),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: PSize.arw(context, 20),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Row(
+                        children: [
+                          Text('Invite Code: ',
+                              style: TextStyle(
+                                fontSize: PSize.arw(context, 15),
+                              )),
+                          Text('123456',
+                              style: TextStyle(
+                                fontSize: PSize.arw(context, 15),
+                                fontWeight: FontWeight.bold,
+                              )),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Icon(
+                              Icons.copy,
+                              size: PSize.arw(context, 15),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: PSize.arh(context, 10),
+                      ),
+                      ZoomTapAnimation(
+                        onTap: () {},
+                        child: SmoothContainer(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          color: Colors.transparent,
+                          smoothness: 0.6,
+                          borderRadius: BorderRadius.all(Radius.circular(40)),
+                          side: BorderSide(
+                            color: PHelper.isDarkMode(context)
+                                ? Colors.white
+                                : Colors.black,
+                            width: 1,
+                          ),
+                          child: Text(
+                            'Invite',
+                            style: TextStyle(
+                              fontSize: PSize.arw(context, 15),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Image.asset(
+                          PHelper.isDarkMode(context)
+                              ? 'assets/images/dark_branding.png'
+                              : 'assets/images/light_branding.png',
+                          width: PSize.arw(context, 80),
+                          height: PSize.arh(context, 50)),
+                    ],
+                  ),
                 ),
-                ...buildProfileItems(context),
+                Image.asset(
+                  'assets/images/invite_us_doodle.png',
+                  width: PSize.arw(context, 240),
+                  height: PSize.arh(context, 100),
+                  // fit: BoxFit.contain,
+                ),
               ],
-            )),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -138,15 +270,6 @@ class ProfileView extends StatelessWidget {
     });
   }
 }
-
-/**
- * ProfileInfoWidget
- * This widget is used to display the user's profile information
- * It contains the user's name, phone number, and profile picture
- * It also contains a back button and a QR code button
- * The user can click on the back button to go back to the previous screen
- * The user can click on the QR code button to view their QR code
- */
 
 class QRBottomSheet extends StatelessWidget {
   const QRBottomSheet({
