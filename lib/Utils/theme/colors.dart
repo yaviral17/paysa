@@ -80,6 +80,13 @@ class PColors {
     return PHelper.isDarkMode(context) ? accountIconDark : accountIconLight;
   }
 
+  // Profile view refer card bg
+  static const Color referCardBgLight = Color(0x6C3B3B3B);
+  static const Color referCardBgDark = Color(0x6C3B3B3B);
+  static Color referCardBg(context) {
+    return PHelper.isDarkMode(context) ? referCardBgDark : referCardBgLight;
+  }
+
   //add more on the go
 
   static const Color success = Color(0xFF2EAB57);

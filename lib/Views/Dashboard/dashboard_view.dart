@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_glow/flutter_glow.dart';
@@ -5,10 +7,12 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
+import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/home/home_view.dart';
 import 'package:paysa/Views/Dashboard/widget/paysa_navbar_icon_widget.dart';
+import 'package:paysa/app.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class DashMenuView extends StatefulWidget {
@@ -18,7 +22,7 @@ class DashMenuView extends StatefulWidget {
   State<DashMenuView> createState() => _DashMenuViewState();
 }
 
-class _DashMenuViewState extends State<DashMenuView> {
+class _DashMenuViewState extends State<DashMenuView> with RouteAware {
   final DashboardController dashboardController =
       Get.put(DashboardController());
 
@@ -26,17 +30,45 @@ class _DashMenuViewState extends State<DashMenuView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Register this widget as a route observer
+    final ModalRoute? route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      routeObserver.subscribe(this, route);
+    }
+    // status bar and navigation bar theme set
+    PHelper.systemUIOverlayStyle(context);
+  }
+
+  @override
+  void dispose() {
+    // Unregister this widget as a route observer
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // Called when the current route has been popped off, and the previous route shows up
+    log('didPopNext');
+    PHelper.systemUIOverlayStyle(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // status bar and navigation bar theme set
+    log('didPopNext');
+    PHelper.systemUIOverlayStyle(context);
     return Scaffold(
       body: PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
+        children: const [
           HomeView(),
         ],
       ),

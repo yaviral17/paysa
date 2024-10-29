@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
@@ -8,8 +9,14 @@ import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 import '../../../../Utils/sizes.dart';
 import '../../../../utils/theme/colors.dart';
 
-class ProfileView extends StatelessWidget {
-  ProfileView({super.key});
+class ProfileView extends StatefulWidget {
+  const ProfileView({super.key});
+
+  @override
+  State<ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
   List<String> items = [
     'Profile Details',
     'Settings',
@@ -19,7 +26,26 @@ class ProfileView extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      PHelper.systemUIOverlayStyle(
+        context,
+        systemNavigationBarColor: PColors.referCardBg(context),
+      );
+    });
+  }
+
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    PHelper.systemUIOverlayStyle(
+      context,
+      systemNavigationBarColor: PColors.referCardBg(context),
+    );
     return SafeArea(
       child: Scaffold(
         body: SafeArea(
@@ -48,6 +74,7 @@ class ProfileView extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const Spacer(),
                   Divider(
                     color: PColors.primary(context),
                     thickness: 5,
@@ -244,109 +271,112 @@ class ProfileView extends StatelessWidget {
     });
   }
 
-  Expanded buildBottomInviteCard(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: PHelper.isDarkMode(context)
-            ? const Color.fromARGB(255, 59, 59, 59)
-            : const Color.fromARGB(255, 115, 115, 115),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ListTile(
-              title: Text('Invite friends to unlock extra features',
-                  style: TextStyle(
-                    fontSize: PSize.arw(context, 25),
-                    // color: Colors.white,
-                  )),
-              subtitle: Text(
-                  'Invite friends yo Paysa and get extra limited features which will help you and your friends to track expenses in a very optimal way.',
-                  style: TextStyle(
-                    fontSize: PSize.arw(context, 15),
-                    color: PHelper.isDarkMode(context)
-                        ? Colors.grey
-                        : const Color.fromARGB(255, 43, 43, 43),
-                  )),
+  Widget buildBottomInviteCard(BuildContext context) {
+    return Container(
+      color: PHelper.isDarkMode(context)
+          ? const Color.fromARGB(108, 59, 59, 59)
+          : const Color.fromARGB(255, 115, 115, 115),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ListTile(
+            title: Text(
+              'Invite friends to unlock extra features',
+              style: TextStyle(
+                fontSize: PSize.arw(context, 25),
+                // color: Colors.white,
+              ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: PSize.arw(context, 20),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        children: [
-                          Text('Invite Code: ',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 15),
-                              )),
-                          Text('123456',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 15),
-                                fontWeight: FontWeight.bold,
-                              )),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.copy,
-                              size: PSize.arw(context, 15),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: PSize.arh(context, 10),
-                      ),
-                      ZoomTapAnimation(
-                        onTap: () {},
-                        child: SmoothContainer(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          color: Colors.transparent,
-                          smoothness: 0.6,
-                          borderRadius: BorderRadius.all(Radius.circular(40)),
-                          side: BorderSide(
-                            color: PHelper.isDarkMode(context)
-                                ? Colors.white
-                                : Colors.black,
-                            width: 1,
-                          ),
-                          child: Text(
-                            'Invite',
+            subtitle: Text(
+                'Invite friends yo Paysa and get extra limited features which will help you and your friends to track expenses in a very optimal way.',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 15),
+                  color: PHelper.isDarkMode(context)
+                      ? Colors.grey
+                      : const Color.fromARGB(255, 43, 43, 43),
+                )),
+          ),
+          SizedBox(
+            height: PSize.arh(context, 16),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  left: PSize.arw(context, 20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      children: [
+                        Text('Invite Code: ',
                             style: TextStyle(
                               fontSize: PSize.arw(context, 15),
-                            ),
+                            )),
+                        Text('123456',
+                            style: TextStyle(
+                              fontSize: PSize.arw(context, 15),
+                              fontWeight: FontWeight.bold,
+                            )),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Icon(
+                            Icons.copy,
+                            size: PSize.arw(context, 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: PSize.arh(context, 16),
+                    ),
+                    ZoomTapAnimation(
+                      onTap: () {},
+                      child: SmoothContainer(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        color: Colors.transparent,
+                        smoothness: 0.6,
+                        borderRadius: BorderRadius.all(Radius.circular(40)),
+                        side: BorderSide(
+                          color: PHelper.isDarkMode(context)
+                              ? Colors.white
+                              : Colors.black,
+                          width: 1,
+                        ),
+                        child: Text(
+                          'Invite',
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 15),
                           ),
                         ),
                       ),
-                      Image.asset(
-                          PHelper.isDarkMode(context)
-                              ? 'assets/images/dark_branding.png'
-                              : 'assets/images/light_branding.png',
-                          width: PSize.arw(context, 80),
-                          height: PSize.arh(context, 50)),
-                    ],
-                  ),
+                    ),
+                    Image.asset(
+                        PHelper.isDarkMode(context)
+                            ? 'assets/images/dark_branding.png'
+                            : 'assets/images/light_branding.png',
+                        width: PSize.arw(context, 80),
+                        height: PSize.arh(context, 50)),
+                  ],
                 ),
-                Image.asset(
-                  'assets/images/invite_us_doodle.png',
-                  width: PSize.arw(context, 240),
-                  height: PSize.arh(context, 100),
-                  // fit: BoxFit.contain,
-                ),
-              ],
-            )
-          ],
-        ),
+              ),
+              Image.asset(
+                'assets/images/refer_png.png',
+                width: PSize.arw(context, 240),
+                height: PSize.arh(context, 100),
+                // fit: BoxFit.contain,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
