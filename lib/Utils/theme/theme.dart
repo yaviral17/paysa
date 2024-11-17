@@ -11,6 +11,11 @@ class PAppTheme {
     brightness: Brightness.light,
     primaryColor: PColors.primaryLight,
     scaffoldBackgroundColor: PColors.backgroundLight,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: PColors.backgroundLight,
+      elevation: 0,
+      iconTheme: IconThemeData(color: PColors.primaryTextLight),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -21,5 +26,10 @@ class PAppTheme {
     primaryColor: PColors
         .primaryLight, // this should be primaryDark but for we keeping the same light color for primary
     scaffoldBackgroundColor: PColors.backgroundDark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: PColors.backgroundDark,
+      elevation: 0,
+      iconTheme: IconThemeData(color: PColors.primaryTextDark),
+    ),
   );
 }

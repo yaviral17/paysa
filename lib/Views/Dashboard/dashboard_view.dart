@@ -1,15 +1,20 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
+import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/Dashboard/NewSpending/new_spending_view.dart';
 import 'package:paysa/Views/Dashboard/home/home_view.dart';
 import 'package:paysa/Views/Dashboard/widget/paysa_navbar_icon_widget.dart';
 import 'package:paysa/app.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import 'cards/cards_view.dart';
 
@@ -103,23 +108,26 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
                 icon: HugeIcons.strokeRoundedCreditCard,
                 isActive: dashboardController.currentIndex.value == 1,
               ),
-              GlowContainer(
-                glowColor: PColors.primary(context).withOpacity(0.5),
-                spreadRadius: 0.0,
-                borderRadius: BorderRadius.circular(100.0),
-                blurRadius: 10.0,
-                child: FloatingActionButton(
-                  onPressed: () {},
-                  backgroundColor: PColors.primary(context),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(100.0)),
-                  ),
-                  child: Icon(
-                    HugeIcons.strokeRoundedPlusSign,
-                    color: PColors.primaryText(context),
-                    // glowColor: PColors.primary(context),
-                    // blurRadius: 10.0,
-                    // offset: const Offset(0, 0),
+              ZoomTapAnimation(
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  PNavigate.to(context, const NewSpendingView());
+                },
+                child: GlowContainer(
+                  glowColor: PColors.primary(context).withOpacity(0.5),
+                  spreadRadius: 0.0,
+                  borderRadius: BorderRadius.circular(100.0),
+                  blurRadius: 10.0,
+                  child: CircleAvatar(
+                    backgroundColor: PColors.primary(context),
+                    radius: PSize.arw(context, 30),
+                    child: Icon(
+                      HugeIcons.strokeRoundedPlusSign,
+                      color: PColors.primaryText(context),
+                      // glowColor: PColors.primary(context),
+                      // blurRadius: 10.0,
+                      // offset: const Offset(0, 0),
+                    ),
                   ),
                 ),
               ),
