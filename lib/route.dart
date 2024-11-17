@@ -33,7 +33,7 @@ class RouteGenerator {
         {
           return MaterialPageRoute(builder: (_) => DashMenuView());
         }
-        case '/profile':
+      case '/profile':
         {
           return MaterialPageRoute(builder: (_) => ProfileView());
         }

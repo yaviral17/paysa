@@ -39,6 +39,7 @@ dependencies:
   hugeicons: ^0.0.7
   flutter_glow: ^0.3.2
   fl_chart: ^0.69.0
+  avatar_stack: ^1.2.0
 
 
   # The following adds the Cupertino Icons font to your application.

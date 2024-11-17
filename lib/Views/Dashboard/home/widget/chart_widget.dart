@@ -10,9 +10,9 @@ class LineChartSample4 extends StatelessWidget {
     Color? aboveLineColor,
   })  : mainLineColor = mainLineColor ?? PColors.primaryLight.withOpacity(0.7),
         belowLineColor =
-            belowLineColor ?? PColors.primaryLight.withOpacity(0.3),
+            belowLineColor ?? PColors.primaryLight.withOpacity(0.1),
         aboveLineColor =
-            aboveLineColor ?? PColors.primaryLight.withOpacity(0.3);
+            aboveLineColor ?? PColors.primaryLight.withOpacity(0.1);
 
   final Color mainLineColor;
   final Color belowLineColor;
@@ -78,7 +78,7 @@ class LineChartSample4 extends StatelessWidget {
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       color: PColors.secondaryTextLight,
-      fontSize: 12,
+      fontSize: 4,
     );
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -119,7 +119,7 @@ class LineChartSample4 extends StatelessWidget {
                   FlSpot(11, 7),
                 ],
                 isCurved: true,
-                barWidth: 8,
+                barWidth: 2,
                 color: mainLineColor,
                 belowBarData: BarAreaData(
                   show: true,
@@ -140,7 +140,7 @@ class LineChartSample4 extends StatelessWidget {
             ],
             minY: 0,
             titlesData: const FlTitlesData(
-              show: true,
+              show: false,
               topTitles: AxisTitles(
                 sideTitles: SideTitles(showTitles: false),
               ),
@@ -182,11 +182,11 @@ class LineChartSample4 extends StatelessWidget {
             borderData: FlBorderData(
               show: true,
               border: Border.all(
-                color: const Color(0xff37434d),
+                color: PColors.transparent,
               ),
             ),
             gridData: FlGridData(
-              show: true,
+              show: false,
               drawVerticalLine: false,
               horizontalInterval: 1,
               checkToShowHorizontalLine: (double value) {
