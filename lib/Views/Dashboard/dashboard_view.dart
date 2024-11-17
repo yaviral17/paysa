@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
@@ -17,6 +16,8 @@ import 'package:paysa/Views/Dashboard/widget/paysa_navbar_icon_widget.dart';
 import 'package:paysa/app.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
+import 'cards/cards_view.dart';
+
 class DashMenuView extends StatefulWidget {
   const DashMenuView({super.key});
 
@@ -27,8 +28,6 @@ class DashMenuView extends StatefulWidget {
 class _DashMenuViewState extends State<DashMenuView> with RouteAware {
   final DashboardController dashboardController =
       Get.put(DashboardController());
-
-  final PageController pageController = PageController();
 
   @override
   void initState() {
@@ -64,14 +63,16 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
   @override
   Widget build(BuildContext context) {
     // status bar and navigation bar theme set
+
     log('didPopNext');
     PHelper.systemUIOverlayStyle(context);
     return Scaffold(
       body: PageView(
-        controller: pageController,
+        controller: dashboardController.pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: const [
           HomeView(),
+          CardsView(),
         ],
       ),
       bottomNavigationBar: Obx(
