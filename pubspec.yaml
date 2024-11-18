@@ -41,6 +41,7 @@ dependencies:
   fl_chart: ^0.69.0
   avatar_stack: ^1.2.0
   carousel_slider: ^5.0.0
+  icons_plus: ^5.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
