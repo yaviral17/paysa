@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
@@ -101,13 +100,16 @@ class _ProfileViewState extends State<ProfileView> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ZoomTapAnimation(
-              onTap: () {
-                PNavigate.back(context);
-              },
-              child: Icon(
-                Icons.arrow_back_ios_new_outlined,
-                size: PSize.arw(context, 20),
+            Padding(
+              padding: const EdgeInsets.only(right: 20),  
+              child: ZoomTapAnimation(
+                onTap: () {
+                  PNavigate.back(context);
+                },
+                child: Icon(
+                  Icons.arrow_back_ios_new_outlined,
+                  size: PSize.arw(context, 20),
+                ),
               ),
             ),
             SizedBox(

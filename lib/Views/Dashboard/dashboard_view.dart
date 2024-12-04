@@ -18,6 +18,7 @@ import 'package:paysa/app.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import 'cards/cards_view.dart';
+import 'stats/stats_view.dart';
 
 class DashMenuView extends StatefulWidget {
   const DashMenuView({super.key});
@@ -74,6 +75,7 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
         children: const [
           HomeView(),
           CardsView(),
+          StatisticsView(),
           ChatScreen(),
         ],
       ),
