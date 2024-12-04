@@ -210,6 +210,10 @@ class ChatScreenView extends StatelessWidget {
                   onPressed: () {},
                 ),
                 IconButton(
+                  icon: const Icon(HugeIcons.strokeRoundedAddCircleHalfDot),
+                  onPressed: () {},
+                ),
+                IconButton(
                   icon: const Icon(Icons.send),
                   onPressed: () {},
                 ),
