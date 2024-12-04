@@ -131,8 +131,10 @@ class ChatScreenView extends StatelessWidget {
                                 ),
                               ),
                             )
-                          : SizedBox(),
-                      (!message.isUser) ? const SizedBox(width: 8) : SizedBox(),
+                          : const SizedBox(),
+                      (!message.isUser)
+                          ? const SizedBox(width: 8)
+                          : const SizedBox(),
 
                       //chat message box
 
@@ -182,9 +184,11 @@ class ChatScreenView extends StatelessWidget {
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Type your message...',
-                      focusColor: Colors.red,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(18),
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -200,6 +204,10 @@ class ChatScreenView extends StatelessWidget {
                       ),
                     ),
                   ),
+                ),
+                IconButton(
+                  icon: const Icon(HugeIcons.strokeRoundedAddCircleHalfDot),
+                  onPressed: () {},
                 ),
                 IconButton(
                   icon: const Icon(Icons.send),
@@ -233,27 +241,23 @@ class CustChatBubble extends StatelessWidget {
             constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width * 0.75,
             ),
-            decoration: BoxDecoration(
-              color: Colors.greenAccent.shade100,
-              borderRadius: const BorderRadius.only(
+            decoration: const BoxDecoration(
+              color: Color(0xffc1f6a7),
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(14),
                 topRight: Radius.circular(14),
                 bottomLeft: Radius.circular(14),
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      message.sender,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Text(
+                  message.sender,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(
                   height: 2,
@@ -269,13 +273,18 @@ class CustChatBubble extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  message.time,
-                  // "8:36 PM",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      message.time,
+                      // "8:36 PM",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -299,16 +308,12 @@ class CustChatBubble extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      message.sender,
-                      style: const TextStyle(
-                        color: Colors.greenAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Text(
+                  message.sender,
+                  style: const TextStyle(
+                    color: Color(0xffc1f6a7),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(
                   height: 2,
@@ -324,13 +329,18 @@ class CustChatBubble extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  message.time,
-                  // "8:36 PM",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      message.time,
+                      // "8:36 PM",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
