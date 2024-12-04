@@ -1,8 +1,9 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
-import 'package:paysa/Views/Dashboard/widget/chat_model.dart';
+import 'package:paysa/Views/Dashboard/chat/convo/chat_model.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 class ChatScreenView extends StatelessWidget {
@@ -165,60 +166,69 @@ class ChatScreenView extends StatelessWidget {
           ),
 
           // Message input text field
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.grey[800],
-            ),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    HugeIcons.strokeRoundedAttachmentCircle,
+          CustChatTextField(),
+        ],
+      ),
+    );
+  }
+}
+
+class CustChatTextField extends StatefulWidget {
+  const CustChatTextField({
+    super.key,
+  });
+
+  @override
+  State<CustChatTextField> createState() => _CustChatTextFieldState();
+}
+
+class _CustChatTextFieldState extends State<CustChatTextField> {
+  FilePickerResult? result;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey[800],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Type your message...',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent,
                   ),
-                  onPressed: () {},
                 ),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Type your message...',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(18),
-                        borderSide: const BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.transparent,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(18),
-                        borderSide: const BorderSide(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.transparent,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(HugeIcons.strokeRoundedAddCircleHalfDot),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(HugeIcons.strokeRoundedAddCircleHalfDot),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: () {},
-                ),
-              ],
+              ),
             ),
+          ),
+          //add attachment button
+          IconButton(
+            icon: const Icon(HugeIcons.strokeRoundedAddCircleHalfDot),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.send),
+            onPressed: () {},
           ),
         ],
       ),

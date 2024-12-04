@@ -11,6 +11,7 @@ import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/NewSpending/new_spending_view.dart';
+import 'package:paysa/Views/Dashboard/chat/chat_screen.dart';
 import 'package:paysa/Views/Dashboard/home/home_view.dart';
 import 'package:paysa/Views/Dashboard/widget/paysa_navbar_icon_widget.dart';
 import 'package:paysa/app.dart';
@@ -73,6 +74,7 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
         children: const [
           HomeView(),
           CardsView(),
+          ChatScreen(),
         ],
       ),
       bottomNavigationBar: Obx(
