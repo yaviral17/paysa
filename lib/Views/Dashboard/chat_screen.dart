@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/Dashboard/widget/chat_model.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 class ChatScreenView extends StatelessWidget {
@@ -9,6 +10,22 @@ class ChatScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<ChatMessage> messages = [
+      ChatMessage(
+        message:
+            "Hi, good to see you! We're starting work on a presentation for a new product today, right?",
+        sender: "You",
+        time: "8:36 PM",
+        isUser: true,
+      ),
+      ChatMessage(
+        message:
+            "Yes, that's right. Let's discuss the main points and structure of the presentation.",
+        sender: "John Doe",
+        time: "8:36 PM",
+        isUser: false,
+      ),
+    ];
     return Scaffold(
       appBar: AppBar(
         leadingWidth: MediaQuery.of(context).size.width * 0.25,
@@ -43,7 +60,7 @@ class ChatScreenView extends StatelessWidget {
         title: Column(
           children: [
             Text(
-              'John Doe',
+              messages[1].sender,
               style: TextStyle(
                 letterSpacing: 0.4,
                 color: Colors.white,
@@ -80,172 +97,68 @@ class ChatScreenView extends StatelessWidget {
         children: [
           // Chat messages
           Expanded(
-            child: ListView(
+            child: ListView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.all(8),
-              children: [
-                // User message bubble
-                Align(
-                  alignment: Alignment.topRight,
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final message = messages[index];
+
+                return Align(
+                  alignment:
+                      (message.isUser) ? Alignment.topRight : Alignment.topLeft,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: (message.isUser)
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
                     children: [
+                      // User avatar
+                      (!message.isUser)
+                          ? Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              child: SmoothClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                side: BorderSide(
+                                  color:
+                                      PColors.primary(context).withOpacity(0.7),
+                                  width: 2,
+                                ),
+                                child: Image.network(
+                                  "https://avatars.githubusercontent.com/u/109690866?v=4",
+                                  width: PSize.arw(context, 50),
+                                  height: PSize.arw(context, 50),
+                                ),
+                              ),
+                            )
+                          : SizedBox(),
+                      (!message.isUser) ? const SizedBox(width: 8) : SizedBox(),
+
                       //chat message box
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 10),
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.75,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.greenAccent.shade100,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(14),
-                            topRight: Radius.circular(14),
-                            bottomLeft: Radius.circular(14),
-                          ),
-                        ),
-                        child: const Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  "You",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "Hi, good to see you! We're starting work on a presentation for a new product today, right?",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                letterSpacing: 0.4,
-                                height: 1.3,
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              "8:36 PM",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+
+                      CustChatBubble(message: message),
                       const SizedBox(width: 8),
                       // User avatar
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: SmoothClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          side: BorderSide(
-                            color: PColors.primary(context).withOpacity(0.7),
-                            width: 2,
-                          ),
-                          child: Image.network(
-                            "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
-                            width: PSize.arw(context, 50),
-                            height: PSize.arw(context, 50),
+                      if (message.isUser)
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: SmoothClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            side: BorderSide(
+                              color: PColors.primary(context).withOpacity(0.7),
+                              width: 2,
+                            ),
+                            child: Image.network(
+                              "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
+                              width: PSize.arw(context, 50),
+                              height: PSize.arw(context, 50),
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
-                ),
-
-                //
-                //
-                // Sender message bubble
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      // User avatar
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: SmoothClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          side: BorderSide(
-                            color: PColors.primary(context).withOpacity(0.7),
-                            width: 2,
-                          ),
-                          child: Image.network(
-                            "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
-                            width: PSize.arw(context, 50),
-                            height: PSize.arw(context, 50),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-
-                      // Sender avatar
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 10),
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.75,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                            bottomRight: Radius.circular(12),
-                          ),
-                        ),
-                        child: const Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  "John Doe",
-                                  style: TextStyle(
-                                    color: Colors.greenAccent,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "Yes, that's right. Let's discuss the main points and structure of the presentation.",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                letterSpacing: 0.4,
-                                height: 1.3,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              "8:38 PM",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           ),
 
@@ -298,5 +211,129 @@ class ChatScreenView extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CustChatBubble extends StatelessWidget {
+  const CustChatBubble({
+    super.key,
+    required this.message,
+  });
+
+  final ChatMessage message;
+
+  @override
+  Widget build(BuildContext context) {
+    return (message.isUser)
+        ?
+        // user chat bubble
+        Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            margin: const EdgeInsets.only(bottom: 10),
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.75,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.greenAccent.shade100,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(14),
+                topRight: Radius.circular(14),
+                bottomLeft: Radius.circular(14),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      message.sender,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  message.message,
+                  // "Hi, good to see you! We're starting work on a presentation for a new product today, right?",
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    letterSpacing: 0.4,
+                    height: 1.3,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  message.time,
+                  // "8:36 PM",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          )
+        :
+        // receiver chat bubble
+        Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            margin: const EdgeInsets.only(bottom: 10),
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.75,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.grey[800],
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(14),
+                topRight: Radius.circular(14),
+                bottomRight: Radius.circular(14),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      message.sender,
+                      style: const TextStyle(
+                        color: Colors.greenAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  message.message,
+                  // "Hi, good to see you! We're starting work on a presentation for a new product today, right?",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    letterSpacing: 0.4,
+                    height: 1.3,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  message.time,
+                  // "8:36 PM",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 }
