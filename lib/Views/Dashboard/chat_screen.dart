@@ -182,9 +182,11 @@ class ChatScreenView extends StatelessWidget {
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Type your message...',
-                      focusColor: Colors.red,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(18),
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -200,6 +202,10 @@ class ChatScreenView extends StatelessWidget {
                       ),
                     ),
                   ),
+                ),
+                IconButton(
+                  icon: const Icon(HugeIcons.strokeRoundedAddCircleHalfDot),
+                  onPressed: () {},
                 ),
                 IconButton(
                   icon: const Icon(Icons.send),
@@ -234,7 +240,7 @@ class CustChatBubble extends StatelessWidget {
               maxWidth: MediaQuery.of(context).size.width * 0.75,
             ),
             decoration: BoxDecoration(
-              color: Colors.greenAccent.shade100,
+              color: Color(0xffc1f6a7),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(14),
                 topRight: Radius.circular(14),
@@ -297,14 +303,14 @@ class CustChatBubble extends StatelessWidget {
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Row(
                   children: [
                     Text(
                       message.sender,
                       style: const TextStyle(
-                        color: Colors.greenAccent,
+                        color: Color(0xffc1f6a7),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
