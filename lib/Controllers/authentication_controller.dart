@@ -15,6 +15,12 @@ class AuthenticationController extends GetxController {
 
   final RxBool isLoading = false.obs;
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
+
   void loginWithEmailAndPassword(String email, String password) async {
     isLoading.value = true;
     try {

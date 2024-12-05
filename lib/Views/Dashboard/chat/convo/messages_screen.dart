@@ -1,9 +1,10 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
-import 'package:paysa/Views/Dashboard/chat/convo/chat_model.dart';
+import 'package:paysa/Models/chat_model.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 class ChatScreenView extends StatelessWidget {
@@ -35,7 +36,9 @@ class ChatScreenView extends StatelessWidget {
           children: [
             IconButton(
               icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
-              onPressed: () {},
+              onPressed: () {
+                PNavigate.back();
+              },
             ),
             //message count
             Container(

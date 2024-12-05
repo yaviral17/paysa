@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/Dashboard/chat/convo/messages_screen.dart';
+import 'package:random_avatar/random_avatar.dart';
 import 'package:smooth_corner/smooth_corner.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -86,22 +90,23 @@ class ChatScreen extends StatelessWidget {
                           return Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Column(
-                              children: [
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.grey.shade300,
-                                  child: Text(
-                                    "A${index + 1}",
-                                    style: const TextStyle(color: Colors.black),
+                            child: ZoomTapAnimation(
+                              onTap: () {
+                                PNavigate.to(const ChatScreenView());
+                              },
+                              child: Column(
+                                children: [
+                                  RandomAvatar(
+                                    "User ${index + 1}",
+                                    width: PSize.arw(context, 60),
                                   ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "User ${index + 1}",
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ],
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "User ${index + 1}",
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -152,6 +157,9 @@ class ChatScreen extends StatelessWidget {
                         itemCount: 10,
                         itemBuilder: (context, index) {
                           return ListTile(
+                            onTap: () {
+                              PNavigate.to(const ChatScreenView());
+                            },
                             leading: SmoothClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               side: BorderSide(
@@ -159,10 +167,9 @@ class ChatScreen extends StatelessWidget {
                                     PColors.primary(context).withOpacity(0.7),
                                 width: 2,
                               ),
-                              child: Image.network(
-                                "https://avatars.githubusercontent.com/u/109690866?v=4",
+                              child: RandomAvatar(
+                                "User ${index + 1}",
                                 width: PSize.arw(context, 50),
-                                height: PSize.arw(context, 50),
                               ),
                             ),
                             title: Text("User ${index + 1}"),

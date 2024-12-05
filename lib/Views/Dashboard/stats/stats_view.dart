@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:random_avatar/random_avatar.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 class StatisticsView extends StatefulWidget {
@@ -202,10 +203,9 @@ class _StatisticsViewState extends State<StatisticsView> {
                         color: PColors.primary(context).withOpacity(0.7),
                         width: 2,
                       ),
-                      child: Image.network(
-                        "https://avatars.githubusercontent.com/u/109690866?v=4",
+                      child: RandomAvatar(
+                        "User ${index + 1}",
                         width: PSize.arw(context, 50),
-                        height: PSize.arw(context, 50),
                       ),
                     ),
                     title: Text("User ${index + 1}"),

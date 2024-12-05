@@ -228,7 +228,7 @@ class _ProfileViewState extends State<ProfileView> {
               },
               child: SmoothContainer(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 10,
                 ),
