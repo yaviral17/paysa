@@ -11,12 +11,14 @@ import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/NewSpending/new_spending_view.dart';
+import 'package:paysa/Views/Dashboard/chat/chat_screen.dart';
 import 'package:paysa/Views/Dashboard/home/home_view.dart';
 import 'package:paysa/Views/Dashboard/widget/paysa_navbar_icon_widget.dart';
 import 'package:paysa/app.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import 'cards/cards_view.dart';
+import 'stats/stats_view.dart';
 
 class DashMenuView extends StatefulWidget {
   const DashMenuView({super.key});
@@ -73,6 +75,8 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
         children: const [
           HomeView(),
           CardsView(),
+          StatisticsView(),
+          ChatScreen(),
         ],
       ),
       bottomNavigationBar: Obx(

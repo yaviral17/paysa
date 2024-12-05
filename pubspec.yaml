@@ -38,7 +38,7 @@ dependencies:
   dashed_circular_progress_bar: ^0.0.6
   hugeicons: ^0.0.7
   flutter_glow: ^0.3.2
-  fl_chart: ^0.69.0
+  fl_chart: ^0.69.2
   avatar_stack: ^1.2.0
   carousel_slider: ^5.0.0
   icons_plus: ^5.0.0
@@ -46,6 +46,8 @@ dependencies:
   firebase_auth: ^5.3.4
   cloud_firestore: ^5.5.1
   random_avatar: ^0.0.8
+  chips_choice_null_safety: ^2.0.6
+  file_picker: ^8.1.4
 
 
   # The following adds the Cupertino Icons font to your application.
