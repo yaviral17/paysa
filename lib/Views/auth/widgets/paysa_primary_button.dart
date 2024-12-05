@@ -40,7 +40,11 @@ class PaysaPrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ZoomTapAnimation(
-      onTap: onTap,
+      onTap: () {
+        if (!isLoading) {
+          onTap?.call();
+        }
+      },
       end: 0.98,
       beginCurve: Curves.fastEaseInToSlowEaseOut,
       endCurve: Curves.easeOut,

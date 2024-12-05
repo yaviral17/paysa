@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:smooth_corner/smooth_corner.dart';
@@ -17,6 +18,8 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  final authController = Get.find<AuthenticationController>();
+
   List<String> items = [
     'Profile Details',
     'Settings',
@@ -103,7 +106,7 @@ class _ProfileViewState extends State<ProfileView> {
           children: [
             ZoomTapAnimation(
               onTap: () {
-                PNavigate.back(context);
+                PNavigate.back();
               },
               child: Icon(
                 Icons.arrow_back_ios_new_outlined,
@@ -256,6 +259,24 @@ class _ProfileViewState extends State<ProfileView> {
       return Column(
         children: [
           ZoomTapAnimation(
+            onTap: () async {
+              switch (items[index]) {
+                case 'Profile Details':
+                  break;
+                case 'Settings':
+                  break;
+                case 'Help':
+                  break;
+                case 'About Us':
+                  break;
+                case 'Logout':
+                  {
+                    await authController.logout();
+                    break;
+                  }
+                default:
+              }
+            },
             child: Text(
               items[index],
               style: TextStyle(

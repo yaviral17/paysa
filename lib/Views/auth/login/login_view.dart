@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/constants/hero_tags.dart';
+import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Views/auth/signup/sign_up_view.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
@@ -15,6 +17,44 @@ class LoginView extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  final AuthenticationController authController =
+      Get.find<AuthenticationController>();
+
+  void login() {
+    FocusScope.of(Get.context!).unfocus();
+    // check if the email is empty
+    if (emailController.text.trim().isEmpty) {
+      PHelper.showErrorMessageGet(
+        title: "Email is empty",
+        message: "Please enter your email address",
+      );
+      return;
+    }
+    // check if email is valid
+    if (!GetUtils.isEmail(emailController.text.trim())) {
+      PHelper.showErrorMessageGet(
+        title: "Invalid Email",
+        message: "Please enter a valid email address",
+      );
+      return;
+    }
+
+    // check if the password is less than 8 characters
+    // if (passwordController.text.length < 8) {
+    //   PHelper.showErrorMessageGet(
+    //     title: "Password is too short",
+    //     message: "Password must be at least 6 characters",
+    //   );
+    //   return;
+    // }
+
+    // call the login function from the controller
+    authController.loginWithEmailAndPassword(
+      emailController.text.trim(),
+      passwordController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +69,7 @@ class LoginView extends StatelessWidget {
             color: PColors.primaryText(context),
           ),
           onPressed: () {
-            PNavigate.back(context);
+            PNavigate.back();
           },
         ),
       ),
@@ -154,14 +194,17 @@ class LoginView extends StatelessWidget {
                     height: PSize.arh(context, 12),
                   ),
                   Center(
-                    child: PaysaPrimaryButton(
-                      // isLoading: true,
-                      text: 'Login',
-                      onTap: () {},
-                      width: PSize.displayWidth(context),
-                      height: PSize.arh(context, 54),
-                      textColor: PColors.primaryText(context),
-                      fontSize: PSize.arw(context, 16),
+                    child: Obx(
+                      () => PaysaPrimaryButton(
+                        // isLoading: true,
+                        text: 'Login',
+                        isLoading: authController.isLoading.value,
+                        onTap: () => login(),
+                        width: PSize.displayWidth(context),
+                        height: PSize.arh(context, 54),
+                        textColor: PColors.primaryText(context),
+                        fontSize: PSize.arw(context, 16),
+                      ),
                     ),
                   ),
                 ],
@@ -170,7 +213,7 @@ class LoginView extends StatelessWidget {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    PNavigate.to(context, SignUpView());
+                    PNavigate.to(SignUpView());
                   },
                   child: Text(
                     'Don\'t have an account? Register',
@@ -204,6 +247,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
   final bool readOnly;
   final TextInputType keyboardType;
   final FilteringTextInputFormatter? inputFormatter;
+  final FocusNode? focusNode;
 
   const PaysaPrimaryTextField({
     super.key,
@@ -218,11 +262,13 @@ class PaysaPrimaryTextField extends StatelessWidget {
     this.readOnly = false,
     this.keyboardType = TextInputType.text,
     this.inputFormatter,
+    this.focusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      focusNode: focusNode,
       controller: controller,
       obscureText: obscureText,
       readOnly: readOnly,

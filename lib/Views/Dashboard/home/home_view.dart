@@ -2,14 +2,17 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/home/widget/bar_chat_widget.dart';
 import 'package:paysa/Views/Dashboard/home/widget/chart_widget.dart';
+import 'package:random_avatar/random_avatar.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
@@ -23,6 +26,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final authController = Get.find<AuthenticationController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,50 +48,60 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        PNavigate.to(context, ProfileView());
+                        PNavigate.to(ProfileView());
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(100),
+                            bottomLeft: Radius.circular(100),
+                            bottomRight: Radius.circular(100),
+                            topRight: Radius.circular(100),
+                          ),
                           color: PColors.containerSecondary(context),
                         ),
-                        child: Row(
-                          children: [
-                            SmoothClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(
-                                color:
-                                    PColors.primary(context).withOpacity(0.7),
-                                width: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(
+                            children: [
+                              SmoothClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                side: BorderSide(
+                                  color:
+                                      PColors.primary(context).withOpacity(0.7),
+                                  width: 2,
+                                ),
+                                child: SizedBox(
+                                  height: PSize.arw(context, 50),
+                                  width: PSize.arw(context, 50),
+                                  child: RandomAvatar(
+                                    "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}",
+                                  ),
+                                ),
                               ),
-                              child: Image.network(
-                                "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
-                                width: PSize.arw(context, 50),
-                                height: PSize.arw(context, 50),
+                              SizedBox(
+                                width: PSize.arw(context, 10),
                               ),
-                            ),
-                            SizedBox(
-                              width: PSize.arw(context, 10),
-                            ),
-                            Text(
-                              'Aviral Y.',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 14),
-                                fontWeight: FontWeight.w600,
+                              Text(
+                                "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}",
+                                style: TextStyle(
+                                  fontSize: PSize.arw(context, 14),
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: PSize.arw(context, 10),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: PColors.primary(context),
-                              size: PSize.arw(context, 12),
-                            ),
-                            SizedBox(
-                              width: PSize.arw(context, 10),
-                            ),
-                          ],
+                              SizedBox(
+                                width: PSize.arw(context, 10),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                color: PColors.primary(context),
+                                size: PSize.arw(context, 12),
+                              ),
+                              SizedBox(
+                                width: PSize.arw(context, 10),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

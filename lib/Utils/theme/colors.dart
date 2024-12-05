@@ -93,4 +93,7 @@ class PColors {
   static const Color error = Color(0xFFB00020);
 
   static const Color black = Color(0xFF000000);
+
+  static const Color infoTostColor = Color.fromARGB(255, 17, 138, 185);
+  static const Color warningTostColor = Color.fromARGB(255, 255, 152, 0);
 }

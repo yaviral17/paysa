@@ -22,7 +22,7 @@ class _PreAuthViewState extends State<PreAuthView> {
 
   transitToAuthView(BuildContext context) async {
     await Future.delayed(const Duration(milliseconds: 500), () {});
-    PNavigate.to(context, const AuthView());
+    PNavigate.to(const AuthView());
   }
 
   @override

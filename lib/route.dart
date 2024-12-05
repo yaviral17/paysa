@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
@@ -14,7 +15,11 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         {
-          return MaterialPageRoute(builder: (_) => const DashMenuView());
+          Widget view = FirebaseAuth.instance.currentUser != null
+              ? const DashMenuView()
+              : const PreAuthView();
+
+          return MaterialPageRoute(builder: (_) => view);
         }
       case '/auth':
         {

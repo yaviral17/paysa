@@ -111,7 +111,7 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
               ZoomTapAnimation(
                 onTap: () {
                   HapticFeedback.lightImpact();
-                  PNavigate.to(context, const NewSpendingView());
+                  PNavigate.to(const NewSpendingView());
                 },
                 child: GlowContainer(
                   glowColor: PColors.primary(context).withOpacity(0.5),

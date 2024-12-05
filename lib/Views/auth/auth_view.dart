@@ -11,7 +11,7 @@ class AuthView extends StatelessWidget {
   const AuthView({super.key});
 
   void goToLogin(BuildContext context) {
-    PNavigate.to(context, LoginView());
+    PNavigate.materialFade(LoginView());
   }
 
   @override
