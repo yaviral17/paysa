@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -20,11 +22,11 @@ class NewSpendingView extends StatefulWidget {
   State<NewSpendingView> createState() => _NewSpendingViewState();
 }
 
-class _NewSpendingViewState extends State<NewSpendingView> {
+class _NewSpendingViewState extends State<NewSpendingView>
+    with SingleTickerProviderStateMixin {
   List<String> selectedContacts = [];
 
-  double alignmentX = 0;
-  double alignmentY = 4;
+  RxBool isBottomsheetOpen = false.obs;
 
   List<String> buttons = [
     '1',
@@ -40,8 +42,22 @@ class _NewSpendingViewState extends State<NewSpendingView> {
     '0',
     '⇦'
   ];
+  late AnimationController _animationController;
 
-  void onButtonPressed(String buttonText) {}
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   final NewSpendingController newSpendingController = NewSpendingController();
   final authController = Get.find<AuthenticationController>();
@@ -141,10 +157,9 @@ class _NewSpendingViewState extends State<NewSpendingView> {
                       'Bill Split') {
                     return ZoomTapAnimation(
                       onTap: () {
-                        setState(() {
-                          alignmentX = 0;
-                          alignmentY = 1;
-                        });
+                        isBottomsheetOpen.value = true;
+
+                        showContactBottomSheet(context);
                       },
                       child: SmoothContainer(
                         width: PSize.arw(context, 150),
@@ -187,16 +202,16 @@ class _NewSpendingViewState extends State<NewSpendingView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Selected Contacts',
-                          style: TextStyle(
-                              fontSize: PSize.arw(context, 20),
-                              fontWeight: FontWeight.w500,
-                              color: PColors.primaryTextDark),
-                        ),
-                        SizedBox(
-                          height: PSize.arw(context, 10),
-                        ),
+                        // Text(
+                        //   'Selected Contacts',
+                        //   style: TextStyle(
+                        //       fontSize: PSize.arw(context, 20),
+                        //       fontWeight: FontWeight.w500,
+                        //       color: PColors.primaryTextDark),
+                        // ),
+                        // SizedBox(
+                        //   height: PSize.arw(context, 10),
+                        // ),
                         selectedContacts.isEmpty
                             ? SizedBox(
                                 height: PSize.arw(context, 40),
@@ -397,121 +412,116 @@ class _NewSpendingViewState extends State<NewSpendingView> {
               ),
             ],
           ),
-          contactBottomSheetBar(context),
+          Obx(() => Visibility(
+                visible: isBottomsheetOpen.value,
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 4,
+                    sigmaY: 4,
+                  ),
+                  child: SizedBox(
+                    height: PSize.displayHeight(context),
+                    width: PSize.displayWidth(context),
+                    //blur effect
+                  ),
+                ),
+              ))
         ],
       ),
     );
   }
 
-  Widget contactBottomSheetBar(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeIn,
-      alignment: Alignment(0, alignmentY),
-      child: GestureDetector(
-        onVerticalDragEnd: (details) {
-          if (details.primaryVelocity! > 30) {
-            // Detect downward swipe
-            setState(() {
-              alignmentY = 4;
-            });
-          }
-        },
-        child: SmoothContainer(
-            height: PSize.arh(context, 400),
-            width: PSize.displayWidth(context),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            smoothness: 0.6,
-            color: PHelper.isDarkMode(context)
-                ? PColors.backgroundLight
-                : PColors.backgroundDark,
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 10,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Contacts',
-                  style: TextStyle(
-                      fontSize: PSize.arw(context, 40),
-                      fontWeight: FontWeight.w400,
-                      color: PColors.primaryDark),
+  void showContactBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      transitionAnimationController: _animationController,
+      useSafeArea: true,
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: PHelper.isDarkMode(context)
+          ? PColors.backgroundLight
+          : PColors.backgroundDark,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Contacts',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 40),
+                  fontWeight: FontWeight.w400,
+                  color: PColors.primaryDark,
                 ),
-                SizedBox(
-                  height: PSize.arw(context, 10),
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 335),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: List.generate(
-                        10,
-                        (i) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (!selectedContacts.contains(
-                                    "${authController.user.value!.firstname ?? ""}${i}${authController.user.value!.lastname ?? ""}")) {
-                                  selectedContacts.add(
-                                      "${authController.user.value!.firstname ?? ""}${i}${authController.user.value!.lastname ?? ""}");
-                                } else {
-                                  Get.snackbar(
-                                    'Contact already added',
-                                    'Contact already added',
-                                    snackPosition: SnackPosition.TOP,
-                                  );
-                                }
-                              });
-                            },
-                            child: Column(
+              ),
+              SizedBox(height: PSize.arw(context, 10)),
+              SizedBox(
+                height: PSize.arh(context, 335),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: List.generate(
+                      10,
+                      (i) => GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            String contact =
+                                "${authController.user.value!.firstname ?? ""}${i}${authController.user.value!.lastname ?? ""}";
+                            if (!selectedContacts.contains(contact)) {
+                              selectedContacts.add(contact);
+                            } else {
+                              PHelper.showErrorMessageGet(
+                                  title: 'Contact Already Added',
+                                  message: 'Contact Already Added');
+                            }
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Row(
                               children: [
                                 SizedBox(
-                                  width: PSize.displayWidth(context),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        height: PSize.arw(context, 50),
-                                        width: PSize.arw(context, 50),
-                                        child: RandomAvatar(
-                                          "${authController.user.value!.firstname ?? ""}${i}${authController.user.value!.lastname ?? ""}",
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: PSize.arw(context, 10),
-                                      ),
-                                      Text(
-                                        "${authController.user.value!.firstname} ${authController.user.value!.lastname}",
-                                        style: TextStyle(
-                                          color: PColors.primaryTextLight,
-                                        ),
-                                      )
-                                    ],
+                                  height: PSize.arw(context, 50),
+                                  width: PSize.arw(context, 50),
+                                  child: RandomAvatar(
+                                    "${authController.user.value!.firstname ?? ""}${i}${authController.user.value!.lastname ?? ""}",
                                   ),
                                 ),
-                                Divider(
-                                  color: Colors.grey,
+                                SizedBox(width: PSize.arw(context, 10)),
+                                Text(
+                                  "${authController.user.value!.firstname} ${authController.user.value!.lastname}",
+                                  style: TextStyle(
+                                    color: PColors.primaryTextLight,
+                                  ),
                                 ),
                               ],
                             ),
-                          );
-                        },
+                            Divider(color: Colors.grey),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                )
-              ],
-            )),
-      ),
-    );
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).whenComplete(() {
+      isBottomsheetOpen.value = false;
+    });
   }
 }
 
