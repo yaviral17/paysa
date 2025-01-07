@@ -65,6 +65,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -437,9 +438,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
       useSafeArea: true,
       context: context,
       isScrollControlled: true,
-      backgroundColor: PHelper.isDarkMode(context)
-          ? PColors.backgroundLight
-          : PColors.backgroundDark,
+      backgroundColor: const Color.fromARGB(255, 24, 24, 24),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -449,27 +448,67 @@ class _NewSpendingViewState extends State<NewSpendingView>
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.only(
-            top: 20,
-            left: 20,
-            right: 20,
+            top: 10,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Contacts',
-                style: TextStyle(
-                  fontSize: PSize.arw(context, 40),
-                  fontWeight: FontWeight.w400,
-                  color: PColors.primaryDark,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Text(
+                      'Contacts',
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 40),
+                        fontWeight: FontWeight.w400,
+                        color: PColors.primaryTextDark,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.close_rounded,
+                        size: PSize.arw(context, 26),
+                        color: PColors.error,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: PSize.arw(context, 10)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search Contacts',
+                    hintStyle: TextStyle(
+                      fontSize: PSize.arw(context, 14),
+                      color: PColors.secondaryText(context),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search_rounded,
+                      color: PColors.secondaryText(context),
+                    ),
+                    filled: true,
+                    fillColor: PColors.containerSecondary(context),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: PSize.arw(context, 20)),
               SizedBox(
-                height: PSize.arh(context, 335),
+                height: PSize.arh(context, 80),
                 child: SingleChildScrollView(
-                  child: Column(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: List.generate(
                       10,
@@ -477,7 +516,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                         onTap: () {
                           setState(() {
                             String contact =
-                                "${authController.user.value!.firstname ?? ""}${i}${authController.user.value!.lastname ?? ""}";
+                                "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}${i}";
                             if (!selectedContacts.contains(contact)) {
                               selectedContacts.add(contact);
                             } else {
@@ -487,27 +526,29 @@ class _NewSpendingViewState extends State<NewSpendingView>
                             }
                           });
                         },
-                        child: Column(
+                        child: Row(
                           children: [
-                            Row(
+                            SizedBox(width: PSize.arw(context, 10)),
+                            Column(
                               children: [
                                 SizedBox(
                                   height: PSize.arw(context, 50),
                                   width: PSize.arw(context, 50),
                                   child: RandomAvatar(
-                                    "${authController.user.value!.firstname ?? ""}${i}${authController.user.value!.lastname ?? ""}",
+                                    "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}${i}",
                                   ),
                                 ),
                                 SizedBox(width: PSize.arw(context, 10)),
                                 Text(
-                                  "${authController.user.value!.firstname} ${authController.user.value!.lastname}",
+                                  "${authController.user.value!.firstname} ${authController.user.value!.lastname}${i}",
                                   style: TextStyle(
-                                    color: PColors.primaryTextLight,
+                                    color: PColors.primaryTextDark,
+                                    fontSize: PSize.arw(context, 14),
                                   ),
                                 ),
                               ],
                             ),
-                            Divider(color: Colors.grey),
+                            SizedBox(width: PSize.arw(context, 10)),
                           ],
                         ),
                       ),
