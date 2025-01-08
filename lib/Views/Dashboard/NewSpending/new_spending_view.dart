@@ -5,15 +5,15 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
+import 'package:paysa/Controllers/contact_controller.dart';
 import 'package:paysa/Controllers/new_spending_controller.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/Dashboard/NewSpending/widgets/contact_bottomsheet.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 import 'package:random_avatar/random_avatar.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
-
-import '../../../Utils/helpers/helper.dart';
 
 class NewSpendingView extends StatefulWidget {
   const NewSpendingView({super.key});
@@ -24,8 +24,6 @@ class NewSpendingView extends StatefulWidget {
 
 class _NewSpendingViewState extends State<NewSpendingView>
     with SingleTickerProviderStateMixin {
-  List<String> selectedContacts = [];
-
   RxBool isBottomsheetOpen = false.obs;
 
   List<String> buttons = [
@@ -61,6 +59,8 @@ class _NewSpendingViewState extends State<NewSpendingView>
 
   final NewSpendingController newSpendingController = NewSpendingController();
   final authController = Get.find<AuthenticationController>();
+
+  ContactsController contactController = Get.find<ContactsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +159,6 @@ class _NewSpendingViewState extends State<NewSpendingView>
                     return ZoomTapAnimation(
                       onTap: () {
                         isBottomsheetOpen.value = true;
-
                         showContactBottomSheet(context);
                       },
                       child: SmoothContainer(
@@ -213,7 +212,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                         // SizedBox(
                         //   height: PSize.arw(context, 10),
                         // ),
-                        selectedContacts.isEmpty
+                        contactController.selectedContactList.isEmpty
                             ? SizedBox(
                                 height: PSize.arw(context, 40),
                               )
@@ -223,7 +222,8 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
                                     children: List.generate(
-                                        selectedContacts.length,
+                                        contactController
+                                            .selectedContactList.length,
                                         (i) => Container(
                                               margin:
                                                   EdgeInsets.only(right: 10),
@@ -235,7 +235,10 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                                     width:
                                                         PSize.arw(context, 40),
                                                     child: RandomAvatar(
-                                                      selectedContacts[i],
+                                                      contactController
+                                                          .selectedContactList[
+                                                              i]
+                                                          .displayName!,
                                                     ),
                                                   ),
                                                   Positioned(
@@ -243,7 +246,8 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                                     top: 0,
                                                     child: GestureDetector(
                                                       onTap: () => setState(() {
-                                                        selectedContacts
+                                                        contactController
+                                                            .selectedContactList
                                                             .removeAt(i);
                                                       }),
                                                       child: Container(
@@ -446,119 +450,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
         ),
       ),
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(
-            top: 10,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Text(
-                      'Contacts',
-                      style: TextStyle(
-                        fontSize: PSize.arw(context, 40),
-                        fontWeight: FontWeight.w400,
-                        color: PColors.primaryTextDark,
-                      ),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.close_rounded,
-                        size: PSize.arw(context, 26),
-                        color: PColors.error,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: PSize.arw(context, 10)),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search Contacts',
-                    hintStyle: TextStyle(
-                      fontSize: PSize.arw(context, 14),
-                      color: PColors.secondaryText(context),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search_rounded,
-                      color: PColors.secondaryText(context),
-                    ),
-                    filled: true,
-                    fillColor: PColors.containerSecondary(context),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: PSize.arw(context, 20)),
-              SizedBox(
-                height: PSize.arh(context, 80),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(
-                      10,
-                      (i) => GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            String contact =
-                                "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}${i}";
-                            if (!selectedContacts.contains(contact)) {
-                              selectedContacts.add(contact);
-                            } else {
-                              PHelper.showErrorMessageGet(
-                                  title: 'Contact Already Added',
-                                  message: 'Contact Already Added');
-                            }
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            SizedBox(width: PSize.arw(context, 10)),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height: PSize.arw(context, 50),
-                                  width: PSize.arw(context, 50),
-                                  child: RandomAvatar(
-                                    "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}${i}",
-                                  ),
-                                ),
-                                SizedBox(width: PSize.arw(context, 10)),
-                                Text(
-                                  "${authController.user.value!.firstname} ${authController.user.value!.lastname}${i}",
-                                  style: TextStyle(
-                                    color: PColors.primaryTextDark,
-                                    fontSize: PSize.arw(context, 14),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: PSize.arw(context, 10)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
+        return ContactBottomSheet();
       },
     ).whenComplete(() {
       isBottomsheetOpen.value = false;
