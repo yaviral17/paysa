@@ -9,16 +9,30 @@ class FirebaseAPI {
 
   // function to initialize notifications
   Future<void> initNotifications() async {
+    log('Requesting notification permission...');
     // request permission from user (will prompt a dialog)
     await _firebaseMessaging.requestPermission();
 
-    // fetch the FCM token for this device
-    final FCMToken = await _firebaseMessaging.getToken();
-    // print the token (normally you would send this to your server)
-    log("Token: $FCMToken");
+    log('Ensuring APNS token is available...');
+    // Ensure the APNS token is available
+    String? apnsToken = await _firebaseMessaging.getAPNSToken();
+    while (apnsToken == null) {
+      log('APNS token not available, retrying...');
+      await Future.delayed(const Duration(seconds: 1));
+      apnsToken = await _firebaseMessaging.getAPNSToken();
+    }
+    log('APNS token available.');
 
-    // initialize further settings for push notifications]
-    initPushNotifications();
+    // fetch the FCM token for this device
+    log('Fetching FCM token...');
+    final fcmToken = await _firebaseMessaging.getToken();
+    // print the token (normally you would send this to your server)
+    log("Token: $fcmToken");
+
+    // initialize further settings for push notifications
+    log('Initializing push notifications...');
+    await initPushNotifications();
+    log('Push notifications initialized.');
   }
 
   //function to handle received notifications
@@ -27,12 +41,14 @@ class FirebaseAPI {
 
     navigatorKey.currentState!.pushNamed('/dashboard', arguments: message);
   }
-  // function to initialize foreground and background notifications
 
-  Future initPushNotifications() async {
+  // function to initialize foreground and background notifications
+  Future<void> initPushNotifications() async {
+    log('Handling initial message...');
     // handle notifications if the app was terminated and opened
     _firebaseMessaging.getInitialMessage().then(handleMessages);
 
+    log('Attaching event listeners...');
     // attach event listeners for when a notification opens the app
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessages);
   }

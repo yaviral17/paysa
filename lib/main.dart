@@ -11,39 +11,60 @@ import 'package:permission_handler/permission_handler.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  // firebase initialize
-  // THelperFunctions.hideBottomBlackStrip();
-  final app = await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+Future<PermissionStatus> requestPhotoPermission() async {
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    Permission permissionToRequest;
 
-  await requestPhotoPermission();
-  await FirebaseAPI().initNotifications();
+    if (androidInfo.version.sdkInt <= 32) {
+      permissionToRequest = Permission.storage;
+    } else {
+      permissionToRequest = Permission.photos;
+    }
 
-  // Check and request storage permission
-
-  log('Firebase app name: ${app.name}');
-
-  runApp(const App());
+    return permissionToRequest.request();
+  } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+    log('Requesting photo permission for iOS');
+    return Permission.photos.request();
+  } else {
+    throw UnsupportedError('Unsupported platform');
+  }
 }
 
-Future<PermissionStatus> requestPhotoPermission() async {
-  final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  Permission permissionToRequest;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // // firebase initialize
+  // // THelperFunctions.hideBottomBlackStrip();
+  // final app = await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
 
-  if (defaultTargetPlatform == TargetPlatform.android &&
-      androidInfo.version.sdkInt <= 32) {
-    permissionToRequest = Permission.storage;
-  } else {
-    permissionToRequest = Permission.photos;
-  }
+  // await requestPhotoPermission();
+  // await FirebaseAPI().initNotifications();
 
-  if (await permissionToRequest.status.isDenied) {
-    return await permissionToRequest.request();
+  // // Check and request storage permission
+
+  // log('Firebase app name: ${app.name}');
+
+  // runApp(const App());
+  try {
+    final app = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    log('Firebase initialized: ${app.name}');
+
+    log('Requesting photo permission...');
+    await requestPhotoPermission();
+    log('Photo permission granted.');
+
+    log('Initializing notifications...');
+    await FirebaseAPI().initNotifications();
+    log('Notifications initialized.');
+
+    runApp(const App());
+  } catch (e, stackTrace) {
+    log('Error during initialization: $e');
+    log('Stack trace: $stackTrace');
   }
-  log('Storage permission denied');
-  return permissionToRequest.status;
 }
