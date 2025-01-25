@@ -5,4 +5,5 @@ class PHeroTags {
   static String authTextField = "authTextField";
   static String authPrimaryText = "authPrimaryText";
   static String authSecondaryText = "authSecondaryText";
+  static String homeHeader = "homeHeader";
 }

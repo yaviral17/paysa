@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:paysa/APIs/firebase_api.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/sizes.dart';
@@ -16,9 +19,10 @@ void main() async {
   final authController = Get.put(AuthenticationController());
 
   if (FirebaseAuth.instance.currentUser != null) {
-    authController.user.value = await PFirestoreAPIs.getUser();
+    authController.user.value = await FirestoreAPIs.getUser();
   }
 
+  PFirebaseAPI().initNotifications();
   // defining screen size for mobile
   PSize.screenWidth = 420;
   PSize.screenHeight = 840;

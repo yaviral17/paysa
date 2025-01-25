@@ -22,23 +22,23 @@ class _ContactBottomSheetState extends State<ContactBottomSheet> {
   @override
   void initState() {
     super.initState();
-    filteredContacts.addAll(contactController.contactList);
+    // filteredContacts.addAll(contactController.contactList);
 
-    searchController.addListener(() {
-      filterContacts(searchController.text);
-    });
+    // searchController.addListener(() {
+    //   filterContacts(searchController.text);
+    // });
   }
 
   void filterContacts(String query) {
-    if (query.isEmpty) {
-      filteredContacts.assignAll(contactController.contactList);
-    } else {
-      filteredContacts.assignAll(
-        contactController.contactList.where((contact) =>
-            contact.displayName?.toLowerCase().contains(query.toLowerCase()) ??
-            false),
-      );
-    }
+    // if (query.isEmpty) {
+    //   filteredContacts.assignAll(contactController.contactList);
+    // } else {
+    //   filteredContacts.assignAll(
+    //     contactController.contactList.where((contact) =>
+    //         contact.displayName?.toLowerCase().contains(query.toLowerCase()) ??
+    //         false),
+    //   );
+    // }
   }
 
   @override
@@ -119,15 +119,15 @@ class _ContactBottomSheetState extends State<ContactBottomSheet> {
                     filteredContacts.length,
                     (i) => GestureDetector(
                       onTap: () {
-                        var contact = filteredContacts[i];
-                        if (contactController.selectedContactList
-                            .contains(contact)) {
-                          PHelper.showErrorMessageGet(
-                              title: 'Contact Already Added',
-                              message: 'Contact Already Added');
-                        } else {
-                          contactController.selectedContactList.add(contact);
-                        }
+                        // var contact = filteredContacts[i];
+                        // if (contactController.selectedContactList
+                        //     .contains(contact)) {
+                        //   PHelper.showErrorMessageGet(
+                        //       title: 'Contact Already Added',
+                        //       message: 'Contact Already Added');
+                        // } else {
+                        //   contactController.selectedContactList.add(contact);
+                        // }
                       },
                       child: Row(
                         children: [

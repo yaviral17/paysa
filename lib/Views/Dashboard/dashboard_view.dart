@@ -66,102 +66,114 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
   Widget build(BuildContext context) {
     // status bar and navigation bar theme set
 
+    bool isPlatformIos = PHelper.isPlatformIos(context);
+
     log('didPopNext');
     PHelper.systemUIOverlayStyle(context);
     return Scaffold(
       body: PageView(
         controller: dashboardController.pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          HomeView(),
-          CardsView(),
-          StatisticsView(),
-          ChatScreen(),
+        children: [
+          isPlatformIos ? const SafeArea(child: HomeView()) : const HomeView(),
+          isPlatformIos
+              ? const SafeArea(child: CardsView())
+              : const CardsView(),
+          isPlatformIos
+              ? const SafeArea(child: StatisticsView())
+              : const StatisticsView(),
+          isPlatformIos
+              ? const SafeArea(child: ChatScreen())
+              : const ChatScreen(),
         ],
       ),
       bottomNavigationBar: Obx(
-        () => Container(
-          padding: const EdgeInsets.only(bottom: 12.0, top: 12.0),
-          decoration: BoxDecoration(
-            color: PColors.background(context),
-            boxShadow: [
-              BoxShadow(
-                color: PColors.background(context),
-                spreadRadius: 4.0,
-                blurRadius: 8.0,
-                // offset: const Offset(0, -10),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              PaysaNavbarIcon(
-                label: 'Home',
-                onPressed: () {
-                  dashboardController.changePage(0);
-                },
-                icon: HugeIcons.strokeRoundedHome06,
-                isActive: dashboardController.currentIndex.value == 0,
-              ),
-              PaysaNavbarIcon(
-                label: 'Cards',
-                onPressed: () {
-                  dashboardController.changePage(1);
-                },
-                icon: HugeIcons.strokeRoundedCreditCard,
-                isActive: dashboardController.currentIndex.value == 1,
-              ),
-              ZoomTapAnimation(
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  PNavigate.to(const NewSpendingView());
-                },
-                child: GlowContainer(
-                  glowColor: PColors.primary(context).withOpacity(0.5),
-                  spreadRadius: 0.0,
-                  borderRadius: BorderRadius.circular(100.0),
-                  blurRadius: 10.0,
-                  child: CircleAvatar(
-                    backgroundColor: PColors.primary(context),
-                    radius: PSize.arw(context, 30),
-                    child: Icon(
-                      HugeIcons.strokeRoundedPlusSign,
-                      color: PColors.primaryText(context),
-                      // glowColor: PColors.primary(context),
-                      // blurRadius: 10.0,
-                      // offset: const Offset(0, 0),
+        () {
+          final navBar = Container(
+            padding: const EdgeInsets.only(bottom: 12.0, top: 12.0),
+            decoration: BoxDecoration(
+              color: PColors.background(context),
+              boxShadow: [
+                BoxShadow(
+                  color: PColors.background(context),
+                  spreadRadius: 4.0,
+                  blurRadius: 8.0,
+                  // offset: const Offset(0, -10),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                PaysaNavbarIcon(
+                  label: 'Home',
+                  onPressed: () {
+                    dashboardController.changePage(0);
+                  },
+                  icon: HugeIcons.strokeRoundedHome06,
+                  isActive: dashboardController.currentIndex.value == 0,
+                ),
+                PaysaNavbarIcon(
+                  label: 'Cards',
+                  onPressed: () {
+                    dashboardController.changePage(1);
+                  },
+                  icon: HugeIcons.strokeRoundedCreditCard,
+                  isActive: dashboardController.currentIndex.value == 1,
+                ),
+                ZoomTapAnimation(
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    PNavigate.to(const NewSpendingView());
+                  },
+                  child: GlowContainer(
+                    glowColor: PColors.primary(context).withOpacity(0.5),
+                    spreadRadius: 0.0,
+                    borderRadius: BorderRadius.circular(100.0),
+                    blurRadius: 2.0,
+                    child: CircleAvatar(
+                      backgroundColor: PColors.color1,
+                      radius: PSize.arw(context, 30),
+                      child: Icon(
+                        HugeIcons.strokeRoundedPlusSign,
+                        color: PColors.primaryText(context),
+                        // glowColor: PColors.primary(context),
+                        // blurRadius: 10.0,
+                        // offset: const Offset(0, 0),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              PaysaNavbarIcon(
-                label: 'Stats',
-                onPressed: () {
-                  dashboardController.changePage(2);
-                },
-                icon: HugeIcons.strokeRoundedBitcoinGraph,
-                isActive: dashboardController.currentIndex.value == 2,
-              ),
-              PaysaNavbarIcon(
-                label: 'Chats',
-                onPressed: () {
-                  dashboardController.changePage(3);
-                },
-                icon: HugeIcons.strokeRoundedBubbleChatNotification,
-                isActive: dashboardController.currentIndex.value == 3,
-              ),
-              // PaysaNavbarIcon(
-              //   label: 'Profile',
-              //   onPressed: () {
-              //     dashboardController.changePage(4);
-              //   },
-              //   icon: HugeIcons.strokeRoundedUserCircle,
-              //   isActive: dashboardController.currentIndex.value == 4,
-              // ),
-            ],
-          ),
-        ),
+                PaysaNavbarIcon(
+                  label: 'Stats',
+                  onPressed: () {
+                    dashboardController.changePage(2);
+                  },
+                  icon: HugeIcons.strokeRoundedBitcoinGraph,
+                  isActive: dashboardController.currentIndex.value == 2,
+                ),
+                PaysaNavbarIcon(
+                  label: 'Chats',
+                  onPressed: () {
+                    dashboardController.changePage(3);
+                  },
+                  icon: HugeIcons.strokeRoundedBubbleChatNotification,
+                  isActive: dashboardController.currentIndex.value == 3,
+                ),
+                // PaysaNavbarIcon(
+                //   label: 'Profile',
+                //   onPressed: () {
+                //     dashboardController.changePage(4);
+                //   },
+                //   icon: HugeIcons.strokeRoundedUserCircle,
+                //   isActive: dashboardController.currentIndex.value == 4,
+                // ),
+              ],
+            ),
+          );
+
+          return isPlatformIos ? SafeArea(child: navBar) : navBar;
+        },
       ),
     );
   }

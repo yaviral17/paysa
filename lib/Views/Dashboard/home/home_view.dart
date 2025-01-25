@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
+import 'package:paysa/Utils/constants/hero_tags.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
@@ -30,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    contactController.getContactPermission();
+    // contactController.getContactPermission();
   }
 
   @override

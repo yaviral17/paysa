@@ -87,6 +87,11 @@ class PColors {
     return PHelper.isDarkMode(context) ? referCardBgDark : referCardBgLight;
   }
 
+  //new colors added
+  static const Color color1 = Color(0xFF3e6d47);
+  static const Color color2 = Color(0xFF9999cc);
+  static const Color color3 = Color(0xFFd7fadb);
+
   //add more on the go
 
   static const Color success = Color(0xFF2EAB57);

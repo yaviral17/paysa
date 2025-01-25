@@ -11,6 +11,10 @@ class PHelper {
     return Theme.of(context).brightness == Brightness.dark;
   }
 
+  static bool isPlatformIos(BuildContext context) {
+    return Theme.of(context).platform == TargetPlatform.iOS;
+  }
+
   static void systemUIOverlayStyle(BuildContext context,
       {Color? statusBarColor, Color? systemNavigationBarColor}) {
     SystemChrome.setSystemUIOverlayStyle(

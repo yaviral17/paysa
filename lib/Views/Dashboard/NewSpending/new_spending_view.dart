@@ -212,7 +212,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                         // SizedBox(
                         //   height: PSize.arw(context, 10),
                         // ),
-                        contactController.selectedContactList.isEmpty
+                        [].isEmpty
                             ? SizedBox(
                                 height: PSize.arw(context, 40),
                               )
@@ -222,8 +222,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
                                     children: List.generate(
-                                        contactController
-                                            .selectedContactList.length,
+                                        [].length,
                                         (i) => Container(
                                               margin:
                                                   EdgeInsets.only(right: 10),
@@ -235,10 +234,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                                     width:
                                                         PSize.arw(context, 40),
                                                     child: RandomAvatar(
-                                                      contactController
-                                                          .selectedContactList[
-                                                              i]
-                                                          .displayName!,
+                                                      [][i].displayName!,
                                                     ),
                                                   ),
                                                   Positioned(
@@ -246,9 +242,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                                     top: 0,
                                                     child: GestureDetector(
                                                       onTap: () => setState(() {
-                                                        contactController
-                                                            .selectedContactList
-                                                            .removeAt(i);
+                                                        [].removeAt(i);
                                                       }),
                                                       child: Container(
                                                         padding:

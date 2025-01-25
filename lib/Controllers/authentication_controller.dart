@@ -42,7 +42,7 @@ class AuthenticationController extends GetxController {
       }
 
       if (credential.user != null) {
-        user.value = await PFirestoreAPIs.getUser();
+        user.value = await FirestoreAPIs.getUser();
       }
 
       PNavigate.to(const DashMenuView());
@@ -85,7 +85,7 @@ class AuthenticationController extends GetxController {
 
       if (credential.user != null) {
         user.value = newUser;
-        await PFirestoreAPIs.createUser(newUser);
+        await FirestoreAPIs.createUser(newUser);
       }
 
       PNavigate.back();
