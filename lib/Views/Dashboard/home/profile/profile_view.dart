@@ -30,12 +30,12 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      PHelper.systemUIOverlayStyle(
-        context,
-        systemNavigationBarColor: PColors.referCardBg(context),
-      );
-    });
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    //   PHelper.systemUIOverlayStyle(
+    //     context,
+    //     systemNavigationBarColor: PColors.referCardBg(context),
+    //   );
+    // });
   }
 
   void dispose() {
@@ -48,50 +48,48 @@ class _ProfileViewState extends State<ProfileView> {
       context,
       systemNavigationBarColor: PColors.referCardBg(context),
     );
-    return SafeArea(
-      child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-              padding: const EdgeInsets.only(
-                top: 20,
+    return Scaffold(
+      body: Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildProfileDetailsCard(context),
+                      SizedBox(
+                        height: PSize.arh(context, 40),
+                      ),
+                      ...buildProfileItems(context),
+                      SizedBox(
+                        height: PSize.arh(context, 160),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildProfileDetailsCard(context),
-                        SizedBox(
-                          height: PSize.arh(context, 40),
-                        ),
-                        ...buildProfileItems(context),
-                        SizedBox(
-                          height: PSize.arh(context, 160),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  Divider(
-                    color: PColors.primary(context),
-                    thickness: 5,
-                    height: PSize.arh(context, 15),
-                  ),
-                  Divider(
-                    color: PColors.primary(context),
-                    thickness: 2,
-                    height: PSize.arh(context, 3),
-                  ),
-                  buildBottomInviteCard(context),
-                ],
-              )),
-        ),
-      ),
+              const Spacer(),
+              Divider(
+                color: PColors.primary(context),
+                thickness: 5,
+                height: PSize.arh(context, 15),
+              ),
+              Divider(
+                color: PColors.primary(context),
+                thickness: 2,
+                height: PSize.arh(context, 3),
+              ),
+              buildBottomInviteCard(context),
+            ],
+          )),
     );
   }
 
@@ -398,6 +396,9 @@ class _ProfileViewState extends State<ProfileView> {
                 // fit: BoxFit.contain,
               ),
             ],
+          ),
+          SizedBox(
+            height: PSize.arh(context, 36),
           ),
         ],
       ),

@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:paysa/APIs/firebase_api.dart';
+import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
@@ -34,6 +37,15 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
   @override
   void initState() {
     super.initState();
+    PFirebaseAPI().initNotifications().then(
+      (token) {
+        log('FCM Token: $token');
+        if (token.isNotEmpty) {
+          FirestoreAPIs.addFcmToken(
+              FirebaseAuth.instance.currentUser!.uid, token);
+        }
+      },
+    );
   }
 
   @override
@@ -75,14 +87,14 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
         controller: dashboardController.pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          isPlatformIos ? const SafeArea(child: HomeView()) : const HomeView(),
-          isPlatformIos
+          !isPlatformIos ? const SafeArea(child: HomeView()) : const HomeView(),
+          !isPlatformIos
               ? const SafeArea(child: CardsView())
               : const CardsView(),
-          isPlatformIos
+          !isPlatformIos
               ? const SafeArea(child: StatisticsView())
               : const StatisticsView(),
-          isPlatformIos
+          !isPlatformIos
               ? const SafeArea(child: ChatScreen())
               : const ChatScreen(),
         ],
@@ -172,7 +184,7 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
             ),
           );
 
-          return isPlatformIos ? SafeArea(child: navBar) : navBar;
+          return !isPlatformIos ? SafeArea(child: navBar) : navBar;
         },
       ),
     );

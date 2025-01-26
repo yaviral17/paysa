@@ -3,14 +3,13 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:paysa/app.dart';
-import 'package:paysa/main.dart';
 
 class PFirebaseAPI {
   // create ana instance of Firebase Messaging
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   // function to initialize notifications
-  Future<void> initNotifications() async {
+  Future<String> initNotifications() async {
     // Request permission from user (will prompt a dialog on iOS)
     NotificationSettings settings =
         await _firebaseMessaging.requestPermission();
@@ -37,10 +36,13 @@ class PFirebaseAPI {
       // Initialize further settings for push notifications
       log('Initializing push notifications...');
       await initPushNotifications();
-      log('Push notifications initialized.');
+
+      return fcmToken!;
     } else {
       log('User declined or has not accepted permission');
     }
+
+    return '';
   }
 
   //function to handle received notifications

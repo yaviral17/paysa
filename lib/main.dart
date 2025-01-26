@@ -22,7 +22,6 @@ void main() async {
     authController.user.value = await FirestoreAPIs.getUser();
   }
 
-  PFirebaseAPI().initNotifications();
   // defining screen size for mobile
   PSize.screenWidth = 420;
   PSize.screenHeight = 840;

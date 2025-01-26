@@ -1,26 +1,26 @@
-// import 'package:contacts_service/contacts_service.dart';
+import 'package:flutter_contacts/contact.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactsController extends GetxController {
-  // RxList<Contact> contactList = <Contact>[].obs;
-  // RxList<Contact> selectedContactList = <Contact>[].obs;
+  RxList<Contact> contacts = <Contact>[].obs;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   fetchContacts();
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    getContacts();
+  }
 
-  // void getContactPermission() async {
-  //   if (await Permission.contacts.isGranted) {
-  //     fetchContacts();
-  //   } else {
-  //     await Permission.contacts.request();
-  //   }
-  // }
-
-  // void fetchContacts() async {
-  //   contactList.value = await ContactsService.getContacts();
-  // }
+  void getContacts() async {
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      contacts.value = await FlutterContacts.getContacts(
+          withProperties: true, withAccounts: true, withPhoto: true);
+    } else {
+      await Permission.contacts.request();
+      contacts.value = await FlutterContacts.getContacts(
+          withProperties: true, withAccounts: true, withPhoto: true);
+    }
+  }
 }

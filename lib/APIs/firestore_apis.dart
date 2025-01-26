@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:paysa/Models/UserModel.dart';
+import 'package:paysa/Models/spending_model.dart';
 
 class FirestoreAPIs {
   static CollectionReference users =
@@ -91,5 +92,58 @@ class FirestoreAPIs {
       log('Failed to load categories', name: "json");
       return {'isSuccess': false};
     }
+  }
+
+  static Future<bool> addFcmToken(String uid, String token) async {
+    try {
+      await users.doc(uid).set({
+        'tokens': FieldValue.arrayUnion([token])
+      }, SetOptions(merge: true));
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
+  static Future<List<String>> getFcmTokens(String uid) async {
+    List<String> tokens = [];
+    await users.doc(uid).get().then((value) {
+      if (value.exists) {
+        tokens = List<String>.from(value.data() as List<String>? ?? []);
+      }
+    });
+    return tokens;
+  }
+
+  static Future<void> removeFcmToken(String uid, String token) async {
+    await users.doc(uid).set({
+      'tokens': FieldValue.arrayRemove([token])
+    }, SetOptions(merge: true));
+  }
+
+  static Future<void> updateUserData(UserModel user) async {
+    await users.doc(user.uid).update(user.toMap());
+  }
+
+  static Future<void> addSpendingToUser(String uid, String spendingId) {
+    return users.doc(uid).set({
+      'spendings': FieldValue.arrayUnion([spendingId])
+    }, SetOptions(merge: true));
+  }
+
+  static Future<void> addSpending(SpendingModel spending) async {
+    await FirebaseFirestore.instance
+        .collection('spendings')
+        .doc(spending.id)
+        .set(spending.toJson());
+  }
+
+  static Future<SpendingModel> getSpending(String spendingId) async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('spendings')
+        .doc(spendingId)
+        .get();
+    return SpendingModel.fromJson(doc.data() as Map<String, dynamic>);
   }
 }
