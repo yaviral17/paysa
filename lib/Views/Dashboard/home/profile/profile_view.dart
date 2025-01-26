@@ -69,9 +69,9 @@ class _ProfileViewState extends State<ProfileView> {
                         height: PSize.arh(context, 40),
                       ),
                       ...buildProfileItems(context),
-                      SizedBox(
-                        height: PSize.arh(context, 160),
-                      ),
+                      // SizedBox(
+                      //   height: PSize.arh(context, 160),
+                      // ),
                     ],
                   ),
                 ),
@@ -101,74 +101,80 @@ class _ProfileViewState extends State<ProfileView> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: ZoomTapAnimation(
-                onTap: () {
-                  PNavigate.back();
-                },
-                child: Icon(
-                  Icons.arrow_back_ios_new_outlined,
-                  size: PSize.arw(context, 20),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(right: 20),
+            //   child: ZoomTapAnimation(
+            //     onTap: () {
+            //       PNavigate.back();
+            //     },
+            //     child: Icon(
+            //       Icons.arrow_back_ios_new_outlined,
+            //       size: PSize.arw(context, 20),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: PSize.arh(context, 10),
             ),
-            Text('Aviral Yadav',
-                style: TextStyle(
-                  fontSize: PSize.arw(context, 40),
-                  fontWeight: FontWeight.bold,
-                )),
-            Text('+91 1234567890',
-                style: TextStyle(
-                  fontSize: PSize.arw(context, 20),
-                )),
+            Text(
+              'Aviral Yadav',
+              style: TextStyle(
+                fontSize: PSize.arw(context, 32),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              '+91 1234567890',
+              style: TextStyle(
+                fontSize: PSize.arw(context, 18),
+              ),
+            ),
           ],
         ),
-        Stack(children: [
-          SmoothClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            side: BorderSide(
-              color: PColors.primary(context).withOpacity(0.7),
-              width: 2,
-            ),
-            child: Image.network(
-              "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
-              width: PSize.arw(context, 120),
-              height: PSize.arw(context, 120),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: SmoothClipRRect(
-              smoothness: 0.6,
-              borderRadius: BorderRadius.circular(50),
+        Stack(
+          children: [
+            SmoothClipRRect(
+              borderRadius: BorderRadius.circular(100),
               side: BorderSide(
-                color: PColors.primaryDark.withOpacity(0.7),
+                color: PColors.primary(context).withOpacity(0.7),
                 width: 2,
               ),
-              child: ZoomTapAnimation(
-                onTap: () {
-                  Get.bottomSheet(
-                    buildBottomSheet(context),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  color: PColors.primary(context),
-                  child: Icon(
-                    Icons.qr_code,
-                    color: Colors.white,
-                    size: PSize.arw(context, 25),
+              child: Image.network(
+                "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
+                width: PSize.arw(context, 100),
+                height: PSize.arw(context, 100),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: SmoothClipRRect(
+                smoothness: 0.6,
+                borderRadius: BorderRadius.circular(50),
+                side: BorderSide(
+                  color: PColors.primaryDark.withOpacity(0.7),
+                  width: 2,
+                ),
+                child: ZoomTapAnimation(
+                  onTap: () {
+                    Get.bottomSheet(
+                      buildBottomSheet(context),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    color: PColors.primary(context),
+                    child: Icon(
+                      Icons.qr_code,
+                      color: Colors.white,
+                      size: PSize.arw(context, 25),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ],
     );
   }
@@ -176,7 +182,7 @@ class _ProfileViewState extends State<ProfileView> {
   Padding buildBottomSheet(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 10,
+        horizontal: 8,
       ),
       child: SmoothContainer(
         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -228,7 +234,7 @@ class _ProfileViewState extends State<ProfileView> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 10,
+                  vertical: 8,
                 ),
                 borderRadius: BorderRadius.circular(10),
                 side: BorderSide(
@@ -242,11 +248,12 @@ class _ProfileViewState extends State<ProfileView> {
                     fontSize: PSize.arw(context, 25),
                     color: Colors.white,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
             SizedBox(
-              height: PSize.arh(context, 20),
+              height: PSize.arh(context, 16),
             ),
           ],
         ),
@@ -280,12 +287,12 @@ class _ProfileViewState extends State<ProfileView> {
             child: Text(
               items[index],
               style: TextStyle(
-                fontSize: PSize.arw(context, 25),
+                fontSize: PSize.arw(context, 20),
               ),
             ),
           ),
           SizedBox(
-            height: PSize.arh(context, 20),
+            height: PSize.arh(context, 16),
           ),
         ],
       );
@@ -305,21 +312,21 @@ class _ProfileViewState extends State<ProfileView> {
             title: Text(
               'Invite friends to unlock extra features',
               style: TextStyle(
-                fontSize: PSize.arw(context, 25),
+                fontSize: PSize.arw(context, 20),
                 // color: Colors.white,
               ),
             ),
             subtitle: Text(
                 'Invite friends yo Paysa and get extra limited features which will help you and your friends to track expenses in a very optimal way.',
                 style: TextStyle(
-                  fontSize: PSize.arw(context, 15),
+                  fontSize: PSize.arw(context, 12),
                   color: PHelper.isDarkMode(context)
                       ? Colors.grey
                       : const Color.fromARGB(255, 43, 43, 43),
                 )),
           ),
           SizedBox(
-            height: PSize.arh(context, 16),
+            height: PSize.arh(context, 12),
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -337,7 +344,7 @@ class _ProfileViewState extends State<ProfileView> {
                       children: [
                         Text('Invite Code: ',
                             style: TextStyle(
-                              fontSize: PSize.arw(context, 15),
+                              fontSize: PSize.arw(context, 14),
                             )),
                         Text('123456',
                             style: TextStyle(
@@ -398,7 +405,7 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
           SizedBox(
-            height: PSize.arh(context, 36),
+            height: PSize.arh(context, 20),
           ),
         ],
       ),

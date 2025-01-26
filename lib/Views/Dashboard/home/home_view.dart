@@ -50,67 +50,70 @@ class _HomeViewState extends State<HomeView> {
 
                 // Header AppBar
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        PNavigate.to(ProfileView());
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(100),
-                            bottomLeft: Radius.circular(100),
-                            bottomRight: Radius.circular(100),
-                            topRight: Radius.circular(100),
-                          ),
-                          color: PColors.containerSecondary(context),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Row(
-                            children: [
-                              SmoothClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                side: BorderSide(
-                                  color:
-                                      PColors.primary(context).withOpacity(0.7),
-                                  width: 2,
-                                ),
-                                child: SizedBox(
-                                  height: PSize.arw(context, 50),
-                                  width: PSize.arw(context, 50),
-                                  child: RandomAvatar(
-                                    "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}",
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: PSize.arw(context, 10),
-                              ),
-                              Text(
-                                "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}",
-                                style: TextStyle(
-                                  fontSize: PSize.arw(context, 14),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                width: PSize.arw(context, 10),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: PColors.primary(context),
-                                size: PSize.arw(context, 12),
-                              ),
-                              SizedBox(
-                                width: PSize.arw(context, 10),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
+                    //
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     PNavigate.to(ProfileView());
+                    //   },
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: const BorderRadius.only(
+                    //         topLeft: Radius.circular(100),
+                    //         bottomLeft: Radius.circular(100),
+                    //         bottomRight: Radius.circular(100),
+                    //         topRight: Radius.circular(100),
+                    //       ),
+                    //       color: PColors.containerSecondary(context),
+                    //     ),
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(4.0),
+                    //       child: Row(
+                    //         children: [
+                    //           SmoothClipRRect(
+                    //             borderRadius: BorderRadius.circular(100),
+                    //             side: BorderSide(
+                    //               color:
+                    //                   PColors.primary(context).withOpacity(0.7),
+                    //               width: 2,
+                    //             ),
+                    //             child: SizedBox(
+                    //               height: PSize.arw(context, 50),
+                    //               width: PSize.arw(context, 50),
+                    //               child: RandomAvatar(
+                    //                 "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}",
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           SizedBox(
+                    //             width: PSize.arw(context, 10),
+                    //           ),
+                    //           Text(
+                    //             "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}",
+                    //             style: TextStyle(
+                    //               fontSize: PSize.arw(context, 14),
+                    //               fontWeight: FontWeight.w600,
+                    //             ),
+                    //           ),
+                    //           SizedBox(
+                    //             width: PSize.arw(context, 10),
+                    //           ),
+                    //           Icon(
+                    //             Icons.arrow_forward_ios_outlined,
+                    //             color: PColors.primary(context),
+                    //             size: PSize.arw(context, 12),
+                    //           ),
+                    //           SizedBox(
+                    //             width: PSize.arw(context, 10),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // const Spacer(),
+                    //
                     IconButton(
                       onPressed: () {},
                       icon: HugeIcon(

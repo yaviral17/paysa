@@ -20,18 +20,19 @@ class ChatScreen extends StatelessWidget {
           slivers: [
             // Purple top section
             SliverAppBar(
-              expandedHeight: PSize.screenHeight! * 0.3,
+              expandedHeight: PSize.arh(context, 220),
               floating: false,
               pinned: false,
+              automaticallyImplyLeading: false,
               // backgroundColor: Colors.purple,
               flexibleSpace: FlexibleSpaceBar(
                 background: Column(
                   children: [
-                    const SizedBox(height: 10),
-
-                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: PSize.arh(context, 16),
+                    ),
                     // Chat row
-                    const Align(
+                    Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -39,13 +40,15 @@ class ChatScreen extends StatelessWidget {
                           "You Received",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: PSize.arw(context, 16),
                             letterSpacing: 1.5,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: PSize.arh(context, 12),
+                    ),
 
                     Align(
                       alignment: Alignment.topLeft,
@@ -55,7 +58,7 @@ class ChatScreen extends StatelessWidget {
                           "12 Messages",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: PSize.arw(context, 28),
+                            fontSize: PSize.arw(context, 24),
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1.2,
                             decoration: TextDecoration.underline,
@@ -65,22 +68,27 @@ class ChatScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: PSize.arh(context, 16),
+                    ),
+
                     // Contacts row
-                    const Align(
+                    Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
                           "Contact List",
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: PSize.arw(context, 16),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: PSize.arh(context, 12),
+                    ),
                     // Contacts row
                     Expanded(
                       child: ListView.builder(
@@ -131,7 +139,8 @@ class ChatScreen extends StatelessWidget {
                     children: [
                       // Search Bar
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: PSize.arw(context, 16)),
                         decoration: BoxDecoration(
                           color: Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(24),
@@ -149,35 +158,66 @@ class ChatScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(
+                        height: PSize.arh(context, 2),
+                      ),
                       // Chat list
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: 10,
+                        padding: EdgeInsets.symmetric(
+                            vertical: PSize.arh(context, 8)),
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              PNavigate.to(const ChatScreenView());
-                            },
-                            leading: SmoothClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              side: BorderSide(
-                                color:
-                                    PColors.primary(context).withOpacity(0.7),
-                                width: 2,
-                              ),
-                              child: RandomAvatar(
-                                "User ${index + 1}",
-                                width: PSize.arw(context, 50),
-                              ),
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: PSize.arh(context, 8),
                             ),
-                            title: Text("User ${index + 1}"),
-                            subtitle:
-                                Text("Last message from user ${index + 1}"),
-                            trailing: Text(
-                              "10:${index} AM",
-                              style: const TextStyle(color: Colors.grey),
+                            child: Row(
+                              children: [
+                                SmoothClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  side: BorderSide(
+                                    color: PColors.primary(context)
+                                        .withOpacity(0.7),
+                                    width: 2,
+                                  ),
+                                  child: RandomAvatar(
+                                    "User ${index + 1}",
+                                    width: PSize.arw(context, 50),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: PSize.arw(context, 8),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "User ${index + 1}",
+                                      style: TextStyle(
+                                        fontSize: PSize.arw(context, 16),
+                                      ),
+                                    ),
+                                    Text(
+                                      "Last message from user ${index + 1}",
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Colors.grey,
+                                        fontSize: PSize.arw(context, 14),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "10:${index}0 AM",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: PSize.arw(context, 12),
+                                  ),
+                                ),
+                              ],
                             ),
                           );
                         },

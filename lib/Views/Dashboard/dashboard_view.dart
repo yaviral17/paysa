@@ -16,6 +16,7 @@ import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/NewSpending/new_spending_view.dart';
 import 'package:paysa/Views/Dashboard/chat/chat_screen.dart';
 import 'package:paysa/Views/Dashboard/home/home_view.dart';
+import 'package:paysa/Views/Dashboard/home/profile/profile_view.dart';
 import 'package:paysa/Views/Dashboard/widget/paysa_navbar_icon_widget.dart';
 import 'package:paysa/app.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
@@ -89,14 +90,14 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
         children: [
           !isPlatformIos ? const SafeArea(child: HomeView()) : const HomeView(),
           !isPlatformIos
-              ? const SafeArea(child: CardsView())
-              : const CardsView(),
+              ? const SafeArea(child: ChatScreen())
+              : const ChatScreen(),
           !isPlatformIos
               ? const SafeArea(child: StatisticsView())
               : const StatisticsView(),
           !isPlatformIos
-              ? const SafeArea(child: ChatScreen())
-              : const ChatScreen(),
+              ? const SafeArea(child: ProfileView())
+              : const ProfileView(),
         ],
       ),
       bottomNavigationBar: Obx(
@@ -125,12 +126,20 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
                   icon: HugeIcons.strokeRoundedHome06,
                   isActive: dashboardController.currentIndex.value == 0,
                 ),
+                // PaysaNavbarIcon(
+                //   label: 'Cards',
+                //   onPressed: () {
+                //     dashboardController.changePage(1);
+                //   },
+                //   icon: HugeIcons.strokeRoundedCreditCard,
+                //   isActive: dashboardController.currentIndex.value == 1,
+                // ),
                 PaysaNavbarIcon(
-                  label: 'Cards',
+                  label: 'Chats',
                   onPressed: () {
                     dashboardController.changePage(1);
                   },
-                  icon: HugeIcons.strokeRoundedCreditCard,
+                  icon: HugeIcons.strokeRoundedBubbleChatNotification,
                   isActive: dashboardController.currentIndex.value == 1,
                 ),
                 ZoomTapAnimation(
@@ -156,6 +165,7 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
                     ),
                   ),
                 ),
+
                 PaysaNavbarIcon(
                   label: 'Stats',
                   onPressed: () {
@@ -165,21 +175,13 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
                   isActive: dashboardController.currentIndex.value == 2,
                 ),
                 PaysaNavbarIcon(
-                  label: 'Chats',
+                  label: 'Profile',
                   onPressed: () {
                     dashboardController.changePage(3);
                   },
-                  icon: HugeIcons.strokeRoundedBubbleChatNotification,
+                  icon: HugeIcons.strokeRoundedUserCircle,
                   isActive: dashboardController.currentIndex.value == 3,
                 ),
-                // PaysaNavbarIcon(
-                //   label: 'Profile',
-                //   onPressed: () {
-                //     dashboardController.changePage(4);
-                //   },
-                //   icon: HugeIcons.strokeRoundedUserCircle,
-                //   isActive: dashboardController.currentIndex.value == 4,
-                // ),
               ],
             ),
           );
