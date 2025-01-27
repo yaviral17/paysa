@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
@@ -46,7 +45,6 @@ class _NewSpendingViewState extends State<NewSpendingView>
     '0',
     '⇦'
   ];
-  late AnimationController _animationController;
 
   final NewSpendingController newSpendingController = NewSpendingController();
   final authController = Get.find<AuthenticationController>();
@@ -56,15 +54,11 @@ class _NewSpendingViewState extends State<NewSpendingView>
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 400),
-      vsync: this,
-    );
+    newSpendingController.searchedContacts.value = contactController.contacts;
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -355,7 +349,8 @@ class _NewSpendingViewState extends State<NewSpendingView>
         Obx(
           // 3622668
           () => Visibility(
-            visible: newSpendingController.spendingMode.value == 'Transfer',
+            visible: newSpendingController.spendingMode.value ==
+                SpendingType.transfer,
             maintainSize: true,
             maintainAnimation: true,
             maintainState: true,
@@ -393,28 +388,31 @@ class _NewSpendingViewState extends State<NewSpendingView>
                           ],
                         ),
                       ),
-                      TextField(
-                        controller: _searchController,
-                        onChanged: (value) {
-                          searchContact(value);
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search contact',
-                          hintStyle: TextStyle(
-                            fontSize: PSize.arw(context, 14),
-                            color: PColors.secondaryText(context),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          fillColor: PColors.containerSecondary(context),
-                          focusColor: PColors.containerSecondary(context),
-                          hoverColor: PColors.containerSecondary(context),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: (value) {
+                            searchContact(value);
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Search contact',
+                            hintStyle: TextStyle(
+                              fontSize: PSize.arw(context, 14),
+                              color: PColors.secondaryText(context),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: PColors.containerSecondary(context),
+                            focusColor: PColors.containerSecondary(context),
+                            hoverColor: PColors.containerSecondary(context),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
                       ),
@@ -637,10 +635,16 @@ class _NewSpendingViewState extends State<NewSpendingView>
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: PaysaPrimaryButton(
-            text: 'Add Transaction',
-            onTap: () {},
-            textColor: PColors.primaryText(context),
+          child: Obx(
+            () => PaysaPrimaryButton(
+              isLoading: newSpendingController.isLoading.value,
+              text: 'Add Transaction',
+              onTap: () {
+                log('Adding Transaction');
+                newSpendingController.createSpending();
+              },
+              textColor: PColors.primaryText(context),
+            ),
           ),
         ),
         SizedBox(

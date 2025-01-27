@@ -74,10 +74,10 @@ class _CardsViewState extends State<CardsView> {
                   padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      const CircleFlagWidget(
-                        countryCode: Flag.IN,
-                        radius: 12,
-                      ),
+                      // const CircleFlagWidget(
+                      //   countryCode: Flag.IN,
+                      //   radius: 12,
+                      // ),
                       SizedBox(
                         width: PSize.arw(context, 12),
                       ),
@@ -268,9 +268,9 @@ class RecentTransTile extends StatelessWidget {
           CircleAvatar(
             radius: 24,
             backgroundColor: PColors.primary(context),
-            child: RandomAvatar(
-              Flag.SJ,
-            ),
+            // child: RandomAvatar(
+            //   Flag.SJ,
+            // ),
           ),
           SizedBox(
             width: PSize.arw(context, 12),
