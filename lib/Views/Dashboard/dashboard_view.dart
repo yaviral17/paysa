@@ -85,8 +85,11 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
     PHelper.systemUIOverlayStyle(context);
     return Scaffold(
       body: PageView(
+        onPageChanged: (index) {
+          dashboardController.currentIndex.value = index;
+        },
         controller: dashboardController.pageController,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: PageScrollPhysics(),
         children: [
           !isPlatformIos ? const SafeArea(child: HomeView()) : const HomeView(),
           !isPlatformIos
@@ -175,11 +178,11 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
                   isActive: dashboardController.currentIndex.value == 2,
                 ),
                 PaysaNavbarIcon(
-                  label: 'Profile',
+                  label: 'Preferences',
                   onPressed: () {
                     dashboardController.changePage(3);
                   },
-                  icon: HugeIcons.strokeRoundedUserCircle,
+                  icon: HugeIcons.strokeRoundedSettings04,
                   isActive: dashboardController.currentIndex.value == 3,
                 ),
               ],

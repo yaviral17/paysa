@@ -171,8 +171,9 @@ class DashboardController extends GetxController {
 
   void changePage(int index) {
     currentIndex.value = index;
-    pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+    pageController.jumpToPage(index);
+    // pageController.animateToPage(index,
+    //     duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
   }
 
   void nextPage() {

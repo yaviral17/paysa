@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:icons_plus/icons_plus.dart' as icons_plus;
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/constants/hero_tags.dart';
@@ -50,75 +51,46 @@ class _HomeViewState extends State<HomeView> {
 
                 // Header AppBar
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    //
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     PNavigate.to(ProfileView());
-                    //   },
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: const BorderRadius.only(
-                    //         topLeft: Radius.circular(100),
-                    //         bottomLeft: Radius.circular(100),
-                    //         bottomRight: Radius.circular(100),
-                    //         topRight: Radius.circular(100),
-                    //       ),
-                    //       color: PColors.containerSecondary(context),
-                    //     ),
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(4.0),
-                    //       child: Row(
-                    //         children: [
-                    //           SmoothClipRRect(
-                    //             borderRadius: BorderRadius.circular(100),
-                    //             side: BorderSide(
-                    //               color:
-                    //                   PColors.primary(context).withOpacity(0.7),
-                    //               width: 2,
-                    //             ),
-                    //             child: SizedBox(
-                    //               height: PSize.arw(context, 50),
-                    //               width: PSize.arw(context, 50),
-                    //               child: RandomAvatar(
-                    //                 "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}",
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           SizedBox(
-                    //             width: PSize.arw(context, 10),
-                    //           ),
-                    //           Text(
-                    //             "${authController.user.value!.firstname ?? ""} ${authController.user.value!.lastname ?? ""}",
-                    //             style: TextStyle(
-                    //               fontSize: PSize.arw(context, 14),
-                    //               fontWeight: FontWeight.w600,
-                    //             ),
-                    //           ),
-                    //           SizedBox(
-                    //             width: PSize.arw(context, 10),
-                    //           ),
-                    //           Icon(
-                    //             Icons.arrow_forward_ios_outlined,
-                    //             color: PColors.primary(context),
-                    //             size: PSize.arw(context, 12),
-                    //           ),
-                    //           SizedBox(
-                    //             width: PSize.arw(context, 10),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // const Spacer(),
-                    //
                     IconButton(
                       onPressed: () {},
                       icon: HugeIcon(
                         icon: Iconsax.search_normal_1,
                         color: PColors.primary(context),
+                      ),
+                    ),
+                    Container(
+                      height: PSize.arw(context, 36),
+                      // width: PSize.arw(context, 80),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: PColors.containerSecondary(context),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: PColors.primary(context),
+                            size: PSize.arw(context, 24),
+                          ),
+                          Text(
+                            // currency symbol flag icon
+                            ' ₹ INR 🇮🇳',
+                            style: TextStyle(
+                              fontSize: PSize.arw(context, 16),
+                              color:
+                                  PColors.primaryText(context).withAlpha(200),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     IconButton(
@@ -128,13 +100,13 @@ class _HomeViewState extends State<HomeView> {
                         color: PColors.primary(context),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: HugeIcon(
-                        icon: HugeIcons.strokeRoundedQrCode,
-                        color: PColors.primary(context),
-                      ),
-                    ),
+                    // IconButton(
+                    //   onPressed: () {},
+                    //   icon: HugeIcon(
+                    //     icon: HugeIcons.strokeRoundedQrCode,
+                    //     color: PColors.primary(context),
+                    //   ),
+                    // ),
                   ],
                 ),
 
