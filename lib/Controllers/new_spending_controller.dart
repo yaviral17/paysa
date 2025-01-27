@@ -76,6 +76,7 @@ class NewSpendingController {
       createdBy: FirebaseAuth.instance.currentUser!.uid,
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
+      spendingType: spendingMode.value,
       shoppingModel: ShoppingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
@@ -130,6 +131,7 @@ class NewSpendingController {
       createdBy: FirebaseAuth.instance.currentUser!.uid,
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
+      spendingType: spendingMode.value,
       transferSpendingModel: TransferSpendingModel(
         amount: amount.value,
         message: messageControler.text.trim(),

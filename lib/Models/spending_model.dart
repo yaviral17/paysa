@@ -1,6 +1,7 @@
 import 'package:paysa/Models/shopping_model.dart';
 import 'package:paysa/Models/split_spending_model.dart';
 import 'package:paysa/Models/transfer_spending_model.dart';
+import 'package:paysa/Utils/constants/custom_enums.dart';
 
 class SpendingModel {
   final String id;
@@ -8,6 +9,7 @@ class SpendingModel {
   final String updatedBy;
   final String createdAt;
   final String updatedAt;
+  final SpendingType spendingType;
   final ShoppingModel? shoppingModel;
   final SplitSpendingModel? splitSpendingModel;
   final TransferSpendingModel? transferSpendingModel;
@@ -18,6 +20,7 @@ class SpendingModel {
     required this.updatedBy,
     required this.createdAt,
     required this.updatedAt,
+    required this.spendingType,
     this.shoppingModel,
     this.splitSpendingModel,
     this.transferSpendingModel,
@@ -30,6 +33,7 @@ class SpendingModel {
       updatedBy: map['updatedBy'],
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],
+      spendingType: SpendingTypeExtension.fromString(map['spendingType']),
       shoppingModel: map['shoppingModel'] != null
           ? ShoppingModel.fromJson(map['shoppingModel'])
           : null,
@@ -49,6 +53,7 @@ class SpendingModel {
       'updatedBy': updatedBy,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'spendingType': spendingType.value,
       'shoppingModel': shoppingModel?.toJson(),
       'splitSpendingModel': splitSpendingModel?.toJson(),
       'transferSpendingModel': transferSpendingModel?.toJson(),
