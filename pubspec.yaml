@@ -34,7 +34,7 @@ dependencies:
   flutter_native_splash: ^2.2.8
   iconsax: ^0.0.8
   zoom_tap_animation: ^1.1.0
-  smooth_corner: ^1.1.0
+  smooth_corner: ^1.1.1
   dashed_circular_progress_bar: ^0.0.6
   hugeicons: ^0.0.7
   flutter_glow: ^0.3.2
