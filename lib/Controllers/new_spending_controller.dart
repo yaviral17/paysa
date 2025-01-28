@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Models/shopping_model.dart';
 import 'package:paysa/Models/spending_model.dart';
-import 'package:paysa/Models/transfer_spending_model.dart';
 import 'package:paysa/Utils/constants/custom_enums.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:uuid/uuid.dart';
@@ -125,23 +124,23 @@ class NewSpendingController {
       return;
     }
 
-    SpendingModel spending = SpendingModel(
-      id: Uuid().v4(),
-      createdAt: DateTime.now().toIso8601String(),
-      createdBy: FirebaseAuth.instance.currentUser!.uid,
-      updatedAt: DateTime.now().toIso8601String(),
-      updatedBy: FirebaseAuth.instance.currentUser!.uid,
-      spendingType: spendingMode.value,
-      transferSpendingModel: TransferSpendingModel(
-        amount: amount.value,
-        message: messageControler.text.trim(),
-        billImage: "",
-        dateTime: DateTime.now(),
-        location: "",
-        transferedFrom: FirebaseAuth.instance.currentUser!.phoneNumber!,
-        transferedTo: transferContact.value!.phones.first.number,
-      ),
-    );
+    // SpendingModel spending = SpendingModel(
+    //   id: Uuid().v4(),
+    //   createdAt: DateTime.now().toIso8601String(),
+    //   createdBy: FirebaseAuth.instance.currentUser!.uid,
+    //   updatedAt: DateTime.now().toIso8601String(),
+    //   updatedBy: FirebaseAuth.instance.currentUser!.uid,
+    //   spendingType: spendingMode.value,
+    //   transferSpendingModel: TransferSpendingModel(
+    //     amount: amount.value,
+    //     message: messageControler.text.trim(),
+    //     billImage: "",
+    //     dateTime: DateTime.now(),
+    //     location: "",
+    //     transferedFrom: FirebaseAuth.instance.currentUser!.phoneNumber!,
+    //     transferedTo: transferContact.value!.phones.first.number,
+    //   ),
+    // );
   }
 
   Future<void> splitCreation() async {

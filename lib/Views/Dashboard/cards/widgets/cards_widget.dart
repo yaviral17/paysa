@@ -3,8 +3,8 @@ import 'package:paysa/Utils/sizes.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 class CardsWidget extends StatelessWidget {
-  Color cardColor;
-  CardsWidget({
+  final Color cardColor;
+  const CardsWidget({
     this.cardColor = Colors.orange,
     super.key,
   });

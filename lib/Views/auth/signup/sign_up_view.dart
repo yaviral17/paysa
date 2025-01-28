@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
-import 'package:paysa/Models/UserModel.dart';
+import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/constants/hero_tags.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';

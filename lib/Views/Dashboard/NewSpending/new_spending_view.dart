@@ -57,11 +57,6 @@ class _NewSpendingViewState extends State<NewSpendingView>
     newSpendingController.searchedContacts.value = contactController.contacts;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void searchContact(String query) {
     log('Searching: $query');
 
@@ -72,8 +67,8 @@ class _NewSpendingViewState extends State<NewSpendingView>
     // finad match in nuber or name
     newSpendingController.searchedContacts.value = contactController.contacts
         .where((element) =>
-            element.displayName!.toLowerCase().contains(query.toLowerCase()) ||
-            element.phones.any((element) => element.number!.contains(query)))
+            element.displayName.toLowerCase().contains(query.toLowerCase()) ||
+            element.phones.any((element) => element.number.contains(query)))
         .toList();
   }
 
@@ -357,7 +352,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
             child: ZoomTapAnimation(
               onTap: () {
                 log('Tapped ${contactController.contacts.length}');
-                TextEditingController _searchController =
+                TextEditingController searchController =
                     TextEditingController();
                 Get.bottomSheet(Container(
                   height: PSize.arh(context, 400),
@@ -391,7 +386,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: TextField(
-                          controller: _searchController,
+                          controller: searchController,
                           onChanged: (value) {
                             searchContact(value);
                           },
@@ -440,9 +435,8 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                         width: PSize.arw(context, 40),
                                       ),
                                 title: Text(
-                                  newSpendingController.searchedContacts[index]
-                                          .displayName ??
-                                      '',
+                                  newSpendingController
+                                      .searchedContacts[index].displayName,
                                   style: TextStyle(
                                     fontSize: PSize.arw(context, 14),
                                     color: PColors.primaryText(context),
@@ -451,8 +445,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                 ),
                                 subtitle: Text(
                                   newSpendingController.searchedContacts[index]
-                                          .phones.first.number ??
-                                      '',
+                                      .phones.first.number,
                                   style: TextStyle(
                                     fontSize: PSize.arw(context, 12),
                                     color: PColors.secondaryText(context),
@@ -495,8 +488,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                               ),
                         title: Text(
                           newSpendingController
-                                  .transferContact.value!.displayName ??
-                              '',
+                              .transferContact.value!.displayName,
                           style: TextStyle(
                             fontSize: PSize.arw(context, 14),
                             color: PColors.primaryText(context),
@@ -505,8 +497,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                         ),
                         subtitle: Text(
                           newSpendingController
-                                  .transferContact.value!.phones.first.number ??
-                              '',
+                              .transferContact.value!.phones.first.number,
                           style: TextStyle(
                             fontSize: PSize.arw(context, 12),
                             color: PColors.secondaryText(context),

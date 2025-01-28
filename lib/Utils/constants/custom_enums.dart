@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 
 // spending type enum
 enum SpendingType { shopping, transfer, split, income, other }

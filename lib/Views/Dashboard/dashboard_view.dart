@@ -21,7 +21,6 @@ import 'package:paysa/Views/Dashboard/widget/paysa_navbar_icon_widget.dart';
 import 'package:paysa/app.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
-import 'cards/cards_view.dart';
 import 'stats/stats_view.dart';
 
 class DashMenuView extends StatefulWidget {

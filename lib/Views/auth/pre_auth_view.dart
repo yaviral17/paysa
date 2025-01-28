@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:paysa/Utils/constants/hero_tags.dart';
-import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Views/auth/auth_view.dart';
