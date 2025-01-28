@@ -1,7 +1,8 @@
 plugins {
     id "com.android.application"
     // START: FlutterFire Configuration
-    id 'com.google.gms.google-services' 
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics' 
     // END: FlutterFire Configuration
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
@@ -28,6 +29,7 @@ if (flutterVersionName == null) {
 android {
     namespace "com.example.paysa"
     compileSdk = 34
+    // buildToolsVersion = "23.0.1"
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -49,7 +51,7 @@ android {
        // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 23
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 30
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled true
@@ -71,5 +73,6 @@ flutter {
 
 dependencies {
      implementation 'com.google.firebase:firebase-analytics'
+      implementation 'com.android.support:multidex:1.0.3' // add this line
 }
 apply plugin: 'com.google.gms.google-services'

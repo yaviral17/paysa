@@ -48,7 +48,6 @@ class _HomeViewState extends State<HomeView> {
                 SizedBox(
                   height: PSize.arh(context, 12),
                 ),
-
                 // Header AppBar
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

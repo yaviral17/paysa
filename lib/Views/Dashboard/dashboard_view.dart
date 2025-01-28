@@ -38,15 +38,6 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
   @override
   void initState() {
     super.initState();
-    PFirebaseAPI().initNotifications().then(
-      (token) {
-        log('FCM Token: $token');
-        if (token.isNotEmpty) {
-          FirestoreAPIs.addFcmToken(
-              FirebaseAuth.instance.currentUser!.uid, token);
-        }
-      },
-    );
   }
 
   @override
