@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,7 +31,7 @@ class PNavigate {
       Get.back();
       return;
     }
-    Navigator.of(context ?? Get.context!).pop();
+    Navigator.of(context).pop();
   }
 
   // material page route with right transition animation
@@ -93,7 +95,7 @@ class PNavigate {
           const curve = Curves.ease;
           var tween =
               Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          var offsetAnimation = animation.drive(tween);
+          animation.drive(tween);
           return FadeTransition(
             opacity: animation,
             child: child,

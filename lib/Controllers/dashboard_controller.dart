@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paysa/Utils/constants/flags.dart';
 
 class DashboardController extends GetxController {
   RxInt currentIndex = 0.obs;

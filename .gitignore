@@ -57,3 +57,4 @@ firestore.indexes.json
 .firebaserc
 storage.rules
 lib/firebase_options.dart
+android/app/google-service.json

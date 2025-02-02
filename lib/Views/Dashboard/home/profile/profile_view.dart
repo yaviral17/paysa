@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
-import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
@@ -38,6 +37,7 @@ class _ProfileViewState extends State<ProfileView> {
     // });
   }
 
+  @override
   void dispose() {
     super.dispose();
   }

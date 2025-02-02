@@ -1,10 +1,8 @@
-import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paysa/APIs/firebase_api.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/sizes.dart';

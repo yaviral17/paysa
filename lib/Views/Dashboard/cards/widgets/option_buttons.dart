@@ -3,9 +3,9 @@ import 'package:paysa/Utils/sizes.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 class OptionButtons extends StatelessWidget {
-  IconData icon;
-  String title;
-  OptionButtons({
+  final IconData icon;
+  final String title;
+  const OptionButtons({
     required this.icon,
     required this.title,
     super.key,

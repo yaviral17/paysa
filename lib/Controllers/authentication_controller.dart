@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
-import 'package:paysa/Models/UserModel.dart';
+import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Views/Dashboard/dashboard_view.dart';

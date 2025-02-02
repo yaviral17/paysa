@@ -1,21 +1,10 @@
-import 'dart:developer';
-
-import 'package:card_slider/card_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
-import 'package:paysa/Utils/constants/flags.dart';
-import 'package:paysa/Utils/constants/hero_tags.dart';
-import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
-import 'package:paysa/Views/Dashboard/cards/widgets/circle_flag_widget.dart';
-import 'package:paysa/Views/Dashboard/home/profile/profile_view.dart';
-import 'package:paysa/APIs/firestore_apis.dart';
-import 'package:random_avatar/random_avatar.dart';
-import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class CardsView extends StatefulWidget {
@@ -27,7 +16,7 @@ class CardsView extends StatefulWidget {
 
 class _CardsViewState extends State<CardsView> {
   PageController _pageController = PageController();
-  int _cardIndex = 0;
+  final int _cardIndex = 0;
 
   @override
   void initState() {
@@ -227,8 +216,8 @@ class _CardsViewState extends State<CardsView> {
 }
 
 class CustomIconBtn extends StatelessWidget {
-  IconData icon;
-  CustomIconBtn({
+  final IconData icon;
+  const CustomIconBtn({
     super.key,
     required this.icon,
   });

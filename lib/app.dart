@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paysa/Views/Dashboard/dashboard_view.dart';
-import 'package:paysa/Views/auth/auth_view.dart';
+import 'package:paysa/Utils/theme/theme.dart';
 import 'package:paysa/route.dart';
-import 'package:paysa/utils/theme/theme.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
