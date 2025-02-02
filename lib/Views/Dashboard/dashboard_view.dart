@@ -41,7 +41,9 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
     PFirebaseAPI().initNotifications().then(
       (token) {
         log('FCM Token: $token');
+
         if (token.isNotEmpty) {
+          dashboardController.fcmToken.value = token;
           FirestoreAPIs.addFcmToken(
               FirebaseAuth.instance.currentUser!.uid, token);
         }

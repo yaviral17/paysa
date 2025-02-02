@@ -4,6 +4,7 @@ import 'package:paysa/Utils/constants/flags.dart';
 
 class DashboardController extends GetxController {
   RxInt currentIndex = 0.obs;
+  Rx<String> fcmToken = "".obs;
 
   PageController pageController = PageController(initialPage: 0);
 

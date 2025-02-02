@@ -4,7 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:get/get.dart';
+import 'package:paysa/APIs/firebsae_functions_api.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
+import 'package:paysa/Controllers/dashboard_controller.dart';
+import 'package:paysa/Models/UserModel.dart';
+import 'package:paysa/Models/notification_model.dart';
 import 'package:paysa/Models/shopping_model.dart';
 import 'package:paysa/Models/spending_model.dart';
 import 'package:paysa/Models/transfer_spending_model.dart';
@@ -17,8 +21,8 @@ class NewSpendingController {
   RxString amount = "".obs;
   RxBool isLoading = false.obs;
 
-  Rx<Contact?> transferContact = Rx<Contact?>(null);
-  RxList<Contact> searchedContacts = <Contact>[].obs;
+  Rx<UserModel?> transferUser = Rx<UserModel?>(null);
+  RxList<UserModel> searchedUsers = <UserModel>[].obs;
 
   TextEditingController messageControler = TextEditingController();
 
@@ -96,12 +100,12 @@ class NewSpendingController {
   }
 
   Future<void> transferCreation() async {
-    if (transferContact.value == null) {
+    if (transferUser.value == null) {
       PHelper.showErrorMessageGet(
-        title: "No Contact Selected 😕",
-        message: "Please select a contact !",
+        title: "No User Selected 😕",
+        message: "Please select a user !",
       );
-      log("No Contact Selected");
+      log("No user Selected");
       return;
     }
 
@@ -138,10 +142,37 @@ class NewSpendingController {
         billImage: "",
         dateTime: DateTime.now(),
         location: "",
-        transferedFrom: FirebaseAuth.instance.currentUser!.phoneNumber!,
-        transferedTo: transferContact.value!.phones.first.number,
+        transferedFrom: FirebaseAuth.instance.currentUser!.uid,
+        transferedTo: transferUser.value!.uid!,
       ),
     );
+    await FirestoreAPIs.addSpendingToUser(
+        FirebaseAuth.instance.currentUser!.uid, spending.id);
+    await FirestoreAPIs.addSpendingToUser(
+        transferUser.value!.uid!, spending.id);
+    await FirestoreAPIs.addSpending(spending);
+
+    await FirebsaeFunctionsApi.sendNotifications(
+      [
+        NotificationModel(
+            title: "New Transfer Added",
+            body:
+                "You have received a transfer of ${amount.value} from ${FirebaseAuth.instance.currentUser!.displayName}",
+            token: transferUser.value!.token!),
+        if (Get.find<DashboardController>().fcmToken.value.isNotEmpty)
+          NotificationModel(
+            title: "New Transfer Added",
+            body:
+                "You have sent a transfer of ${amount.value} to ${transferUser.value!.firstname}",
+            token: Get.find<DashboardController>().fcmToken.value,
+          ),
+      ],
+    );
+
+    Get.back();
+    PHelper.showSuccessMessageGet(
+        title: "Spending Created", message: "Spending created successfully");
+    log("Spending Created");
   }
 
   Future<void> splitCreation() async {
