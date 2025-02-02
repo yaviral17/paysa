@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
-import 'package:paysa/Controllers/contact_controller.dart';
 import 'package:paysa/Controllers/new_spending_controller.dart';
+import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/constants/custom_enums.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
@@ -49,27 +50,27 @@ class _NewSpendingViewState extends State<NewSpendingView>
   final NewSpendingController newSpendingController = NewSpendingController();
   final authController = Get.find<AuthenticationController>();
 
-  ContactsController contactController = Get.find<ContactsController>();
-
   @override
   void initState() {
     super.initState();
-    newSpendingController.searchedContacts.value = contactController.contacts;
   }
 
-  void searchContact(String query) {
-    log('Searching: $query');
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
+  void searchUser(String query) async {
     if (query.isEmpty) {
-      newSpendingController.searchedContacts.value = contactController.contacts;
+      newSpendingController.searchedUsers.clear();
       return;
     }
-    // finad match in nuber or name
-    newSpendingController.searchedContacts.value = contactController.contacts
-        .where((element) =>
-            element.displayName.toLowerCase().contains(query.toLowerCase()) ||
-            element.phones.any((element) => element.number.contains(query)))
-        .toList();
+    log('Searching User: $query');
+
+    List<UserModel> users =
+        await FirestoreAPIs.getUsersByEmailOrUsername(query);
+    newSpendingController.searchedUsers.clear();
+    newSpendingController.searchedUsers.addAll(users);
   }
 
   void buttonPressed(String buttonText) {
@@ -206,69 +207,6 @@ class _NewSpendingViewState extends State<NewSpendingView>
             ],
           ),
         ),
-        SmoothContainer(
-          width: PSize.displayWidth(context),
-          margin: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          color: PColors.containerSecondary(context),
-          borderRadius: BorderRadius.circular(16),
-          smoothness: 0.8,
-          child: Row(
-            children: [
-              Icon(
-                HugeIcons.strokeRoundedCreditCard,
-                size: PSize.arw(context, 45),
-              ),
-              SizedBox(
-                width: PSize.arw(context, 8),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'HDFC Bank',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 14),
-                      color: PColors.primaryText(context),
-                    ),
-                  ),
-                  Text(
-                    'Balance: ₹ 98,468.90',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 12),
-                      color: PColors.secondaryText(context),
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: PColors.primary(context),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  minimumSize: Size(
-                    PSize.arw(context, 54),
-                    PSize.arh(context, 42),
-                  ),
-                ),
-                child: Text(
-                  'Change',
-                  style: TextStyle(
-                    fontSize: PSize.arw(context, 14),
-                    color: PColors.primaryText(context),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
 
         const Spacer(),
 
@@ -351,8 +289,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
             maintainState: true,
             child: ZoomTapAnimation(
               onTap: () {
-                log('Tapped ${contactController.contacts.length}');
-                TextEditingController searchController =
+                TextEditingController searchUserController =
                     TextEditingController();
                 Get.bottomSheet(Container(
                   height: PSize.arh(context, 400),
@@ -373,7 +310,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                               },
                             ),
                             Text(
-                              'Select a contact',
+                              'Select a user',
                               style: TextStyle(
                                 fontSize: PSize.arw(context, 18),
                                 color: PColors.primaryText(context),
@@ -386,9 +323,9 @@ class _NewSpendingViewState extends State<NewSpendingView>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: TextField(
-                          controller: searchController,
+                          controller: searchUserController,
                           onChanged: (value) {
-                            searchContact(value);
+                            searchUser(value);
                           },
                           decoration: InputDecoration(
                             hintText: 'Search contact',
@@ -415,28 +352,29 @@ class _NewSpendingViewState extends State<NewSpendingView>
                         () => Expanded(
                           child: ListView.builder(
                             itemCount:
-                                newSpendingController.searchedContacts.length,
+                                newSpendingController.searchedUsers.length,
                             itemBuilder: (context, index) {
                               return ListTile(
                                 leading: newSpendingController
-                                            .searchedContacts[index].photo !=
+                                            .searchedUsers[index].profile !=
                                         null
                                     ? CircleAvatar(
-                                        backgroundImage: MemoryImage(
-                                          newSpendingController
-                                              .searchedContacts[index].photo!,
-                                        ),
+                                        backgroundImage: NetworkImage(
+                                            newSpendingController
+                                                .searchedUsers[index].profile!),
                                         radius: PSize.arw(context, 20),
                                       )
                                     : RandomAvatar(
                                         newSpendingController
-                                            .searchedContacts[index]
-                                            .displayName,
+                                                .searchedUsers[index]
+                                                .firstname ??
+                                            "Random",
                                         width: PSize.arw(context, 40),
                                       ),
                                 title: Text(
                                   newSpendingController
-                                      .searchedContacts[index].displayName,
+                                          .searchedUsers[index].firstname ??
+                                      '',
                                   style: TextStyle(
                                     fontSize: PSize.arw(context, 14),
                                     color: PColors.primaryText(context),
@@ -444,8 +382,9 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                   ),
                                 ),
                                 subtitle: Text(
-                                  newSpendingController.searchedContacts[index]
-                                      .phones.first.number,
+                                  newSpendingController
+                                          .searchedUsers[index].username ??
+                                      '',
                                   style: TextStyle(
                                     fontSize: PSize.arw(context, 12),
                                     color: PColors.secondaryText(context),
@@ -453,9 +392,9 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                   ),
                                 ),
                                 onTap: () {
-                                  newSpendingController.transferContact.value =
+                                  newSpendingController.transferUser.value =
                                       newSpendingController
-                                          .searchedContacts[index];
+                                          .searchedUsers[index];
                                   Get.back();
                                 },
                               );
@@ -467,28 +406,28 @@ class _NewSpendingViewState extends State<NewSpendingView>
                   ),
                 ));
               },
-              child: newSpendingController.transferContact.value != null
+              child: newSpendingController.transferUser.value != null
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: ListTile(
-                        leading: newSpendingController
-                                    .transferContact.value!.photo !=
-                                null
-                            ? CircleAvatar(
-                                backgroundImage: MemoryImage(
-                                  newSpendingController
-                                      .transferContact.value!.photo!,
-                                ),
-                                radius: PSize.arw(context, 20),
-                              )
-                            : RandomAvatar(
-                                newSpendingController
-                                    .transferContact.value!.displayName,
-                                width: PSize.arw(context, 40),
-                              ),
+                        leading:
+                            newSpendingController.transferUser.value!.profile !=
+                                    null
+                                ? CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                      newSpendingController
+                                          .transferUser.value!.profile!,
+                                    ),
+                                    radius: PSize.arw(context, 20),
+                                  )
+                                : RandomAvatar(
+                                    newSpendingController
+                                        .transferUser.value!.firstname!,
+                                    width: PSize.arw(context, 40),
+                                  ),
                         title: Text(
-                          newSpendingController
-                              .transferContact.value!.displayName,
+                          newSpendingController.transferUser.value!.firstname ??
+                              '',
                           style: TextStyle(
                             fontSize: PSize.arw(context, 14),
                             color: PColors.primaryText(context),
@@ -496,8 +435,8 @@ class _NewSpendingViewState extends State<NewSpendingView>
                           ),
                         ),
                         subtitle: Text(
-                          newSpendingController
-                              .transferContact.value!.phones.first.number,
+                          newSpendingController.transferUser.value!.username ??
+                              '',
                           style: TextStyle(
                             fontSize: PSize.arw(context, 12),
                             color: PColors.secondaryText(context),
@@ -506,7 +445,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                         ),
                         trailing: GestureDetector(
                           onTap: () {
-                            newSpendingController.transferContact.value = null;
+                            newSpendingController.transferUser.value = null;
                           },
                           child: Icon(
                             Iconsax.close_circle,
@@ -525,7 +464,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                           color: PColors.primaryText(context),
                         ),
                         title: Text(
-                          'Select a contact',
+                          'Select a user',
                           style: TextStyle(
                             fontSize: PSize.arw(context, 14),
                             color: PColors.primaryText(context),

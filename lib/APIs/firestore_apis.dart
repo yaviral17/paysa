@@ -96,30 +96,12 @@ class FirestoreAPIs {
 
   static Future<bool> addFcmToken(String uid, String token) async {
     try {
-      await users.doc(uid).set({
-        'tokens': FieldValue.arrayUnion([token])
-      }, SetOptions(merge: true));
+      await users.doc(uid).set({'token': token});
       return true;
     } catch (e) {
       log(e.toString());
       return false;
     }
-  }
-
-  static Future<List<String>> getFcmTokens(String uid) async {
-    List<String> tokens = [];
-    await users.doc(uid).get().then((value) {
-      if (value.exists) {
-        tokens = List<String>.from(value.data() as List<String>? ?? []);
-      }
-    });
-    return tokens;
-  }
-
-  static Future<void> removeFcmToken(String uid, String token) async {
-    await users.doc(uid).set({
-      'tokens': FieldValue.arrayRemove([token])
-    }, SetOptions(merge: true));
   }
 
   static Future<void> updateUserData(UserModel user) async {
@@ -145,5 +127,58 @@ class FirestoreAPIs {
         .doc(spendingId)
         .get();
     return SpendingModel.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
+  static Future<List<UserModel>> getUsersByEmailOrUsername(
+      String emailOrUsername) async {
+    List<UserModel> users = [];
+    // await FirebaseFirestore.instance
+    //     .collection('user')
+    //     .where('email', isEqualTo: emailOrUsername)
+    //     .get()
+    //     .then((value) {
+    //   for (var element in value.docs) {
+    //     users.add(UserModel.fromMap(element.data()));
+    //   }
+    // });
+    // await FirebaseFirestore.instance
+    //     .collection('user')
+    //     .where('username', isEqualTo: emailOrUsername)
+    //     .get()
+    //     .then((value) {
+    //   for (var element in value.docs) {
+    //     users.add(UserModel.fromMap(element.data()));
+    //   }
+    // });
+
+    // find email and username which contains the search string
+    await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isGreaterThanOrEqualTo: emailOrUsername)
+        .where('email', isLessThanOrEqualTo: '$emailOrUsername\uf8ff')
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        users.add(UserModel.fromMap(element.data()));
+      }
+    });
+
+    await FirebaseFirestore.instance
+        .collection('user')
+        .where('username', isGreaterThanOrEqualTo: emailOrUsername)
+        .where('username', isLessThanOrEqualTo: '$emailOrUsername\uf8ff')
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        users.add(UserModel.fromMap(element.data()));
+      }
+    });
+
+    users = users.toSet().toList();
+    // check if it is the current user
+    users.removeWhere(
+        (element) => element.uid == FirebaseAuth.instance.currentUser!.uid);
+
+    return users;
   }
 }

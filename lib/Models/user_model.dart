@@ -7,6 +7,7 @@ class UserModel {
   String? phone;
   String? profile;
   AuthType? authtype;
+  String? token;
 
   UserModel({
     this.uid,
@@ -17,6 +18,7 @@ class UserModel {
     this.phone,
     this.profile,
     this.authtype,
+    this.token,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
@@ -29,6 +31,7 @@ class UserModel {
       phone: data['phone'],
       profile: data['profile'],
       authtype: data['authtype'] == "email" ? AuthType.email : AuthType.google,
+      token: data['token'],
     );
   }
 
@@ -42,6 +45,7 @@ class UserModel {
       'phone': phone,
       'profile': profile,
       'authtype': authtype!.value,
+      'token': token,
     };
   }
 }
