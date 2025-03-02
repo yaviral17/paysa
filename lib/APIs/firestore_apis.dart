@@ -28,7 +28,7 @@ class FirestoreAPIs {
   static Future<Map<String, dynamic>> getCurrencyRates() async {
     Map<String, dynamic>? data = await FirebaseFirestore.instance
         .collection('global-data')
-        .doc('currency-rates')
+        .doc('country-data')
         .get()
         .then(
       (value) {
@@ -96,7 +96,7 @@ class FirestoreAPIs {
 
   static Future<bool> addFcmToken(String uid, String token) async {
     try {
-      await users.doc(uid).set({'token': token});
+      await users.doc(uid).update({'token': token});
       return true;
     } catch (e) {
       log(e.toString());
@@ -132,26 +132,6 @@ class FirestoreAPIs {
   static Future<List<UserModel>> getUsersByEmailOrUsername(
       String emailOrUsername) async {
     List<UserModel> users = [];
-    // await FirebaseFirestore.instance
-    //     .collection('user')
-    //     .where('email', isEqualTo: emailOrUsername)
-    //     .get()
-    //     .then((value) {
-    //   for (var element in value.docs) {
-    //     users.add(UserModel.fromMap(element.data()));
-    //   }
-    // });
-    // await FirebaseFirestore.instance
-    //     .collection('user')
-    //     .where('username', isEqualTo: emailOrUsername)
-    //     .get()
-    //     .then((value) {
-    //   for (var element in value.docs) {
-    //     users.add(UserModel.fromMap(element.data()));
-    //   }
-    // });
-
-    // find email and username which contains the search string
     await FirebaseFirestore.instance
         .collection('user')
         .where('email', isGreaterThanOrEqualTo: emailOrUsername)
@@ -174,11 +154,33 @@ class FirestoreAPIs {
       }
     });
 
-    users = users.toSet().toList();
-    // check if it is the current user
+    // remove duplicates withouth using toSet()
+    users = users.fold([], (prev, elem) {
+      if (!prev.contains(elem)) prev.add(elem);
+      return prev;
+    });
+
+    // check if it is the current userth
     users.removeWhere(
         (element) => element.uid == FirebaseAuth.instance.currentUser!.uid);
+    log(users.length.toString());
 
     return users;
+  }
+
+  static Future<List<SpendingModel>> getSpendings(int range) async {
+    List<SpendingModel> spendings = [];
+    await FirebaseFirestore.instance
+        .collection('spendings')
+        .orderBy('date', descending: true)
+        .limit(range)
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        spendings.add(
+            SpendingModel.fromJson(element.data() as Map<String, dynamic>));
+      }
+    });
+    return spendings;
   }
 }

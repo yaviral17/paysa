@@ -81,6 +81,7 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
+      users: [FirebaseAuth.instance.currentUser!.uid],
       shoppingModel: ShoppingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
@@ -145,6 +146,7 @@ class NewSpendingController {
         transferedFrom: FirebaseAuth.instance.currentUser!.uid,
         transferedTo: transferUser.value!.uid!,
       ),
+      users: [FirebaseAuth.instance.currentUser!.uid, transferUser.value!.uid!],
     );
     await FirestoreAPIs.addSpendingToUser(
         FirebaseAuth.instance.currentUser!.uid, spending.id);

@@ -14,6 +14,10 @@ class PHelper {
     return Theme.of(context).platform == TargetPlatform.iOS;
   }
 
+  static String convertToCurrency(double amount, String from, String to) {
+    return amount.toStringAsFixed(2);
+  }
+
   static void systemUIOverlayStyle(BuildContext context,
       {Color? statusBarColor, Color? systemNavigationBarColor}) {
     SystemChrome.setSystemUIOverlayStyle(

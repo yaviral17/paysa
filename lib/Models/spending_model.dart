@@ -13,6 +13,7 @@ class SpendingModel {
   final ShoppingModel? shoppingModel;
   final SplitSpendingModel? splitSpendingModel;
   final TransferSpendingModel? transferSpendingModel;
+  final List<String> users;
 
   SpendingModel({
     required this.id,
@@ -24,6 +25,7 @@ class SpendingModel {
     this.shoppingModel,
     this.splitSpendingModel,
     this.transferSpendingModel,
+    required this.users,
   });
 
   factory SpendingModel.fromJson(Map<String, dynamic> map) {
@@ -43,6 +45,7 @@ class SpendingModel {
       transferSpendingModel: map['transferSpendingModel'] != null
           ? TransferSpendingModel.fromJson(map['transferSpendingModel'])
           : null,
+      users: List<String>.from(map['users'].map((x) => x)),
     );
   }
 
@@ -57,6 +60,7 @@ class SpendingModel {
       'shoppingModel': shoppingModel?.toJson(),
       'splitSpendingModel': splitSpendingModel?.toJson(),
       'transferSpendingModel': transferSpendingModel?.toJson(),
+      'users': users,
     };
   }
 }

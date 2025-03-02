@@ -92,6 +92,7 @@ class SignUpView extends StatelessWidget {
         phone: "",
         profile: "",
         uid: "",
+        username: emailController.text.split('@')[0],
       ),
     );
   }

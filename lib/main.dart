@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,7 +16,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final authController = Get.put(AuthenticationController());
-
+  log('User: ${FirebaseAuth.instance.currentUser}');
   if (FirebaseAuth.instance.currentUser != null) {
     authController.user.value = await FirestoreAPIs.getUser();
   }

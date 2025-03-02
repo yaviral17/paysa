@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
+import 'package:paysa/Controllers/dashboard_controller.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/home/widget/chart_widget.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
@@ -23,15 +25,77 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final authController = Get.find<AuthenticationController>();
   final contactController = Get.put(ContactsController());
-
+  final dashboardController = Get.find<DashboardController>();
   @override
   void initState() {
     super.initState();
   }
 
+  void fetchRecentTransactions() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: PColors.background(context),
+      appBar: AppBar(
+        backgroundColor: PColors.background(context),
+        surfaceTintColor: PColors.background(context),
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 18.0),
+          child: IconButton(
+            onPressed: () {},
+            icon: HugeIcon(
+              icon: Iconsax.search_normal_1,
+              color: PColors.primary(context),
+            ),
+          ),
+        ),
+        title: Container(
+          height: PSize.arw(context, 36),
+          width: PSize.arw(context, 120),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 4,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: PColors.containerSecondary(context),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: PColors.primary(context),
+                size: PSize.arw(context, 24),
+              ),
+              Text(
+                // currency symbol flag icon
+                ' ₹ INR 🇮🇳',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 16),
+                  color: PColors.primaryText(context).withAlpha(200),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: HugeIcon(
+                icon: Iconsax.notification,
+                color: PColors.primary(context),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: ScrollPhysics(),
@@ -40,81 +104,10 @@ class _HomeViewState extends State<HomeView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: PSize.arh(context, 12),
-                ),
-
-                // Header AppBar
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: HugeIcon(
-                        icon: Iconsax.search_normal_1,
-                        color: PColors.primary(context),
-                      ),
-                    ),
-                    Container(
-                      height: PSize.arw(context, 36),
-                      // width: PSize.arw(context, 80),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: PColors.containerSecondary(context),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: PColors.primary(context),
-                            size: PSize.arw(context, 24),
-                          ),
-                          Text(
-                            // currency symbol flag icon
-                            ' ₹ INR 🇮🇳',
-                            style: TextStyle(
-                              fontSize: PSize.arw(context, 16),
-                              color:
-                                  PColors.primaryText(context).withAlpha(200),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: HugeIcon(
-                        icon: Iconsax.notification,
-                        color: PColors.primary(context),
-                      ),
-                    ),
-                    // IconButton(
-                    //   onPressed: () {},
-                    //   icon: HugeIcon(
-                    //     icon: HugeIcons.strokeRoundedQrCode,
-                    //     color: PColors.primary(context),
-                    //   ),
-                    // ),
-                  ],
-                ),
-
-                SizedBox(
-                  height: PSize.arh(context, 16),
-                ),
-
                 firstBgBalanceCard(context),
-
                 SizedBox(
                   height: PSize.arh(context, 18),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Row(
@@ -172,216 +165,9 @@ class _HomeViewState extends State<HomeView> {
                   totalAmount: 2000,
                   currentAmount: 1000,
                 ),
-
                 SizedBox(
                   height: PSize.arh(context, 16),
                 ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Splits',
-                        style: TextStyle(
-                          fontSize: PSize.arw(context, 18),
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0,
-                          color: PColors.primaryText(context),
-                        ),
-                      ),
-                      ZoomTapAnimation(
-                        onTap: () {
-                          HapticFeedback.lightImpact();
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              'View All',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 14),
-                                color: PColors.primary(context),
-                              ),
-                            ),
-                            SizedBox(
-                              width: PSize.arw(context, 4),
-                            ),
-                            Icon(
-                              HugeIcons.strokeRoundedArrowRight01,
-                              color: PColors.primary(context),
-                              size: PSize.arw(context, 14),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-
-                SizedBox(
-                  height: PSize.arh(context, 4),
-                ),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: SmoothContainer(
-                        padding: const EdgeInsets.all(12),
-                        borderRadius: BorderRadius.circular(10),
-                        color: PColors.containerSecondary(context),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Total Splits You Lent',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 14),
-                                color: PColors.secondaryText(context),
-                              ),
-                            ),
-                            SizedBox(
-                              height: PSize.arh(context, 4),
-                            ),
-                            Text(
-                              '\$ 120.0',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 20),
-                                fontWeight: FontWeight.w700,
-                                color: PColors.primary(context),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: PSize.arw(context, 12),
-                    ),
-                    Expanded(
-                      child: SmoothContainer(
-                        padding: const EdgeInsets.all(12),
-                        // margin: const EdgeInsets.all(12),
-                        borderRadius: BorderRadius.circular(10),
-                        color: PColors.containerSecondary(context),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Total Splits You Owe',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 14),
-                                color: PColors.secondaryText(context),
-                              ),
-                            ),
-                            SizedBox(
-                              height: PSize.arh(context, 4),
-                            ),
-                            Text(
-                              '\$ 120.0',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 20),
-                                fontWeight: FontWeight.w700,
-                                color: PColors.error,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(
-                  height: PSize.arh(context, 4),
-                ),
-                ...List.generate(
-                  2,
-                  (index) {
-                    return SmoothContainer(
-                      width: PSize.displayWidth(context),
-                      height: PSize.arh(context, 80),
-                      color: PColors.containerSecondary(context),
-                      margin: const EdgeInsets.symmetric(vertical: 4),
-                      padding: const EdgeInsets.all(12),
-                      borderRadius: BorderRadius.circular(10),
-                      smoothness: 0.8,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FittedBox(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "B'day Party",
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 18),
-                                    color: PColors.primaryText(context),
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: PSize.arh(context, 4),
-                                ),
-                                Text(
-                                  '+ \$ 120.0 ',
-                                  style: TextStyle(
-                                    fontSize: PSize.arw(context, 20),
-                                    fontWeight: FontWeight.w600,
-                                    color: PColors.primary(context),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: PSize.arw(context, 36),
-                            width: PSize.arw(context, 100),
-                            child: AvatarStack(
-                              height: PSize.arw(context, 40),
-                              borderColor: PColors.primaryText(context),
-                              borderWidth: 2,
-                              avatars: List.generate(
-                                6,
-                                (index) => const NetworkImage(
-                                  "https://avatars.githubusercontent.com/u/58760825?s=400&u=735ec2d81037c15adfbeea61a5a3112aef3afb85&v=4",
-                                ),
-                              ),
-                              infoWidgetBuilder: (surplus) =>
-                                  BorderedCircleAvatar(
-                                border: BorderSide(
-                                  color: PColors.primary(context),
-                                  width: 2,
-                                ),
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: CircleAvatar(
-                                    radius: PSize.arw(context, 16),
-                                    backgroundColor: PColors.primary(context),
-                                    child: Text(
-                                      '+$surplus',
-                                      style: TextStyle(
-                                        fontSize: PSize.arw(context, 14),
-                                        color: PColors.primaryText(context),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 12),
-                ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Row(
@@ -423,7 +209,6 @@ class _HomeViewState extends State<HomeView> {
                     ],
                   ),
                 ),
-
                 SizedBox(
                   height: PSize.arh(context, 4),
                 ),
@@ -451,55 +236,63 @@ class _HomeViewState extends State<HomeView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: PSize.arh(context, 10),
-                  ),
-                  Text(
-                    'TOTAL BALANCE',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 16),
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -1,
-                      color: PColors.secondaryText(context),
+            Obx(
+              () => Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: PSize.arh(context, 10),
                     ),
-                  ),
-                  SizedBox(
-                    height: PSize.arh(context, 2),
-                  ),
-                  Text(
-                    '\$12,000.00',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 40),
-                      color: PColors.primaryText(context),
-                      letterSpacing: -1,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'View Details',
+                    Skeletonizer(
+                      enabled: dashboardController.isLoading.value,
+                      child: Text(
+                        'TOTAL BALANCE',
                         style: TextStyle(
-                          fontSize: PSize.arw(context, 14),
-                          color: PColors.primary(context),
+                          fontSize: PSize.arw(context, 16),
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -1,
+                          color: PColors.secondaryText(context),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: HugeIcon(
-                          icon: HugeIcons.strokeRoundedArrowRight01,
-                          color: PColors.primary(context),
+                    ),
+                    SizedBox(
+                      height: PSize.arh(context, 2),
+                    ),
+                    Skeletonizer(
+                      enabled: dashboardController.isLoading.value,
+                      child: Text(
+                        '\$ ${dashboardController.user.value?.balance ?? 0}',
+                        style: TextStyle(
+                          fontSize: PSize.arw(context, 40),
+                          color: PColors.primaryText(context),
+                          letterSpacing: -1,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'View Details',
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 14),
+                            color: PColors.primary(context),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: HugeIcon(
+                            icon: HugeIcons.strokeRoundedArrowRight01,
+                            color: PColors.primary(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(

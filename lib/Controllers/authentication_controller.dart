@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
@@ -29,6 +31,7 @@ class AuthenticationController extends GetxController {
       );
 
       if (!credential.user!.emailVerified) {
+        log("Email not verified");
         PHelper.showErrorMessageGet(
           title: "Email not verified",
           message: "A verification email has been sent to your email address.",
@@ -47,17 +50,20 @@ class AuthenticationController extends GetxController {
       PNavigate.to(const DashMenuView());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
+        log("User not found");
         PHelper.showWarningMessageGet(
           title: "User not found",
           message: "No user found for that email.",
         );
       } else if (e.code == 'wrong-password') {
+        log("Wrong password");
         PHelper.showWarningMessageGet(
           title: "Wrong password",
           message: "Wrong password provided for that user.",
         );
       }
     } catch (e) {
+      log(e.toString());
       PHelper.showErrorMessageGet(
         title: "Something went wrong",
         message: e.toString(),
@@ -106,6 +112,7 @@ class AuthenticationController extends GetxController {
         message: e.toString(),
       );
     } finally {
+      FirebaseAuth.instance.signOut();
       isLoading.value = false;
     }
   }

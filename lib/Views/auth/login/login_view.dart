@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -25,6 +27,7 @@ class LoginView extends StatelessWidget {
     FocusScope.of(Get.context!).unfocus();
     // check if the email is empty
     if (emailController.text.trim().isEmpty) {
+      log('Email is empty');
       PHelper.showErrorMessageGet(
         title: "Email is empty",
         message: "Please enter your email address",
@@ -33,6 +36,7 @@ class LoginView extends StatelessWidget {
     }
     // check if email is valid
     if (!GetUtils.isEmail(emailController.text.trim())) {
+      log('Invalid Email');
       PHelper.showErrorMessageGet(
         title: "Invalid Email",
         message: "Please enter a valid email address",

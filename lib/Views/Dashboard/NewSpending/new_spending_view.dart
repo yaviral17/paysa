@@ -69,6 +69,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
 
     List<UserModel> users =
         await FirestoreAPIs.getUsersByEmailOrUsername(query);
+    log('Users: $users');
     newSpendingController.searchedUsers.clear();
     newSpendingController.searchedUsers.addAll(users);
   }
