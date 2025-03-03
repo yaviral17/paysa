@@ -8,6 +8,7 @@ import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Views/Dashboard/dashboard_view.dart';
 import 'package:paysa/Views/auth/auth_view.dart';
+import 'package:paysa/Views/auth/post_auth_view.dart';
 
 class AuthenticationController extends GetxController {
   final firebaseAuth = FirebaseAuth.instance;
@@ -46,8 +47,12 @@ class AuthenticationController extends GetxController {
       if (credential.user != null) {
         user.value = await FirestoreAPIs.getUser();
       }
-
-      PNavigate.to(const DashMenuView());
+      Get.log(user.value!.isOnboarded.toString());
+      if (!user.value!.isOnboarded!) {
+        PNavigate.to(PostAuthView());
+      } else {
+        PNavigate.to(const DashMenuView());
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         log("User not found");
@@ -123,4 +128,6 @@ class AuthenticationController extends GetxController {
     user.value = newUser;
     PNavigate.toAndRemoveUntil(const AuthView());
   }
+
+  
 }

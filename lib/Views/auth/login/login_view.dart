@@ -8,11 +8,10 @@ import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/constants/hero_tags.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
-import 'package:paysa/Views/auth/signup/sign_up_view.dart';
-import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
-
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/auth/signup/sign_up_view.dart';
+import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -27,7 +26,7 @@ class LoginView extends StatelessWidget {
     FocusScope.of(Get.context!).unfocus();
     // check if the email is empty
     if (emailController.text.trim().isEmpty) {
-      log('Email is empty');
+      log('Email is empty');  
       PHelper.showErrorMessageGet(
         title: "Email is empty",
         message: "Please enter your email address",
@@ -59,6 +58,8 @@ class LoginView extends StatelessWidget {
       passwordController.text,
     );
   }
+
+  RxBool isVisibility = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -163,15 +164,20 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  PaysaPrimaryTextField(
-                    controller: passwordController,
-                    hintText: "Password",
-                    fillColor: PColors.primaryText(context),
-                    prefixIcon: Icon(
-                      Iconsax.lock,
-                      color: PColors.primaryText(context),
+                  Obx(
+                    () => PaysaPrimaryTextField(
+                      controller: passwordController,
+                      hintText: "Password",
+                      isPassword: true,
+                      onObsecure: () =>
+                          isVisibility.value = !isVisibility.value,
+                      fillColor: PColors.primaryText(context),
+                      prefixIcon: Icon(
+                        Iconsax.lock,
+                        color: PColors.primaryText(context),
+                      ),
+                      obscureText: isVisibility.value,
                     ),
-                    obscureText: true,
                   ),
                   SizedBox(
                     height: PSize.arh(context, 14),
@@ -247,11 +253,13 @@ class PaysaPrimaryTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final void Function(String)? onChanged;
   final void Function()? onTap;
+  final bool isPassword;
   final bool obscureText;
   final bool readOnly;
   final TextInputType keyboardType;
   final FilteringTextInputFormatter? inputFormatter;
   final FocusNode? focusNode;
+  final void Function()? onObsecure;
 
   const PaysaPrimaryTextField({
     super.key,
@@ -262,11 +270,13 @@ class PaysaPrimaryTextField extends StatelessWidget {
     this.suffixIcon,
     this.onChanged,
     this.onTap,
+    this.isPassword = false,
     this.obscureText = false,
     this.readOnly = false,
     this.keyboardType = TextInputType.text,
     this.inputFormatter,
     this.focusNode,
+    this.onObsecure,
   });
 
   @override
@@ -281,6 +291,15 @@ class PaysaPrimaryTextField extends StatelessWidget {
       onChanged: onChanged,
       onTap: onTap,
       decoration: InputDecoration(
+        suffixIcon: isPassword
+            ? GestureDetector(
+                onTap: onObsecure,
+                child: Icon(
+                  obscureText ? Iconsax.eye : Iconsax.eye_slash,
+                ),
+              )
+            : suffixIcon,
+        suffixIconColor: PColors.backgroundLight,
         hintText: hintText,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
@@ -302,8 +321,6 @@ class PaysaPrimaryTextField extends StatelessWidget {
         ),
         prefixIcon: prefixIcon,
         fillColor: fillColor ?? PColors.secondaryText(context),
-
-        // focusColor: Theme.of(context).colorScheme.onBackground,
       ),
     );
   }

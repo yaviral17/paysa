@@ -9,6 +9,7 @@ class UserModel {
   AuthType? authtype;
   String? token;
   double? balance;
+  bool? isOnboarded;
 
   UserModel({
     this.uid,
@@ -21,6 +22,7 @@ class UserModel {
     this.authtype,
     this.token,
     this.balance,
+    this.isOnboarded,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
@@ -35,6 +37,7 @@ class UserModel {
       authtype: data['authtype'] == "email" ? AuthType.email : AuthType.google,
       token: data['token'],
       balance: data['balance'],
+      isOnboarded: data['isOnboarded'],
     );
   }
 
@@ -50,6 +53,7 @@ class UserModel {
       'authtype': authtype!.value,
       'token': token,
       'balance': balance,
+      'isOnboarded': isOnboarded,
     };
   }
 }
