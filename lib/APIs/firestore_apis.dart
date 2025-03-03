@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Models/spending_model.dart';
@@ -182,5 +183,16 @@ class FirestoreAPIs {
       }
     });
     return spendings;
+  }
+
+  Future<void> updateUserName(
+      double totatBalance, String userName, String uid) async {
+    try {
+      await users
+          .doc(uid)
+          .update({'balance': totatBalance, 'username': userName});
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }

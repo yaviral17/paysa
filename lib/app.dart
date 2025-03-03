@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       //   }
       //   return const AuthView();
       // },
-      onGenerateRoute: RouteGenerator.generateRoute,
+      onGenerateRoute: RouteGenerator().generateRoute,
       themeMode: ThemeMode.system,
     );
   }
