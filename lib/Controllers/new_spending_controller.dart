@@ -25,6 +25,7 @@ class NewSpendingController {
   RxList<UserModel> searchedUsers = <UserModel>[].obs;
 
   TextEditingController messageControler = TextEditingController();
+  final dashboardController = Get.find<DashboardController>();
 
   Future<void> createSpending() async {
     log("Create Spending : isloading : ${isLoading.value}");
@@ -36,6 +37,16 @@ class NewSpendingController {
       log("Please Wait");
       return;
     }
+
+    if (messageControler.text.trim().isEmpty) {
+      PHelper.showErrorMessageGet(
+        title: "Message is empty 😕",
+        message: "Please enter a message for the spending !",
+      );
+      log("Message is empty");
+      return;
+    }
+
     isLoading.value = true;
     switch (spendingMode.value) {
       case SpendingType.shopping:
@@ -55,6 +66,7 @@ class NewSpendingController {
         break;
     }
     isLoading.value = false;
+    dashboardController.fetchData();
   }
 
   Future<void> shoppingCreation() async {

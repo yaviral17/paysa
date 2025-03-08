@@ -172,13 +172,13 @@ class FirestoreAPIs {
     List<SpendingModel> spendings = [];
     await FirebaseFirestore.instance
         .collection('spendings')
-        .orderBy('date', descending: true)
+        .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy('createdAt', descending: true)
         .limit(range)
         .get()
         .then((value) {
       for (var element in value.docs) {
-        spendings.add(
-            SpendingModel.fromJson(element.data() as Map<String, dynamic>));
+        spendings.add(SpendingModel.fromJson(element.data()));
       }
     });
     return spendings;

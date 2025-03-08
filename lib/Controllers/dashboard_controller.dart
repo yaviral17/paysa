@@ -32,12 +32,13 @@ class DashboardController extends GetxController {
     currencyData.value = await FirestoreAPIs.getCurrencyRates();
     // fetching user data
     user.value = await FirestoreAPIs.getUser();
+    await fetchSpendings(spendingModelsLength);
     isLoading.value = false;
-    fetchSpendings(spendingModelsLength);
   }
 
-  void fetchSpendings(int range) async {
+  Future<void> fetchSpendings(int range) async {
     spendings.value = await FirestoreAPIs.getSpendings(range);
+    log("Spendings: ${spendings.value.length}");
   }
 
   void changePage(int index) {

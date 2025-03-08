@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 
 class PHelper {
@@ -16,6 +17,36 @@ class PHelper {
 
   static String convertToCurrency(double amount, String from, String to) {
     return amount.toStringAsFixed(2);
+  }
+
+  static String dateTimeFormat(DateTime dateTime,
+      {String format = 'dd/MM/yyyy'}) {
+    return DateFormat(format).format(dateTime);
+  }
+
+  static String timeFormat(DateTime dateTime, {String format = 'hh:mm a'}) {
+    return DateFormat(format).format(dateTime);
+  }
+
+  static String timeAgo(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays > 365) {
+      return '${(difference.inDays / 365).floor()} years ago';
+    } else if (difference.inDays > 30) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else if (difference.inDays > 7) {
+      return '${(difference.inDays / 7).floor()} weeks ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} minutes ago';
+    } else {
+      return 'Just now';
+    }
   }
 
   static void systemUIOverlayStyle(BuildContext context,

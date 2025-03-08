@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
+import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/home/widget/chart_widget.dart';
@@ -30,8 +32,6 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
   }
-
-  void fetchRecentTransactions() {}
 
   @override
   Widget build(BuildContext context) {
@@ -101,118 +101,152 @@ class _HomeViewState extends State<HomeView> {
           physics: ScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                firstBgBalanceCard(context),
-                SizedBox(
-                  height: PSize.arh(context, 18),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Goals',
-                        style: TextStyle(
-                          fontSize: PSize.arw(context, 18),
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0,
-                          color: PColors.primaryText(context),
-                        ),
-                      ),
-                      ZoomTapAnimation(
-                        onTap: () {
-                          HapticFeedback.lightImpact();
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              'View All',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 14),
-                                color: PColors.primary(context),
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  firstBgBalanceCard(context),
+                  SizedBox(
+                    height: PSize.arh(context, 4),
+                  ),
+                  ...List.generate(
+                    dashboardController.isLoading.value
+                        ? 3
+                        : dashboardController.spendings.value.length
+                            .clamp(0, 3),
+                    (index) {
+                      if (dashboardController.isLoading.value) {
+                        return Skeletonizer(
+                          enabled: true,
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: PColors.primary(context),
+                              child: Icon(
+                                Iconsax.money,
+                                color: PColors.primaryText(context),
                               ),
                             ),
-                            SizedBox(
-                              width: PSize.arw(context, 4),
-                            ),
-                            Icon(
-                              HugeIcons.strokeRoundedArrowRight01,
-                              color: PColors.primary(context),
-                              size: PSize.arw(context, 14),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 8),
-                ),
-                const GoalTileWidget(
-                  label: 'Goal 1',
-                  totalAmount: 1000,
-                  currentAmount: 500,
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 8),
-                ),
-                const GoalTileWidget(
-                  label: 'Goal 2',
-                  totalAmount: 2000,
-                  currentAmount: 1000,
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 16),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Recent Transactions',
-                        style: TextStyle(
-                          fontSize: PSize.arw(context, 18),
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0,
-                          color: PColors.primaryText(context),
-                        ),
-                      ),
-                      ZoomTapAnimation(
-                        onTap: () {
-                          HapticFeedback.lightImpact();
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              'View All',
+                            title: Text(
+                              "blah blah blah",
                               style: TextStyle(
-                                fontSize: PSize.arw(context, 14),
-                                color: PColors.primary(context),
+                                fontSize: PSize.arw(context, 16),
+                                color: PColors.primaryText(context),
                               ),
                             ),
-                            SizedBox(
-                              width: PSize.arw(context, 4),
+                            subtitle: Text(
+                              "blah blah blah",
+                              style: TextStyle(
+                                fontSize: PSize.arw(context, 14),
+                                color: PColors.secondaryText(context),
+                              ),
                             ),
-                            Icon(
-                              HugeIcons.strokeRoundedArrowRight01,
-                              color: PColors.primary(context),
-                              size: PSize.arw(context, 14),
+                            trailing: Text(
+                              '\$ 234234234',
+                              style: TextStyle(
+                                fontSize: PSize.arw(context, 16),
+                                color: PColors.primaryText(context),
+                              ),
                             ),
-                          ],
+                          ),
+                        );
+                      }
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: PColors.primary(context),
+                          child: Icon(
+                            Iconsax.money,
+                            color: PColors.primaryText(context),
+                          ),
                         ),
-                      )
-                    ],
+                        title: Text(
+                          dashboardController.spendings.value[index]
+                                  .transferSpendingModel?.amount ??
+                              "0",
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 16),
+                            color: PColors.primaryText(context),
+                          ),
+                        ),
+                        subtitle: Text(
+                          PHelper.timeAgo(DateTime.parse(dashboardController
+                              .spendings.value[index].createdAt)),
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 14),
+                            color: PColors.secondaryText(context),
+                          ),
+                        ),
+                        trailing: Text(
+                          '\$ ${dashboardController.spendings.value[index].transferSpendingModel?.amount ?? 0}',
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 16),
+                            color: PColors.primaryText(context),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 4),
-                ),
-              ],
+                  SizedBox(
+                    height: PSize.arh(context, 18),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Goals',
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 18),
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0,
+                            color: PColors.primaryText(context),
+                          ),
+                        ),
+                        ZoomTapAnimation(
+                          onTap: () {
+                            HapticFeedback.lightImpact();
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'View All',
+                                style: TextStyle(
+                                  fontSize: PSize.arw(context, 14),
+                                  color: PColors.primary(context),
+                                ),
+                              ),
+                              SizedBox(
+                                width: PSize.arw(context, 4),
+                              ),
+                              Icon(
+                                HugeIcons.strokeRoundedArrowRight01,
+                                color: PColors.primary(context),
+                                size: PSize.arw(context, 14),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: PSize.arh(context, 8),
+                  ),
+                  const GoalTileWidget(
+                    label: 'Goal 1',
+                    totalAmount: 1000,
+                    currentAmount: 500,
+                  ),
+                  SizedBox(
+                    height: PSize.arh(context, 8),
+                  ),
+                  const GoalTileWidget(
+                    label: 'Goal 2',
+                    totalAmount: 2000,
+                    currentAmount: 1000,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -236,63 +270,61 @@ class _HomeViewState extends State<HomeView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Obx(
-              () => Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: PSize.arh(context, 10),
-                    ),
-                    Skeletonizer(
-                      enabled: dashboardController.isLoading.value,
-                      child: Text(
-                        'TOTAL BALANCE',
-                        style: TextStyle(
-                          fontSize: PSize.arw(context, 16),
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: -1,
-                          color: PColors.secondaryText(context),
-                        ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: PSize.arh(context, 10),
+                  ),
+                  Skeletonizer(
+                    enabled: dashboardController.isLoading.value,
+                    child: Text(
+                      'TOTAL BALANCE',
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 16),
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -1,
+                        color: PColors.secondaryText(context),
                       ),
                     ),
-                    SizedBox(
-                      height: PSize.arh(context, 2),
-                    ),
-                    Skeletonizer(
-                      enabled: dashboardController.isLoading.value,
-                      child: Text(
-                        '\$ ${dashboardController.user.value?.balance ?? 0}',
-                        style: TextStyle(
-                          fontSize: PSize.arw(context, 40),
-                          color: PColors.primaryText(context),
-                          letterSpacing: -1,
-                          fontWeight: FontWeight.w600,
-                        ),
+                  ),
+                  SizedBox(
+                    height: PSize.arh(context, 2),
+                  ),
+                  Skeletonizer(
+                    enabled: dashboardController.isLoading.value,
+                    child: Text(
+                      '\$ ${dashboardController.user.value?.balance ?? 0}',
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 40),
+                        color: PColors.primaryText(context),
+                        letterSpacing: -1,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'View Details',
-                          style: TextStyle(
-                            fontSize: PSize.arw(context, 14),
-                            color: PColors.primary(context),
-                          ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'View Details',
+                        style: TextStyle(
+                          fontSize: PSize.arw(context, 14),
+                          color: PColors.primary(context),
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: HugeIcon(
-                            icon: HugeIcons.strokeRoundedArrowRight01,
-                            color: PColors.primary(context),
-                          ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: HugeIcon(
+                          icon: HugeIcons.strokeRoundedArrowRight01,
+                          color: PColors.primary(context),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             SizedBox(
