@@ -1,21 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/dashboard_view.dart';
 import 'package:paysa/Views/auth/auth_view.dart';
 import 'package:paysa/Views/auth/login/login_view.dart';
+import 'package:paysa/Views/auth/post_auth_view.dart';
 import 'package:paysa/Views/auth/pre_auth_view.dart';
 import 'package:paysa/Views/auth/signup/sign_up_view.dart';
 
 import 'Views/Dashboard/home/profile/profile_view.dart';
 
 class RouteGenerator {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  final authController = Get.put(AuthenticationController());
+  Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
         {
           Widget view = FirebaseAuth.instance.currentUser != null
-              ? const DashMenuView()
+              ? (authController.user.value!.isOnboarded != null) &&
+                      (authController.user.value!.isOnboarded == true)
+                  ? const DashMenuView()
+                  : PostAuthView()
               : const PreAuthView();
 
           return MaterialPageRoute(builder: (_) => view);

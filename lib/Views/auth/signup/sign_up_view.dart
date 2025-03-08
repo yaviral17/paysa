@@ -93,9 +93,13 @@ class SignUpView extends StatelessWidget {
         profile: "",
         uid: "",
         username: emailController.text.split('@')[0],
+        isOnboarded: false,
       ),
     );
   }
+
+  RxBool isPasswordObsecure = true.obs;
+  RxBool isConfirmPasswordObsecure = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -248,15 +252,20 @@ class SignUpView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        PaysaPrimaryTextField(
-                          controller: passwordController,
-                          hintText: "*******",
-                          fillColor: PColors.primary(context),
-                          prefixIcon: Icon(
-                            Iconsax.lock,
-                            color: PColors.primary(context),
+                        Obx(
+                          () => PaysaPrimaryTextField(
+                            isPassword: true,
+                            onObsecure: () => isPasswordObsecure.value =
+                                !isPasswordObsecure.value,
+                            controller: passwordController,
+                            hintText: "*******",
+                            fillColor: PColors.primary(context),
+                            prefixIcon: Icon(
+                              Iconsax.lock,
+                              color: PColors.primary(context),
+                            ),
+                            obscureText: isPasswordObsecure.value,
                           ),
-                          obscureText: true,
                         ),
                         SizedBox(
                           height: PSize.rh(context, 10),
@@ -272,15 +281,20 @@ class SignUpView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        PaysaPrimaryTextField(
-                          controller: confirmPasswordController,
-                          hintText: "*******",
-                          fillColor: PColors.primary(context),
-                          prefixIcon: Icon(
-                            Iconsax.lock,
-                            color: PColors.primary(context),
+                        Obx(
+                          () => PaysaPrimaryTextField(
+                            isPassword: true,
+                            onObsecure: () => isConfirmPasswordObsecure.value =
+                                !isConfirmPasswordObsecure.value,
+                            controller: confirmPasswordController,
+                            hintText: "*******",
+                            fillColor: PColors.primary(context),
+                            prefixIcon: Icon(
+                              Iconsax.lock,
+                              color: PColors.primary(context),
+                            ),
+                            obscureText: isConfirmPasswordObsecure.value,
                           ),
-                          obscureText: true,
                         ),
                         SizedBox(
                           height: PSize.rh(context, 20),

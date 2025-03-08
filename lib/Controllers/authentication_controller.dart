@@ -8,6 +8,7 @@ import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Views/Dashboard/dashboard_view.dart';
 import 'package:paysa/Views/auth/auth_view.dart';
+import 'package:paysa/Views/auth/post_auth_view.dart';
 
 class AuthenticationController extends GetxController {
   final firebaseAuth = FirebaseAuth.instance;
@@ -37,7 +38,7 @@ class AuthenticationController extends GetxController {
           message: "A verification email has been sent to your email address.",
         );
 
-        await credential.user!.sendEmailVerification();
+        await credential.user?.sendEmailVerification();
         FirebaseAuth.instance.signOut();
         isLoading.value = false;
         return;
@@ -46,8 +47,13 @@ class AuthenticationController extends GetxController {
       if (credential.user != null) {
         user.value = await FirestoreAPIs.getUser();
       }
-
-      PNavigate.to(const DashMenuView());
+      Get.log(user.value!.isOnboarded.toString());
+      if ((user.value!.isOnboarded != null) &&
+          (user.value!.isOnboarded == false)) {
+        PNavigate.to(PostAuthView());
+      } else {
+        PNavigate.to(const DashMenuView());
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         log("User not found");
