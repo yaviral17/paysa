@@ -19,7 +19,8 @@ class RouteGenerator {
       case '/':
         {
           Widget view = FirebaseAuth.instance.currentUser != null
-              ? authController.user.value!.isOnboarded!
+              ? (authController.user.value!.isOnboarded != null) &&
+                      (authController.user.value!.isOnboarded == true)
                   ? const DashMenuView()
                   : PostAuthView()
               : const PreAuthView();

@@ -14,6 +14,7 @@ import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/dashboard_view.dart';
+import 'package:paysa/Views/auth/auth_view.dart';
 import 'package:paysa/Views/auth/login/login_view.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 
@@ -143,6 +144,22 @@ class PostAuthView extends StatelessWidget {
                   text: 'Update',
                   isLoading: isLoading.value,
                   onTap: () => update(),
+                  width: PSize.displayWidth(context),
+                  height: PSize.arh(context, 54),
+                  textColor: PColors.primaryText(context),
+                  fontSize: PSize.arw(context, 16),
+                )),
+            SizedBox(
+              height: PSize.arh(context, 8),
+            ),
+            Obx(() => PaysaPrimaryButton(
+                  text: 'Logout',
+                  isLoading: isLoading.value,
+                  onTap: () {
+                    FirebaseAuth.instance.signOut();
+                    PNavigate.toAndReplace(AuthView());
+                  },
+                  color: PColors.error,
                   width: PSize.displayWidth(context),
                   height: PSize.arh(context, 54),
                   textColor: PColors.primaryText(context),

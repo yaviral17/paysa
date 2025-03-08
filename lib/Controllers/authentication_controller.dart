@@ -38,7 +38,7 @@ class AuthenticationController extends GetxController {
           message: "A verification email has been sent to your email address.",
         );
 
-        await credential.user!.sendEmailVerification();
+        await credential.user?.sendEmailVerification();
         FirebaseAuth.instance.signOut();
         isLoading.value = false;
         return;
@@ -48,7 +48,8 @@ class AuthenticationController extends GetxController {
         user.value = await FirestoreAPIs.getUser();
       }
       Get.log(user.value!.isOnboarded.toString());
-      if (!user.value!.isOnboarded!) {
+      if ((user.value!.isOnboarded != null) &&
+          (user.value!.isOnboarded == false)) {
         PNavigate.to(PostAuthView());
       } else {
         PNavigate.to(const DashMenuView());
@@ -128,6 +129,4 @@ class AuthenticationController extends GetxController {
     user.value = newUser;
     PNavigate.toAndRemoveUntil(const AuthView());
   }
-
-  
 }
