@@ -31,7 +31,7 @@ class PaysaPrimaryButton extends StatelessWidget {
     this.borderRadius = 12.0,
     this.textColor = PColors.primaryTextLight,
     this.fontWeight = FontWeight.bold,
-    this.fontFamily = 'OpenSans',
+    this.fontFamily = 'Inter',
     this.prefixWidget,
     this.suffixWidget,
     this.isLoading = false,

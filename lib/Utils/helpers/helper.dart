@@ -14,6 +14,14 @@ class PHelper {
     return Theme.of(context).platform == TargetPlatform.iOS;
   }
 
+  // toggle theme
+  static void toggleTheme(BuildContext context) {
+    ThemeMode themeMode = Theme.of(context).brightness == Brightness.dark
+        ? ThemeMode.light
+        : ThemeMode.dark;
+    Get.changeThemeMode(themeMode);
+  }
+
   static String convertToCurrency(double amount, String from, String to) {
     return amount.toStringAsFixed(2);
   }

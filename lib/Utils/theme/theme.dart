@@ -6,7 +6,7 @@ class PAppTheme {
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    fontFamily: 'OpenSans',
+    fontFamily: 'Inter',
     disabledColor: PColors.secondaryTextLight,
     brightness: Brightness.light,
     primaryColor: PColors.primaryLight,
@@ -20,7 +20,7 @@ class PAppTheme {
 
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
-    fontFamily: 'OpenSans',
+    fontFamily: 'Inter',
     disabledColor: PColors.secondaryTextDark,
     brightness: Brightness.dark,
     primaryColor: PColors
