@@ -9,6 +9,7 @@ class SpendingModel {
   final String updatedBy;
   final String createdAt;
   final String updatedAt;
+  final String billImage;
   final SpendingType spendingType;
   final ShoppingModel? shoppingModel;
   final SplitSpendingModel? splitSpendingModel;
@@ -21,6 +22,7 @@ class SpendingModel {
     required this.updatedBy,
     required this.createdAt,
     required this.updatedAt,
+    required this.billImage,
     required this.spendingType,
     this.shoppingModel,
     this.splitSpendingModel,
@@ -35,6 +37,7 @@ class SpendingModel {
       updatedBy: map['updatedBy'],
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],
+      billImage: map['billImage'],
       spendingType: SpendingTypeExtension.fromString(map['spendingType']),
       shoppingModel: map['shoppingModel'] != null
           ? ShoppingModel.fromJson(map['shoppingModel'])
@@ -56,6 +59,7 @@ class SpendingModel {
       'updatedBy': updatedBy,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'billImage': billImage,
       'spendingType': spendingType.value,
       'shoppingModel': shoppingModel?.toJson(),
       'splitSpendingModel': splitSpendingModel?.toJson(),

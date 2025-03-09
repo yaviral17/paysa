@@ -2,7 +2,6 @@ class ShoppingModel {
   final String message;
   final String amount;
   final DateTime dateTime;
-  final String billImage;
   final String? location;
   final String? category;
 
@@ -10,7 +9,6 @@ class ShoppingModel {
     required this.message,
     required this.amount,
     required this.dateTime,
-    required this.billImage,
     this.location,
     this.category,
   });
@@ -20,7 +18,6 @@ class ShoppingModel {
       message: json['message'],
       amount: json['amount'],
       dateTime: DateTime.parse(json['dateTime']),
-      billImage: json['billImage'],
       location: json['location'],
       category: json['category'],
     );
@@ -31,7 +28,6 @@ class ShoppingModel {
       'message': message,
       'amount': amount,
       'dateTime': dateTime.toIso8601String(),
-      'billImage': billImage,
       'location': location,
       'category': category,
     };

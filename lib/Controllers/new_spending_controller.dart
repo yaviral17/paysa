@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_contacts/contact.dart';
 import 'package:get/get.dart';
 import 'package:paysa/APIs/firebsae_functions_api.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
@@ -37,6 +36,7 @@ class NewSpendingController {
       return;
     }
     isLoading.value = true;
+
     switch (spendingMode.value) {
       case SpendingType.shopping:
         await shoppingCreation();
@@ -54,6 +54,7 @@ class NewSpendingController {
         log("Other");
         break;
     }
+
     isLoading.value = false;
   }
 
@@ -81,11 +82,11 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
+      billImage: "",
       users: [FirebaseAuth.instance.currentUser!.uid],
       shoppingModel: ShoppingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
-        billImage: "",
         dateTime: DateTime.now(),
         location: "",
         category: "",
@@ -137,10 +138,10 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
+      billImage: "",
       transferSpendingModel: TransferSpendingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
-        billImage: "",
         dateTime: DateTime.now(),
         location: "",
         transferedFrom: FirebaseAuth.instance.currentUser!.uid,

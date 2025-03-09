@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Controllers/new_spending_controller.dart';
@@ -28,6 +29,9 @@ class NewSpendingView extends StatefulWidget {
 class _NewSpendingViewState extends State<NewSpendingView>
     with SingleTickerProviderStateMixin {
   RxBool isBottomsheetOpen = false.obs;
+
+  final _imagePicker = ImagePicker();
+  File _image = File('');
 
   // Rx<Contact?> transferContact = Rx<Contact?>(null);
   // RxList<Contact> searchedContacts = <Contact>[].obs;
@@ -58,6 +62,23 @@ class _NewSpendingViewState extends State<NewSpendingView>
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future getImage(ImageSource source) async {
+    try {
+      final pickedFile = await _imagePicker.pickImage(source: source);
+
+      setState(() {
+        if (pickedFile != null) {
+          _image = File(pickedFile.path);
+          Get.log('Image Path: ${_image.path}');
+        } else {
+          print('No image selected.');
+        }
+      });
+    } catch (e) {
+      print('Error picking image: $e');
+    }
   }
 
   void searchUser(String query) async {
@@ -157,10 +178,20 @@ class _NewSpendingViewState extends State<NewSpendingView>
           smoothness: 0.8,
           child: Row(
             children: [
-              Icon(
-                HugeIcons.strokeRoundedImage01,
-                size: PSize.arw(context, 45),
-              ),
+              _image.existsSync()
+                  ? ClipRRect(
+                      // borderRadius: BorderRadius.circular(16),
+                      child: Image.file(
+                        _image,
+                        width: PSize.arw(context, 45),
+                        height: PSize.arh(context, 45),
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Icon(
+                      HugeIcons.strokeRoundedImage01,
+                      size: PSize.arw(context, 45),
+                    ),
               SizedBox(
                 width: PSize.arw(context, 8),
               ),
@@ -174,20 +205,28 @@ class _NewSpendingViewState extends State<NewSpendingView>
                       color: PColors.primaryText(context),
                     ),
                   ),
-                  Text(
-                    'Add a receipt to keep track of your spending',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 12),
-                      color: PColors.secondaryText(context),
+                  SizedBox(
+                    width: PSize.arw(context, 150),
+                    child: Text(
+                      'Add a receipt to keep track of your spending',
+                      softWrap: true,
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 12),
+                        color: PColors.secondaryText(context),
+                      ),
                     ),
                   ),
                 ],
               ),
               const Spacer(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await getImage(ImageSource.gallery);
+                },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: PColors.primary(context),
+                  backgroundColor: _image.existsSync()
+                      ? Colors.blue
+                      : PColors.primary(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -197,7 +236,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
                   ),
                 ),
                 child: Text(
-                  '   Add   ',
+                  _image.existsSync() ? '   Change   ' : '   Add   ',
                   style: TextStyle(
                     fontSize: PSize.arw(context, 14),
                     color: PColors.primaryText(context),
