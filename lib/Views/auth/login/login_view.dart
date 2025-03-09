@@ -26,7 +26,7 @@ class LoginView extends StatelessWidget {
     FocusScope.of(Get.context!).unfocus();
     // check if the email is empty
     if (emailController.text.trim().isEmpty) {
-      log('Email is empty');  
+      log('Email is empty');
       PHelper.showErrorMessageGet(
         title: "Email is empty",
         message: "Please enter your email address",
@@ -137,7 +137,7 @@ class LoginView extends StatelessWidget {
                       'Email',
                       style: TextStyle(
                         fontSize: PSize.rw(context, 14),
-                        fontFamily: 'OpenSans',
+                        fontFamily: 'Inter',
                       ),
                     ),
                   ),
@@ -160,7 +160,7 @@ class LoginView extends StatelessWidget {
                       'Password',
                       style: TextStyle(
                         fontSize: PSize.arw(context, 14),
-                        fontFamily: 'OpenSans',
+                        fontFamily: 'Inter',
                       ),
                     ),
                   ),
@@ -194,7 +194,7 @@ class LoginView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: PSize.arw(context, 14),
                             color: PColors.primaryText(context),
-                            fontFamily: 'OpenSans',
+                            fontFamily: 'Inter',
                           ),
                         ),
                       ),
@@ -295,7 +295,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
             ? GestureDetector(
                 onTap: onObsecure,
                 child: Icon(
-                  obscureText ? Iconsax.eye : Iconsax.eye_slash,
+                  !obscureText ? Iconsax.eye : Iconsax.eye_slash,
                 ),
               )
             : suffixIcon,

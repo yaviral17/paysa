@@ -90,7 +90,7 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
           dashboardController.currentIndex.value = index;
         },
         controller: dashboardController.pageController,
-        physics: PageScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           !isPlatformIos ? const SafeArea(child: HomeView()) : const HomeView(),
           !isPlatformIos
