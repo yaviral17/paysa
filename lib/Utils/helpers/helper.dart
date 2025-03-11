@@ -1,23 +1,19 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:paysa/Utils/theme/colors.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
-
-import 'package:permission_handler/permission_handler.dart';
-
 import 'package:path_provider/path_provider.dart';
-
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:paysa/Utils/theme/colors.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class PHelper {
   // Check if the current theme is dark
@@ -281,5 +277,19 @@ class PHelper {
     }
     log('Storage permission denied');
     return permissionToRequest.status;
+  }
+
+  bool isImage(File file) {
+    final ext = file.path.toLowerCase();
+    return ext.endsWith('.jpg') ||
+        ext.endsWith('.jpeg') ||
+        ext.endsWith('.png') ||
+        ext.endsWith('.gif') ||
+        ext.endsWith('.bmp') ||
+        ext.endsWith('.webp');
+  }
+
+  bool isPdf(File file) {
+    return file.path.toLowerCase().endsWith('.pdf');
   }
 }

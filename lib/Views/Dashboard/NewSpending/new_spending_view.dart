@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_contacts/contact.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Controllers/new_spending_controller.dart';
 import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/constants/custom_enums.dart';
+import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
@@ -29,9 +31,6 @@ class NewSpendingView extends StatefulWidget {
 class _NewSpendingViewState extends State<NewSpendingView>
     with SingleTickerProviderStateMixin {
   RxBool isBottomsheetOpen = false.obs;
-
-  final _imagePicker = ImagePicker();
-  File _image = File('');
 
   // Rx<Contact?> transferContact = Rx<Contact?>(null);
   // RxList<Contact> searchedContacts = <Contact>[].obs;
@@ -64,14 +63,14 @@ class _NewSpendingViewState extends State<NewSpendingView>
     super.dispose();
   }
 
-  Future getImage(ImageSource source) async {
+  Future getFile(ImageSource source) async {
     try {
-      final pickedFile = await _imagePicker.pickImage(source: source);
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
 
       setState(() {
-        if (pickedFile != null) {
-          _image = File(pickedFile.path);
-          Get.log('Image Path: ${_image.path}');
+        if (result != null) {
+          newSpendingController.image.value = File(result!.files.single.path!);
+          Get.log('Image Path: ${newSpendingController.image.value.path}');
         } else {
           print('No image selected.');
         }
@@ -178,16 +177,20 @@ class _NewSpendingViewState extends State<NewSpendingView>
           smoothness: 0.8,
           child: Row(
             children: [
-              _image.existsSync()
-                  ? ClipRRect(
-                      // borderRadius: BorderRadius.circular(16),
-                      child: Image.file(
-                        _image,
-                        width: PSize.arw(context, 45),
-                        height: PSize.arh(context, 45),
-                        fit: BoxFit.cover,
-                      ),
-                    )
+              newSpendingController.image.value.existsSync()
+                  ? PHelper().isImage(newSpendingController.image.value)
+                      ? ClipRRect(
+                          // borderRadius: BorderRadius.circular(16),
+                          child: Image.file(
+                            newSpendingController.image.value,
+                            width: PSize.arw(context, 45),
+                            height: PSize.arh(context, 45),
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : ClipRRect(
+                          child: Icon(Icons.picture_as_pdf),
+                        )
                   : Icon(
                       HugeIcons.strokeRoundedImage01,
                       size: PSize.arw(context, 45),
@@ -198,13 +201,30 @@ class _NewSpendingViewState extends State<NewSpendingView>
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Add a receipt',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 14),
-                      color: PColors.primaryText(context),
-                    ),
-                  ),
+                  newSpendingController.image.value.existsSync()
+                      ? SizedBox(
+                          width: 100,
+                          child: Text(
+                            newSpendingController.image.value.path
+                                .split('/')
+                                .last,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            // maxLines: 1,
+                            // textWidthBasis: TextWidthBasis.longestLine,
+                            style: TextStyle(
+                              fontSize: PSize.arw(context, 14),
+                              color: PColors.primaryText(context),
+                            ),
+                          ),
+                        )
+                      : Text(
+                          'Add a receipt',
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 14),
+                            color: PColors.primaryText(context),
+                          ),
+                        ),
                   SizedBox(
                     width: PSize.arw(context, 150),
                     child: Text(
@@ -221,12 +241,13 @@ class _NewSpendingViewState extends State<NewSpendingView>
               const Spacer(),
               ElevatedButton(
                 onPressed: () async {
-                  await getImage(ImageSource.gallery);
+                  await getFile(ImageSource.gallery);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _image.existsSync()
-                      ? Colors.blue
-                      : PColors.primary(context),
+                  backgroundColor:
+                      newSpendingController.image.value.existsSync()
+                          ? Colors.blue
+                          : PColors.primary(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -236,7 +257,9 @@ class _NewSpendingViewState extends State<NewSpendingView>
                   ),
                 ),
                 child: Text(
-                  _image.existsSync() ? '   Change   ' : '   Add   ',
+                  newSpendingController.image.value.existsSync()
+                      ? '   Change   '
+                      : '   Add   ',
                   style: TextStyle(
                     fontSize: PSize.arw(context, 14),
                     color: PColors.primaryText(context),
