@@ -2,7 +2,6 @@ class TransferSpendingModel {
   final String message;
   final String amount;
   final DateTime dateTime;
-  final String? billImage;
   final String? location;
   final String transferedTo;
   final String transferedFrom;
@@ -11,7 +10,6 @@ class TransferSpendingModel {
     required this.message,
     required this.amount,
     required this.dateTime,
-    this.billImage,
     this.location,
     required this.transferedTo,
     required this.transferedFrom,
@@ -22,7 +20,6 @@ class TransferSpendingModel {
       message: json['message'],
       amount: json['amount'],
       dateTime: DateTime.parse(json['dateTime']),
-      billImage: json['billImage'],
       location: json['location'],
       transferedTo: json['transferedTo'],
       transferedFrom: json['transferedFrom'],
@@ -34,7 +31,6 @@ class TransferSpendingModel {
       'message': message,
       'amount': amount,
       'dateTime': dateTime.toIso8601String(),
-      'billImage': billImage,
       'location': location,
       'transferedTo': transferedTo,
       'transferedFrom': transferedFrom,

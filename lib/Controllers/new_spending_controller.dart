@@ -1,8 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_contacts/contact.dart';
 import 'package:get/get.dart';
 import 'package:paysa/APIs/firebsae_functions_api.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
@@ -21,12 +22,32 @@ class NewSpendingController {
   RxString amount = "".obs;
   RxBool isLoading = false.obs;
 
+  Rx<File> image = File('').obs;
+
+  final storageRef = FirebaseStorage.instance.ref();
+
   Rx<UserModel?> transferUser = Rx<UserModel?>(null);
   RxList<UserModel> searchedUsers = <UserModel>[].obs;
 
   TextEditingController messageControler = TextEditingController();
 
+  Future<String?> addFileFirebaseStorage({File? file, String? fileName}) async {
+    try {
+      final spendingStorage = storageRef.child('spendings').child(fileName!);
+
+      await spendingStorage.putFile(file!);
+
+      String imageUrl = await spendingStorage.getDownloadURL();
+
+      return imageUrl;
+    } catch (e) {
+      log('Error uploading image: $e');
+      return null;
+    }
+  }
+
   Future<void> createSpending() async {
+    log("Create Spending : isloading : ${isLoading.value}");
     log("Create Spending : isloading : ${isLoading.value}");
     if (isLoading.value) {
       PHelper.showInfoMessageGet(
@@ -37,6 +58,7 @@ class NewSpendingController {
       return;
     }
     isLoading.value = true;
+
     switch (spendingMode.value) {
       case SpendingType.shopping:
         await shoppingCreation();
@@ -54,6 +76,7 @@ class NewSpendingController {
         log("Other");
         break;
     }
+
     isLoading.value = false;
   }
 
@@ -74,18 +97,23 @@ class NewSpendingController {
       return;
     }
 
+    String id = Uuid().v4();
+
+    String? imageUrl =
+        await addFileFirebaseStorage(fileName: id, file: image.value);
+
     SpendingModel spending = SpendingModel(
-      id: Uuid().v4(),
+      id: id,
       createdAt: DateTime.now().toIso8601String(),
       createdBy: FirebaseAuth.instance.currentUser!.uid,
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
+      billImage: imageUrl!,
       users: [FirebaseAuth.instance.currentUser!.uid],
       shoppingModel: ShoppingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
-        billImage: "",
         dateTime: DateTime.now(),
         location: "",
         category: "",
@@ -130,17 +158,22 @@ class NewSpendingController {
       return;
     }
 
+    String id = Uuid().v4();
+
+    String? imageUrl =
+        await addFileFirebaseStorage(fileName: id, file: image.value);
+
     SpendingModel spending = SpendingModel(
-      id: Uuid().v4(),
+      id: id,
       createdAt: DateTime.now().toIso8601String(),
       createdBy: FirebaseAuth.instance.currentUser!.uid,
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
+      billImage: imageUrl!,
       transferSpendingModel: TransferSpendingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
-        billImage: "",
         dateTime: DateTime.now(),
         location: "",
         transferedFrom: FirebaseAuth.instance.currentUser!.uid,
