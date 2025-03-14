@@ -102,7 +102,7 @@ class PostAuthView extends StatelessWidget {
                 'Total Balance',
                 style: TextStyle(
                   fontSize: PSize.rw(context, 14),
-                  fontFamily: 'OpenSans',
+                  fontFamily: 'Inter',
                 ),
               ),
             ),
@@ -126,7 +126,7 @@ class PostAuthView extends StatelessWidget {
                 'Username',
                 style: TextStyle(
                   fontSize: PSize.rw(context, 14),
-                  fontFamily: 'OpenSans',
+                  fontFamily: 'Inter',
                 ),
               ),
             ),
