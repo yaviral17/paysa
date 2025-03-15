@@ -169,9 +169,9 @@ class ChatScreenView extends StatelessWidget {
           ),
 
           // Message input text field
-          CustChatTextField(),
         ],
       ),
+      bottomNavigationBar: CustChatTextField(),
     );
   }
 }

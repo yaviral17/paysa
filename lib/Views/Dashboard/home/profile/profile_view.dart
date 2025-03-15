@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:random_avatar/random_avatar.dart';
@@ -35,53 +36,57 @@ class _ProfileViewState extends State<ProfileView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    authController.logout();
-                  },
-                  child: Text('Logout',
-                      style: TextStyle(color: Colors.red, fontSize: 16)),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    child: Text('Edit Profile',
+                        style: TextStyle(
+                            color: PColors.bottomNavIconActive(context),
+                            fontSize: 16)),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      authController.logout();
+                    },
+                    child: Text('Logout',
+                        style: TextStyle(color: Colors.red, fontSize: 16)),
+                  ),
+                ],
               ),
               CircleAvatar(
-                radius: 40,
+                radius: PSize.displayWidth(context) * 0.12,
                 backgroundColor: Colors.grey.shade300,
                 child: RandomAvatar(
                   '${authController.user.value!.firstname!} ${authController.user.value!.lastname!}',
-                  height: 80,
+                  // height: 80,
                 ),
               ),
               const SizedBox(height: 12),
-              Text(
-                '${authController.user.value!.firstname!} ${authController.user.value!.lastname!}',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: PColors.primaryTextDark,
-                ),
-              ),
-              Text(
-                authController.user.value!.email!,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: PColors.secondaryText(context),
-                ),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Edit Profile'),
-              ),
+              buildSettingsSection('Basic information 📑', [
+                buildSettingsTile(
+                    context, HugeIcons.strokeRoundedUser, 'Full Name',
+                    trailing:
+                        '${authController.user.value!.firstname!} ${authController.user.value!.lastname!}'),
+                buildSettingsTile(
+                    context, HugeIcons.strokeRoundedUserAccount, 'Username',
+                    trailing: authController.user.value!.username!),
+                buildSettingsTile(
+                    context, HugeIcons.strokeRoundedMail01, 'Email',
+                    trailing: authController.user.value!.email!),
+              ]),
               const SizedBox(height: 20),
-              // buildSettingsSection('Content', [
-              //   buildSettingsTile(
-              //       context, HugeIcons.strokeRoundedPlusMinus, 'Favorites'),
-              //   buildSettingsTile(
-              //       context, HugeIcons.strokeRoundedDownload01, 'Downloads'),
-              // ]),
-              buildSettingsSection('Preferences', [
+              buildSettingsSection('Preferences 🔧', [
+                buildSettingsTile(
+                  context,
+                  HugeIcons.strokeRoundedMoon,
+                  'Theme',
+                  trailing: PHelper.isDarkMode(context) ? 'Dark' : 'Light',
+                  onTap: () {
+                    PHelper.toggleTheme(context);
+                  },
+                ),
                 buildSettingsTile(
                     context, HugeIcons.strokeRoundedShield02, 'Privacy Policy',
                     trailing: 'Read'),
@@ -101,15 +106,7 @@ class _ProfileViewState extends State<ProfileView> {
                 buildSettingsTile(
                     context, HugeIcons.strokeRoundedUser, 'About Developer',
                     trailing: 'Read'),
-                buildSettingsTile(
-                  context,
-                  HugeIcons.strokeRoundedMoon,
-                  'Theme',
-                  trailing: PHelper.isDarkMode(context) ? 'Dark' : 'Light',
-                  onTap: () {
-                    PHelper.toggleTheme(context);
-                  },
-                ),
+
                 // buildToggleTile(context, 'Background Play', true),
                 // buildToggleTile(context, 'Download via WiFi only', false),
                 // buildToggleTile(context, 'Autoplay', true),
@@ -132,7 +129,7 @@ class _ProfileViewState extends State<ProfileView> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: PColors.primaryTextDark,
+              color: PColors.primaryText(context),
             ),
           ),
         ),

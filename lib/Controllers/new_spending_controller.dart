@@ -109,7 +109,7 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
-      billImage: imageUrl!,
+      billImage: imageUrl ?? "",
       users: [FirebaseAuth.instance.currentUser!.uid],
       shoppingModel: ShoppingModel(
         amount: amount.value,

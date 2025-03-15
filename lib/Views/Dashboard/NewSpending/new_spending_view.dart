@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_contacts/contact.dart';
 import 'package:get/get.dart';
@@ -63,18 +64,83 @@ class _NewSpendingViewState extends State<NewSpendingView>
     super.dispose();
   }
 
-  Future getFile(ImageSource source) async {
+  Future getFile() async {
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      FilePickerResult? result;
+      if (Platform.isIOS) {
+        bool fromGallary = false;
+        showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('Select receipt from'),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () async {
+                    await FilePicker.platform
+                        .pickFiles(
+                      type: FileType.image,
+                    )
+                        .then(
+                      (value) {
+                        newSpendingController.image.value =
+                            File(value!.files.single.path!);
+                      },
+                    );
 
-      setState(() {
-        if (result != null) {
-          newSpendingController.image.value = File(result!.files.single.path!);
-          Get.log('Image Path: ${newSpendingController.image.value.path}');
-        } else {
-          print('No image selected.');
-        }
-      });
+                    fromGallary = true;
+                    Navigator.pop(context);
+                  },
+                  child: Text('Gallery'),
+                ),
+                CupertinoDialogAction(
+                  onPressed: () async {
+                    await FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: [
+                        'webp',
+                        'jpg',
+                        'jpeg',
+                        'png',
+                        'pdf',
+                        'doc',
+                        'docx',
+                        'xls',
+                        'xlsx'
+                      ],
+                    ).then((value) {
+                      newSpendingController.image.value =
+                          File(value!.files.single.path!);
+                      return value;
+                    });
+                    fromGallary = false;
+                    Navigator.pop(context);
+                  },
+                  child: Text('Files'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: [
+            'webp',
+            'jpg',
+            'jpeg',
+            'png',
+            'pdf',
+            'doc',
+            'docx',
+            'xls',
+            'xlsx'
+          ],
+        ).then((value) {
+          newSpendingController.image.value = File(value!.files.single.path!);
+          return value;
+        });
+      }
     } catch (e) {
       print('Error picking image: $e');
     }
@@ -163,111 +229,113 @@ class _NewSpendingViewState extends State<NewSpendingView>
             ],
           ),
         ),
-        SmoothContainer(
-          width: PSize.displayWidth(context),
-          margin: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 12,
-            bottom: 12,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          color: PColors.containerSecondary(context),
-          borderRadius: BorderRadius.circular(16),
-          smoothness: 0.8,
-          child: Row(
-            children: [
-              newSpendingController.image.value.existsSync()
-                  ? PHelper().isImage(newSpendingController.image.value)
-                      ? ClipRRect(
-                          // borderRadius: BorderRadius.circular(16),
-                          child: Image.file(
-                            newSpendingController.image.value,
-                            width: PSize.arw(context, 45),
-                            height: PSize.arh(context, 45),
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : ClipRRect(
-                          child: Icon(Icons.picture_as_pdf),
-                        )
-                  : Icon(
-                      HugeIcons.strokeRoundedImage01,
-                      size: PSize.arw(context, 45),
-                    ),
-              SizedBox(
-                width: PSize.arw(context, 8),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  newSpendingController.image.value.existsSync()
-                      ? SizedBox(
-                          width: 100,
-                          child: Text(
-                            newSpendingController.image.value.path
-                                .split('/')
-                                .last,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            // maxLines: 1,
-                            // textWidthBasis: TextWidthBasis.longestLine,
+        Obx(
+          () => SmoothContainer(
+            width: PSize.displayWidth(context),
+            margin: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 12,
+              bottom: 12,
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            color: PColors.containerSecondary(context),
+            borderRadius: BorderRadius.circular(16),
+            smoothness: 0.8,
+            child: Row(
+              children: [
+                newSpendingController.image.value.existsSync()
+                    ? PHelper().isImage(newSpendingController.image.value)
+                        ? ClipRRect(
+                            // borderRadius: BorderRadius.circular(16),
+                            child: Image.file(
+                              newSpendingController.image.value,
+                              width: PSize.arw(context, 45),
+                              height: PSize.arh(context, 45),
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : ClipRRect(
+                            child: Icon(Icons.picture_as_pdf),
+                          )
+                    : Icon(
+                        HugeIcons.strokeRoundedImage01,
+                        size: PSize.arw(context, 45),
+                      ),
+                SizedBox(
+                  width: PSize.arw(context, 8),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    newSpendingController.image.value.existsSync()
+                        ? SizedBox(
+                            width: 100,
+                            child: Text(
+                              newSpendingController.image.value.path
+                                  .split('/')
+                                  .last,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              // maxLines: 1,
+                              // textWidthBasis: TextWidthBasis.longestLine,
+                              style: TextStyle(
+                                fontSize: PSize.arw(context, 14),
+                                color: PColors.primaryText(context),
+                              ),
+                            ),
+                          )
+                        : Text(
+                            'Add a receipt',
                             style: TextStyle(
                               fontSize: PSize.arw(context, 14),
                               color: PColors.primaryText(context),
                             ),
                           ),
-                        )
-                      : Text(
-                          'Add a receipt',
-                          style: TextStyle(
-                            fontSize: PSize.arw(context, 14),
-                            color: PColors.primaryText(context),
-                          ),
+                    SizedBox(
+                      width: PSize.arw(context, 150),
+                      child: Text(
+                        'Add a receipt to keep track of your spending',
+                        softWrap: true,
+                        style: TextStyle(
+                          fontSize: PSize.arw(context, 12),
+                          color: PColors.secondaryText(context),
                         ),
-                  SizedBox(
-                    width: PSize.arw(context, 150),
-                    child: Text(
-                      'Add a receipt to keep track of your spending',
-                      softWrap: true,
-                      style: TextStyle(
-                        fontSize: PSize.arw(context, 12),
-                        color: PColors.secondaryText(context),
                       ),
                     ),
+                  ],
+                ),
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: () async {
+                    await getFile();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        newSpendingController.image.value.existsSync()
+                            ? Colors.blue
+                            : PColors.primary(context),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    minimumSize: Size(
+                      PSize.arw(context, 54),
+                      PSize.arh(context, 42),
+                    ),
                   ),
-                ],
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: () async {
-                  await getFile(ImageSource.gallery);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      newSpendingController.image.value.existsSync()
-                          ? Colors.blue
-                          : PColors.primary(context),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  minimumSize: Size(
-                    PSize.arw(context, 54),
-                    PSize.arh(context, 42),
+                  child: Text(
+                    newSpendingController.image.value.existsSync()
+                        ? '   Change   '
+                        : '   Add   ',
+                    style: TextStyle(
+                      fontSize: PSize.arw(context, 14),
+                      color: PColors.primaryText(context),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-                child: Text(
-                  newSpendingController.image.value.existsSync()
-                      ? '   Change   '
-                      : '   Add   ',
-                  style: TextStyle(
-                    fontSize: PSize.arw(context, 14),
-                    color: PColors.primaryText(context),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
 

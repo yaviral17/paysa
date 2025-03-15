@@ -74,6 +74,15 @@ class PColors {
         .withOpacity(0.14);
   }
 
+  static const Color searchtextFieldLight = Color(0xFF8E8E93);
+  static const Color searchtextFieldDark = Color(0xFF8E8E93);
+  static Color searchtextField(context) {
+    return (PHelper.isDarkMode(context)
+            ? searchtextFieldLight
+            : searchtextFieldDark)
+        .withOpacity(0.14);
+  }
+
   static const Color accountIconLight = Color(0xFF8E8E93);
   static const Color accountIconDark = Color(0xFF8E8E93);
   static Color accountIcon(context) {
