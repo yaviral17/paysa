@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -222,6 +223,23 @@ class PHelper {
     File? croppedImage = await PHelper.startImageCrop(image, context);
     if (croppedImage == null) return File(image.path);
     return croppedImage;
+  }
+
+  // time ago
+  static String timeAgo(String iosString) {
+    final DateTime date = DateTime.parse(iosString);
+    final Duration diff = DateTime.now().difference(date);
+    if (diff.inDays > 7) {
+      return DateFormat.yMMMd().format(date);
+    } else if (diff.inDays > 0) {
+      return '${diff.inDays} days ago';
+    } else if (diff.inHours > 0) {
+      return '${diff.inHours} hours ago';
+    } else if (diff.inMinutes > 0) {
+      return '${diff.inMinutes} minutes ago';
+    } else {
+      return 'Just now';
+    }
   }
 
   static Future<File?> startImageCrop(

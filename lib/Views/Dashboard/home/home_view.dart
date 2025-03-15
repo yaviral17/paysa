@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -5,9 +7,13 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
+import 'package:paysa/Models/spending_model.dart';
+import 'package:paysa/Models/user_model.dart';
+import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/home/widget/chart_widget.dart';
+import 'package:random_avatar/random_avatar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
@@ -25,6 +31,7 @@ class _HomeViewState extends State<HomeView> {
   final authController = Get.find<AuthenticationController>();
   final contactController = Get.put(ContactsController());
   final dashboardController = Get.find<DashboardController>();
+
   @override
   void initState() {
     super.initState();
@@ -100,118 +107,141 @@ class _HomeViewState extends State<HomeView> {
           physics: ScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                firstBgBalanceCard(context),
-                SizedBox(
-                  height: PSize.arh(context, 18),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Goals',
-                        style: TextStyle(
-                          fontSize: PSize.arw(context, 18),
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0,
-                          color: PColors.primaryText(context),
-                        ),
-                      ),
-                      ZoomTapAnimation(
-                        onTap: () {
-                          HapticFeedback.lightImpact();
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              'View All',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 14),
-                                color: PColors.primary(context),
-                              ),
-                            ),
-                            SizedBox(
-                              width: PSize.arw(context, 4),
-                            ),
-                            Icon(
-                              HugeIcons.strokeRoundedArrowRight01,
-                              color: PColors.primary(context),
-                              size: PSize.arw(context, 14),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  firstBgBalanceCard(context),
+                  SizedBox(
+                    height: PSize.arh(context, 18),
                   ),
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 8),
-                ),
-                const GoalTileWidget(
-                  label: 'Goal 1',
-                  totalAmount: 1000,
-                  currentAmount: 500,
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 8),
-                ),
-                const GoalTileWidget(
-                  label: 'Goal 2',
-                  totalAmount: 2000,
-                  currentAmount: 1000,
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 16),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Recent Transactions',
-                        style: TextStyle(
-                          fontSize: PSize.arw(context, 18),
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0,
-                          color: PColors.primaryText(context),
+                  Visibility(
+                    visible:
+                        dashboardController.shoppingSpendings.value.isNotEmpty,
+                    child: Column(
+                      children: [
+                        SectionDividerWidget(
+                          label: "Shopping 🛍️",
+                          onTap: () {},
                         ),
-                      ),
-                      ZoomTapAnimation(
-                        onTap: () {
-                          HapticFeedback.lightImpact();
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              'View All',
-                              style: TextStyle(
-                                fontSize: PSize.arw(context, 14),
-                                color: PColors.primary(context),
+                        SizedBox(
+                          height: PSize.arh(context, 8),
+                        ),
+                        ...List.generate(
+                          dashboardController.shoppingSpendings.value.length > 3
+                              ? 3
+                              : dashboardController
+                                  .shoppingSpendings.value.length,
+                          (index) {
+                            return ShoppingTileWidget(
+                              label: dashboardController.shoppingSpendings
+                                  .value[index].shoppingModel!.message,
+                              time: PHelper.timeAgo(
+                                dashboardController
+                                    .shoppingSpendings.value[index].createdAt,
                               ),
-                            ),
-                            SizedBox(
-                              width: PSize.arw(context, 4),
-                            ),
-                            Icon(
-                              HugeIcons.strokeRoundedArrowRight01,
-                              color: PColors.primary(context),
-                              size: PSize.arw(context, 14),
-                            ),
-                          ],
+                              amount: double.parse(
+                                dashboardController.shoppingSpendings
+                                        .value[index].shoppingModel?.amount ??
+                                    '0',
+                              ),
+                              isIncome: false,
+                            );
+                          },
                         ),
-                      )
-                    ],
+                        SizedBox(
+                          height: PSize.arh(context, 18),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: PSize.arh(context, 4),
-                ),
-              ],
+                  Visibility(
+                    visible:
+                        dashboardController.transferSpendings.value.isNotEmpty,
+                    child: Column(
+                      children: [
+                        SectionDividerWidget(
+                          label: 'Transfer 💸',
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          height: PSize.arh(context, 8),
+                        ),
+                        ...List.generate(
+                          dashboardController.transferSpendings.value.length > 3
+                              ? 3
+                              : dashboardController
+                                  .transferSpendings.value.length,
+                          (index) {
+                            SpendingModel spending = dashboardController
+                                .transferSpendings.value[index];
+                            bool isIncome = spending.createdBy !=
+                                authController.user.value?.uid;
+                            return TransferTileWidget(
+                              otherPerson: isIncome
+                                  ? spending
+                                      .transferSpendingModel!.transferdFromUser!
+                                  : spending
+                                      .transferSpendingModel!.transferdToUser!,
+                              isIncome: isIncome,
+                              time: PHelper.timeAgo(spending.createdAt),
+                              amount: double.parse(
+                                spending.transferSpendingModel?.amount ?? '0',
+                              ),
+                              onTap: () {},
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: PSize.arh(context, 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible:
+                        dashboardController.splitSpendings.value.isNotEmpty,
+                    child: Column(
+                      children: [
+                        SectionDividerWidget(
+                          label: 'Bill Split 🤝',
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          height: PSize.arh(context, 8),
+                        ),
+                        ...List.generate(
+                          dashboardController.splitSpendings.value.length > 3
+                              ? 3
+                              : dashboardController.splitSpendings.value.length,
+                          (index) {
+                            SpendingModel spending =
+                                dashboardController.splitSpendings.value[index];
+                            bool isIncome = spending.createdBy !=
+                                authController.user.value?.uid;
+                            return TransferTileWidget(
+                              otherPerson: isIncome
+                                  ? spending
+                                      .transferSpendingModel!.transferdFromUser!
+                                  : spending
+                                      .transferSpendingModel!.transferdToUser!,
+                              isIncome: isIncome,
+                              time: PHelper.timeAgo(spending.createdAt),
+                              amount: double.parse(
+                                spending.transferSpendingModel?.amount ?? '0',
+                              ),
+                              onTap: () {},
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: PSize.arh(context, 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -220,6 +250,8 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget firstBgBalanceCard(BuildContext context) {
+    log("'₹ 2397.0 spent this month'".length.toString(),
+        name: 'firstBgBalanceCard');
     return FittedBox(
       child: Container(
         width: PSize.displayWidth(context),
@@ -262,7 +294,7 @@ class _HomeViewState extends State<HomeView> {
                     Skeletonizer(
                       enabled: dashboardController.isLoading.value,
                       child: Text(
-                        '\$ ${dashboardController.user.value?.balance ?? 0}',
+                        '₹ ${dashboardController.user.value?.balance ?? 0}',
                         style: TextStyle(
                           fontSize: PSize.arw(context, 40),
                           color: PColors.primaryText(context),
@@ -271,21 +303,36 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: PSize.arh(context, 8),
+                    ),
                     Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          'View Details',
-                          style: TextStyle(
-                            fontSize: PSize.arw(context, 14),
-                            color: PColors.primary(context),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: HugeIcon(
-                            icon: HugeIcons.strokeRoundedArrowRight01,
-                            color: PColors.primary(context),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            margin: const EdgeInsets.only(
+                              right: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: PColors.containerSecondary(context),
+                            ),
+                            child: Center(
+                              child: FittedBox(
+                                child: Text(
+                                  '₹ 2397.0 spent this month',
+                                  style: TextStyle(
+                                    fontSize: PSize.arw(context, 24),
+                                    color: PColors.primary(context),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -313,6 +360,208 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ShoppingTileWidget extends StatelessWidget {
+  final String icon;
+  final String label;
+  final String time;
+  final double amount;
+  final bool isIncome;
+  final Function()? onTap;
+
+  const ShoppingTileWidget({
+    super.key,
+    this.icon = '🛍️',
+    this.label = 'Shopping',
+    this.time = '2 hours ago',
+    this.amount = 100,
+    this.isIncome = false,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ZoomTapAnimation(
+      onTap: onTap,
+      child: SmoothContainer(
+        padding: const EdgeInsets.symmetric(
+          vertical: 4,
+        ),
+        margin: const EdgeInsets.only(bottom: 8),
+        width: PSize.displayWidth(context),
+        borderRadius: BorderRadius.circular(10),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: PSize.arw(context, 25),
+              backgroundColor: PColors.containerSecondary(context),
+              child: Text(
+                icon,
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 20),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: PSize.arw(context, 18),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: PSize.arw(context, 16),
+                    fontWeight: FontWeight.w600,
+                    color: PColors.primaryText(context),
+                  ),
+                ),
+                Text(
+                  time,
+                  style: TextStyle(
+                    fontSize: PSize.arw(context, 14),
+                    color: PColors.secondaryText(context),
+                  ),
+                ),
+              ],
+            ),
+            Spacer(),
+            Text(
+              isIncome ? '+ ₹ $amount' : '- ₹ $amount',
+              style: TextStyle(
+                fontSize: PSize.arw(context, 16),
+                color:
+                    isIncome ? PColors.success.withAlpha(180) : PColors.error,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TransferTileWidget extends StatelessWidget {
+  final UserModel otherPerson;
+  final String time;
+  final double amount;
+  final bool isIncome;
+  final Function()? onTap;
+
+  const TransferTileWidget({
+    super.key,
+    required this.otherPerson,
+    this.time = '2 hours ago',
+    this.amount = 100,
+    this.isIncome = false,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ZoomTapAnimation(
+      onTap: onTap,
+      child: SmoothContainer(
+        padding: const EdgeInsets.symmetric(
+          vertical: 4,
+        ),
+        margin: const EdgeInsets.only(bottom: 8),
+        width: PSize.displayWidth(context),
+        borderRadius: BorderRadius.circular(10),
+        child: Row(
+          children: [
+            RandomAvatar(
+              '${otherPerson.firstname!} ${otherPerson.lastname!}',
+              width: PSize.arw(context, 45),
+              height: PSize.arw(context, 45),
+            ),
+            SizedBox(
+              width: PSize.arw(context, 18),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${otherPerson.firstname!} ${otherPerson.lastname!}',
+                  style: TextStyle(
+                    fontSize: PSize.arw(context, 16),
+                    fontWeight: FontWeight.w600,
+                    color: PColors.primaryText(context),
+                  ),
+                ),
+                Text(
+                  time,
+                  style: TextStyle(
+                    fontSize: PSize.arw(context, 14),
+                    color: PColors.secondaryText(context),
+                  ),
+                ),
+              ],
+            ),
+            Spacer(),
+            Text(
+              isIncome ? '+ ₹ $amount' : '- ₹ $amount',
+              style: TextStyle(
+                fontSize: PSize.arw(context, 16),
+                color:
+                    isIncome ? PColors.success.withAlpha(180) : PColors.error,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SectionDividerWidget extends StatelessWidget {
+  final String label;
+  final Function()? onTap;
+  const SectionDividerWidget({
+    super.key,
+    required this.label,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: PSize.arw(context, 18),
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0,
+            color: PColors.primaryText(context),
+          ),
+        ),
+        ZoomTapAnimation(
+          onTap: onTap,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'View All',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 14),
+                  color: PColors.primary(context),
+                ),
+              ),
+              HugeIcon(
+                icon: HugeIcons.strokeRoundedArrowRight01,
+                color: PColors.primary(context),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -353,14 +602,14 @@ class GoalTileWidget extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '\$$currentAmount',
+                '₹ $currentAmount',
                 style: TextStyle(
                   fontSize: PSize.arw(context, 12),
                   color: PColors.secondaryText(context),
                 ),
               ),
               Text(
-                ' / \$$totalAmount',
+                ' / ₹ $totalAmount',
                 style: TextStyle(
                   fontSize: PSize.arw(context, 14),
                   color: PColors.primaryText(context),

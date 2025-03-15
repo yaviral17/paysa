@@ -20,8 +20,8 @@ class FirestoreAPIs {
     await users.doc(user.uid).set(user.toMap());
   }
 
-  static Future<UserModel> getUser() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
+  static Future<UserModel> getUser({String? uid}) async {
+    uid ??= FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot doc = await users.doc(uid).get();
     return UserModel.fromMap(doc.data() as Map<String, dynamic>);
   }
@@ -169,17 +169,17 @@ class FirestoreAPIs {
     return users;
   }
 
-  static Future<List<SpendingModel>> getSpendings(int range) async {
+  static Future<List<SpendingModel>> getSpendings(int? range) async {
     List<SpendingModel> spendings = [];
     await FirebaseFirestore.instance
         .collection('spendings')
-        .orderBy('date', descending: true)
-        .limit(range)
+        .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy('createdAt', descending: true)
+        .limit(range ?? 10)
         .get()
         .then((value) {
       for (var element in value.docs) {
-        spendings.add(
-            SpendingModel.fromJson(element.data() as Map<String, dynamic>));
+        spendings.add(SpendingModel.fromJson(element.data()));
       }
     });
     return spendings;

@@ -32,6 +32,9 @@ class NewSpendingController {
   TextEditingController messageControler = TextEditingController();
 
   Future<String?> addFileFirebaseStorage({File? file, String? fileName}) async {
+    if (file == null || fileName == null) {
+      return null;
+    }
     try {
       final spendingStorage = storageRef.child('spendings').child(fileName!);
 
@@ -84,6 +87,12 @@ class NewSpendingController {
     if (amount.value.isEmpty) {
       PHelper.showErrorMessageGet(
           title: "Amount is empty", message: "Please enter the amount");
+      log("Amount is empty");
+      return;
+    }
+    if (messageControler.text.trim().isEmpty) {
+      PHelper.showErrorMessageGet(
+          title: "Message is empty 😕", message: "Please enter a message");
       log("Amount is empty");
       return;
     }
@@ -170,7 +179,7 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
-      billImage: imageUrl!,
+      billImage: imageUrl ?? "",
       transferSpendingModel: TransferSpendingModel(
         amount: amount.value,
         message: messageControler.text.trim(),

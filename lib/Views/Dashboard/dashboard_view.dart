@@ -76,6 +76,10 @@ class _DashMenuViewState extends State<DashMenuView> with RouteAware {
     PHelper.systemUIOverlayStyle(context);
   }
 
+  onInit() {
+    dashboardController.fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     // status bar and navigation bar theme set

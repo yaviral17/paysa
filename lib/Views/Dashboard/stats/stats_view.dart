@@ -120,7 +120,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('\$10,000',
+                              Text('₹10,000',
                                   style: TextStyle(
                                     fontSize: PSize.arw(context, 25),
                                     fontWeight: FontWeight.bold,
@@ -146,7 +146,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('\$10,000',
+                              Text('₹10,000',
                                   style: TextStyle(
                                     fontSize: PSize.arw(context, 25),
                                     fontWeight: FontWeight.bold,
@@ -172,7 +172,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('\$10,000',
+                              Text('₹10,000',
                                   style: TextStyle(
                                     fontSize: PSize.arw(context, 25),
                                     fontWeight: FontWeight.bold,
@@ -211,7 +211,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                     title: Text("User ${index + 1}"),
                     subtitle: Text("Today, 12:30 pm"),
                     trailing: Text(
-                      "\$100",
+                      "₹100",
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -236,44 +236,44 @@ class _StatisticsViewState extends State<StatisticsView> {
                 getTitlesWidget: (value, _) {
                   switch (value.toInt()) {
                     case 1:
-                      return Text('\$1k',
+                      return Text('₹1k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark,
                               fontSize: value == 1 ? 12 : 10));
                     case 2:
-                      return Text('\$2k',
+                      return Text('₹2k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
                     case 3:
-                      return Text('\$3k',
+                      return Text('₹3k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
                     case 4:
-                      return Text('\$4k',
+                      return Text('₹4k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
                     case 5:
-                      return Text('\$5k',
+                      return Text('₹5k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
                     case 6:
-                      return Text('\$6k',
+                      return Text('₹6k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
                     case 7:
-                      return Text('\$7k',
+                      return Text('₹7k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
                     case 8:
-                      return Text('\$8k',
+                      return Text('₹8k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
                     case 9:
-                      return Text('\$9k',
+                      return Text('₹9k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
                     case 10:
-                      return Text('\$10k',
+                      return Text('₹10k',
                           style: TextStyle(
                               color: PColors.secondaryTextDark, fontSize: 12));
 

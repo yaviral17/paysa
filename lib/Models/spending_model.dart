@@ -37,7 +37,7 @@ class SpendingModel {
       updatedBy: map['updatedBy'],
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],
-      billImage: map['billImage'],
+      billImage: map['billImage'] ?? '',
       spendingType: SpendingTypeExtension.fromString(map['spendingType']),
       shoppingModel: map['shoppingModel'] != null
           ? ShoppingModel.fromJson(map['shoppingModel'])
