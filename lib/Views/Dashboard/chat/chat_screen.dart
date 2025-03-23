@@ -19,6 +19,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   FocusNode searchNode = FocusNode();
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -98,41 +99,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                height: 50,
-                child: TextField(
-                  focusNode: searchNode,
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: TextStyle(
-                      color: PColors.secondaryText(context),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    prefixIcon: Icon(
-                      HugeIcons.strokeRoundedSearch01,
-                      color: searchNode.hasFocus
-                          ? PColors.primaryText(context)
-                          : PColors.secondaryText(context),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: PColors.searchtextField(context),
-                  ),
-                  style: TextStyle(
-                    color: PColors.primaryText(context),
-                  ),
-                ),
+              SearchTextField(
+                searchNode: searchNode,
+                controller: searchController,
               ),
               const SizedBox(height: 20),
               ListView.builder(
@@ -149,6 +118,63 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SearchTextField extends StatelessWidget {
+  const SearchTextField({
+    super.key,
+    required this.searchNode,
+    required this.controller,
+    this.onChanged,
+    this.hintText,
+  });
+
+  final FocusNode searchNode;
+  final TextEditingController controller;
+  final String? hintText;
+  final void Function(String)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: 50,
+      child: TextField(
+        focusNode: searchNode,
+        onChanged: onChanged,
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText ?? 'Search',
+          hintStyle: TextStyle(
+            color: PColors.secondaryText(context),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+          prefixIcon: Icon(
+            HugeIcons.strokeRoundedSearch01,
+            color: searchNode.hasFocus
+                ? PColors.primaryText(context)
+                : PColors.secondaryText(context),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: PColors.searchtextField(context),
+        ),
+        style: TextStyle(
+          color: PColors.primaryText(context),
         ),
       ),
     );

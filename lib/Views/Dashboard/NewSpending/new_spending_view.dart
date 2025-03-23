@@ -15,8 +15,10 @@ import 'package:paysa/Controllers/new_spending_controller.dart';
 import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/constants/custom_enums.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/Dashboard/NewSpending/split_flow/add_split_data_view.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 import 'package:random_avatar/random_avatar.dart';
 import 'package:smooth_corner/smooth_corner.dart';
@@ -51,7 +53,9 @@ class _NewSpendingViewState extends State<NewSpendingView>
     '⇦'
   ];
 
-  final NewSpendingController newSpendingController = NewSpendingController();
+  final NewSpendingController newSpendingController = Get.put(
+    NewSpendingController(),
+  );
   final authController = Get.find<AuthenticationController>();
 
   @override
@@ -162,6 +166,13 @@ class _NewSpendingViewState extends State<NewSpendingView>
 
   void buttonPressed(String buttonText) {
     log('Button Pressed: $buttonText');
+    if (newSpendingController.amount.value.length > 10) {
+      PHelper.showErrorMessageGet(
+        title: 'Amount Limit Reached 😕',
+        message: 'Amount can not be more than 10 digits long 😕',
+      );
+      return;
+    }
 
     if (newSpendingController.amount.value.contains('.') &&
         (newSpendingController.amount.value.split('.').last.length > 1) &&
@@ -187,6 +198,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
 
   @override
   Widget build(BuildContext context) {
+    log('Size : ${PSize.displayWidth(context)} x ${PSize.displayHeight(context)}');
     Widget bodyUi = Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -230,111 +242,118 @@ class _NewSpendingViewState extends State<NewSpendingView>
           ),
         ),
         Obx(
-          () => SmoothContainer(
-            width: PSize.displayWidth(context),
-            margin: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 12,
-              bottom: 12,
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            color: PColors.containerSecondary(context),
-            borderRadius: BorderRadius.circular(16),
-            smoothness: 0.8,
-            child: Row(
-              children: [
-                newSpendingController.image.value.existsSync()
-                    ? PHelper().isImage(newSpendingController.image.value)
-                        ? ClipRRect(
-                            // borderRadius: BorderRadius.circular(16),
-                            child: Image.file(
-                              newSpendingController.image.value,
-                              width: PSize.arw(context, 45),
-                              height: PSize.arh(context, 45),
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : ClipRRect(
-                            child: Icon(Icons.picture_as_pdf),
-                          )
-                    : Icon(
-                        HugeIcons.strokeRoundedImage01,
-                        size: PSize.arw(context, 45),
-                      ),
-                SizedBox(
-                  width: PSize.arw(context, 8),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    newSpendingController.image.value.existsSync()
-                        ? SizedBox(
-                            width: 100,
-                            child: Text(
-                              newSpendingController.image.value.path
-                                  .split('/')
-                                  .last,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              // maxLines: 1,
-                              // textWidthBasis: TextWidthBasis.longestLine,
+          () => Visibility(
+            visible:
+                newSpendingController.spendingMode.value != SpendingType.split,
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            child: SmoothContainer(
+              width: PSize.displayWidth(context),
+              margin: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 12,
+                bottom: 12,
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              color: PColors.containerSecondary(context),
+              borderRadius: BorderRadius.circular(16),
+              smoothness: 0.8,
+              child: Row(
+                children: [
+                  newSpendingController.image.value.existsSync()
+                      ? PHelper().isImage(newSpendingController.image.value)
+                          ? ClipRRect(
+                              // borderRadius: BorderRadius.circular(16),
+                              child: Image.file(
+                                newSpendingController.image.value,
+                                width: PSize.arw(context, 45),
+                                height: PSize.arh(context, 45),
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : ClipRRect(
+                              child: Icon(Icons.picture_as_pdf),
+                            )
+                      : Icon(
+                          HugeIcons.strokeRoundedImage01,
+                          size: PSize.arw(context, 45),
+                        ),
+                  SizedBox(
+                    width: PSize.arw(context, 8),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      newSpendingController.image.value.existsSync()
+                          ? SizedBox(
+                              width: 100,
+                              child: Text(
+                                newSpendingController.image.value.path
+                                    .split('/')
+                                    .last,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true,
+                                // maxLines: 1,
+                                // textWidthBasis: TextWidthBasis.longestLine,
+                                style: TextStyle(
+                                  fontSize: PSize.arw(context, 14),
+                                  color: PColors.primaryText(context),
+                                ),
+                              ),
+                            )
+                          : Text(
+                              'Add a receipt',
                               style: TextStyle(
                                 fontSize: PSize.arw(context, 14),
                                 color: PColors.primaryText(context),
                               ),
                             ),
-                          )
-                        : Text(
-                            'Add a receipt',
-                            style: TextStyle(
-                              fontSize: PSize.arw(context, 14),
-                              color: PColors.primaryText(context),
-                            ),
+                      SizedBox(
+                        width: PSize.arw(context, 150),
+                        child: Text(
+                          'Add a receipt to keep track of your spending',
+                          softWrap: true,
+                          style: TextStyle(
+                            fontSize: PSize.arw(context, 12),
+                            color: PColors.secondaryText(context),
                           ),
-                    SizedBox(
-                      width: PSize.arw(context, 150),
-                      child: Text(
-                        'Add a receipt to keep track of your spending',
-                        softWrap: true,
-                        style: TextStyle(
-                          fontSize: PSize.arw(context, 12),
-                          color: PColors.secondaryText(context),
                         ),
                       ),
+                    ],
+                  ),
+                  const Spacer(),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await getFile();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          newSpendingController.image.value.existsSync()
+                              ? Colors.blue
+                              : PColors.primary(context),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      minimumSize: Size(
+                        PSize.arw(context, 54),
+                        PSize.arh(context, 42),
+                      ),
                     ),
-                  ],
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () async {
-                    await getFile();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        newSpendingController.image.value.existsSync()
-                            ? Colors.blue
-                            : PColors.primary(context),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    minimumSize: Size(
-                      PSize.arw(context, 54),
-                      PSize.arh(context, 42),
+                    child: Text(
+                      newSpendingController.image.value.existsSync()
+                          ? '   Change   '
+                          : '   Add   ',
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 14),
+                        color: PColors.primaryText(context),
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                  child: Text(
-                    newSpendingController.image.value.existsSync()
-                        ? '   Change   '
-                        : '   Add   ',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 14),
-                      color: PColors.primaryText(context),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -632,13 +651,15 @@ class _NewSpendingViewState extends State<NewSpendingView>
           child: SmoothContainer(
             width: PSize.displayWidth(context),
             child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                childAspectRatio: 2.2,
+                childAspectRatio:
+                    PSize.displayHeight(context) < 700 ? 2.6 : 2.2,
                 mainAxisSpacing: 6,
                 crossAxisSpacing: 4,
               ),
               shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
               itemCount: buttons.length,
               itemBuilder: (context, index) {
                 return InkWell(
@@ -699,20 +720,46 @@ class _NewSpendingViewState extends State<NewSpendingView>
           child: Obx(
             () => PaysaPrimaryButton(
               isLoading: newSpendingController.isLoading.value,
-              text: 'Add Transaction',
+              text:
+                  'Add ${newSpendingController.spendingMode.value.value} Data',
               onTap: () {
-                log('Adding Transaction');
-                newSpendingController.createSpending();
+                if (newSpendingController.spendingMode.value !=
+                    SpendingType.split) {
+                  newSpendingController.createSpending();
+                  return;
+                }
+                if (newSpendingController.amount.value.isEmpty) {
+                  PHelper.showErrorMessageGet(
+                    title: 'Amount is empty 😭',
+                    message: 'Please enter the amount',
+                  );
+                  return;
+                }
+
+                // for split flow
+                if (newSpendingController.amount.value.isEmpty) {
+                  PHelper.showErrorMessageGet(
+                      title: "Amount is empty 😭",
+                      message: "Please enter the amount");
+                  return;
+                }
+                if (newSpendingController.messageControler.value.text
+                    .trim()
+                    .isEmpty) {
+                  PHelper.showErrorMessageGet(
+                      title: "Add a message 😭",
+                      message: "Please enter a message");
+                  return;
+                }
+                log('Amount: ${newSpendingController.amount.value}');
+                PNavigate.to(AddSplitDataView());
               },
               textColor: PColors.primaryText(context),
             ),
           ),
         ),
         SizedBox(
-          height: PSize.arh(
-            context,
-            8,
-          ),
+          height: PSize.arh(context, 4),
         ),
       ],
     );
@@ -741,7 +788,7 @@ class _NewSpendingViewState extends State<NewSpendingView>
           ),
         ),
       ),
-      body: Platform.isIOS ? bodyUi : SafeArea(child: bodyUi),
+      body: SafeArea(child: bodyUi),
     );
   }
 }

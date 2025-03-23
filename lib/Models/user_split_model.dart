@@ -1,28 +1,33 @@
+import 'package:paysa/Models/user_model.dart';
+
 class UserSplitModel {
   final String uid;
-  final String amount;
-  final List<String> tokens;
+  String amount;
+  final String? token;
   final bool isPaid;
   final String createdAt;
-  final String paidAt;
+  final String? paidAt;
+  UserModel? user;
 
   UserSplitModel({
     required this.uid,
     required this.amount,
-    required this.tokens,
+    required this.token,
     required this.isPaid,
     required this.createdAt,
-    required this.paidAt,
+    this.paidAt,
+    this.user,
   });
 
   factory UserSplitModel.fromJson(Map<String, dynamic> json) {
     return UserSplitModel(
       uid: json['uid'],
       amount: json['amount'],
-      tokens: List<String>.from(json['tokens']),
+      token: json['token'],
       isPaid: json['isPaid'],
       createdAt: json['createdAt'],
       paidAt: json['paidAt'],
+      user: json['user'] != null ? UserModel.fromMap(json['user']) : null,
     );
   }
 
@@ -30,10 +35,11 @@ class UserSplitModel {
     return {
       'uid': uid,
       'amount': amount,
-      'tokens': tokens,
+      'tokens': token,
       'isPaid': isPaid,
       'createdAt': createdAt,
       'paidAt': paidAt,
+      'user': user?.toMap(),
     };
   }
 }

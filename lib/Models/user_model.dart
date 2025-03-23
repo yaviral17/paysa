@@ -56,6 +56,25 @@ class UserModel {
       'isOnboarded': isOnboarded,
     };
   }
+
+  // operator == to compare two UserModel objects
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is UserModel &&
+        other.uid == uid &&
+        other.username == username &&
+        other.email == email &&
+        other.firstname == firstname &&
+        other.lastname == lastname &&
+        other.phone == phone &&
+        other.profile == profile &&
+        other.authtype == authtype &&
+        other.token == token &&
+        other.balance == balance &&
+        other.isOnboarded == isOnboarded;
+  }
 }
 
 enum AuthType {

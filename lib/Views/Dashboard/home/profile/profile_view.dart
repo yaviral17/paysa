@@ -81,6 +81,17 @@ class _ProfileViewState extends State<ProfileView> {
                 buildSettingsTile(
                   context,
                   HugeIcons.strokeRoundedMoon,
+                  'Notifications',
+                  trailing: authController.user.value?.token != null
+                      ? 'Enabled'
+                      : 'Disabled',
+                  onTap: () {
+                    PHelper.toggleTheme(context);
+                  },
+                ),
+                buildSettingsTile(
+                  context,
+                  HugeIcons.strokeRoundedMoon,
                   'Theme',
                   trailing: PHelper.isDarkMode(context) ? 'Dark' : 'Light',
                   onTap: () {

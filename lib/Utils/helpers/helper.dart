@@ -242,6 +242,15 @@ class PHelper {
     }
   }
 
+  // format date time
+  static String formatDateTime(String iosString, {String? format}) {
+    final DateTime date = DateTime.parse(iosString);
+    if (format != null) {
+      return DateFormat(format).format(date);
+    }
+    return DateFormat.yMMMd().add_jm().format(date);
+  }
+
   static Future<File?> startImageCrop(
       XFile imageFile, BuildContext context) async {
     File imageTemporary = File(imageFile.path);

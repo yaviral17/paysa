@@ -154,6 +154,19 @@ class FirestoreAPIs {
         users.add(UserModel.fromMap(element.data()));
       }
     });
+    await FirebaseFirestore.instance
+        .collection('user')
+        .where('firstname', isGreaterThanOrEqualTo: emailOrUsername)
+        .where(
+          'firstname',
+          isLessThanOrEqualTo: '$emailOrUsername\uf8ff',
+        )
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        users.add(UserModel.fromMap(element.data()));
+      }
+    });
 
     // remove duplicates withouth using toSet()
     users = users.fold([], (prev, elem) {
@@ -185,7 +198,7 @@ class FirestoreAPIs {
     return spendings;
   }
 
-  Future<void> updateUserName(
+  static Future<void> updateUserName(
       double totatBalance, String userName, String uid) async {
     try {
       await users
@@ -193,6 +206,15 @@ class FirestoreAPIs {
           .update({'balance': totatBalance, 'username': userName});
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  static Future<void> deleteSpendings(List<String> spendingIds) async {
+    for (var spendingId in spendingIds) {
+      await FirebaseFirestore.instance
+          .collection('spendings')
+          .doc(spendingId)
+          .delete();
     }
   }
 }

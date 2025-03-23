@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:avatar_stack/animated_avatar_stack.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,9 +12,13 @@ import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
 import 'package:paysa/Models/spending_model.dart';
 import 'package:paysa/Models/user_model.dart';
+import 'package:paysa/Utils/constants/custom_enums.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/Dashboard/SpendingDetails/spending_deatils_view.dart';
+import 'package:paysa/Views/Dashboard/SpendingDetails/spending_list_view.dart';
 import 'package:paysa/Views/Dashboard/home/widget/chart_widget.dart';
 import 'package:random_avatar/random_avatar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -50,9 +57,11 @@ class _HomeViewState extends State<HomeView> {
         leading: Padding(
           padding: const EdgeInsets.only(left: 18.0),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              dashboardController.fetchData();
+            },
             icon: HugeIcon(
-              icon: Iconsax.search_normal_1,
+              icon: Iconsax.refresh,
               color: PColors.primary(context),
             ),
           ),
@@ -122,7 +131,7 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         SectionDividerWidget(
                           label: "Shopping 🛍️",
-                          onTap: () {},
+                          spendingType: SpendingType.shopping,
                         ),
                         SizedBox(
                           height: PSize.arh(context, 8),
@@ -134,6 +143,8 @@ class _HomeViewState extends State<HomeView> {
                                   .shoppingSpendings.value.length,
                           (index) {
                             return ShoppingTileWidget(
+                              spending: dashboardController
+                                  .shoppingSpendings.value[index],
                               label: dashboardController.shoppingSpendings
                                   .value[index].shoppingModel!.message,
                               time: PHelper.timeAgo(
@@ -162,7 +173,7 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         SectionDividerWidget(
                           label: 'Transfer 💸',
-                          onTap: () {},
+                          spendingType: SpendingType.transfer,
                         ),
                         SizedBox(
                           height: PSize.arh(context, 8),
@@ -178,6 +189,7 @@ class _HomeViewState extends State<HomeView> {
                             bool isIncome = spending.createdBy !=
                                 authController.user.value?.uid;
                             return TransferTileWidget(
+                              spending: spending,
                               otherPerson: isIncome
                                   ? spending
                                       .transferSpendingModel!.transferdFromUser!
@@ -188,7 +200,6 @@ class _HomeViewState extends State<HomeView> {
                               amount: double.parse(
                                 spending.transferSpendingModel?.amount ?? '0',
                               ),
-                              onTap: () {},
                             );
                           },
                         ),
@@ -205,7 +216,7 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         SectionDividerWidget(
                           label: 'Bill Split 🤝',
-                          onTap: () {},
+                          spendingType: SpendingType.split,
                         ),
                         SizedBox(
                           height: PSize.arh(context, 8),
@@ -217,20 +228,9 @@ class _HomeViewState extends State<HomeView> {
                           (index) {
                             SpendingModel spending =
                                 dashboardController.splitSpendings.value[index];
-                            bool isIncome = spending.createdBy !=
-                                authController.user.value?.uid;
-                            return TransferTileWidget(
-                              otherPerson: isIncome
-                                  ? spending
-                                      .transferSpendingModel!.transferdFromUser!
-                                  : spending
-                                      .transferSpendingModel!.transferdToUser!,
-                              isIncome: isIncome,
-                              time: PHelper.timeAgo(spending.createdAt),
-                              amount: double.parse(
-                                spending.transferSpendingModel?.amount ?? '0',
-                              ),
-                              onTap: () {},
+
+                            return SplitTileWidget(
+                              spending: spending,
                             );
                           },
                         ),
@@ -366,6 +366,7 @@ class _HomeViewState extends State<HomeView> {
 
 class ShoppingTileWidget extends StatelessWidget {
   final String icon;
+  final SpendingModel spending;
   final String label;
   final String time;
   final double amount;
@@ -374,6 +375,7 @@ class ShoppingTileWidget extends StatelessWidget {
 
   const ShoppingTileWidget({
     super.key,
+    required this.spending,
     this.icon = '🛍️',
     this.label = 'Shopping',
     this.time = '2 hours ago',
@@ -385,7 +387,12 @@ class ShoppingTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ZoomTapAnimation(
-      onTap: onTap,
+      onTap: onTap ??
+          () {
+            PNavigate.to(SpendingDeatilsView(
+              spendingModel: spending,
+            ));
+          },
       child: SmoothContainer(
         padding: const EdgeInsets.symmetric(
           vertical: 4,
@@ -419,12 +426,29 @@ class ShoppingTileWidget extends StatelessWidget {
                     color: PColors.primaryText(context),
                   ),
                 ),
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontSize: PSize.arw(context, 14),
-                    color: PColors.secondaryText(context),
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      time,
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 14),
+                        color: PColors.secondaryText(context),
+                      ),
+                    ),
+                    SizedBox(
+                      width: PSize.arw(context, 8),
+                    ),
+                    Text(
+                      !spending.billImage.isNotEmpty ? 'Bill ❌' : 'Bill ✅',
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 12),
+                        fontWeight: FontWeight.bold,
+                        color: !spending.billImage.isNotEmpty
+                            ? PColors.error
+                            : PColors.success,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -446,6 +470,7 @@ class ShoppingTileWidget extends StatelessWidget {
 }
 
 class TransferTileWidget extends StatelessWidget {
+  final SpendingModel spending;
   final UserModel otherPerson;
   final String time;
   final double amount;
@@ -454,6 +479,7 @@ class TransferTileWidget extends StatelessWidget {
 
   const TransferTileWidget({
     super.key,
+    required this.spending,
     required this.otherPerson,
     this.time = '2 hours ago',
     this.amount = 100,
@@ -464,7 +490,14 @@ class TransferTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ZoomTapAnimation(
-      onTap: onTap,
+      onTap: onTap ??
+          () {
+            PNavigate.to(
+              SpendingDeatilsView(
+                spendingModel: spending,
+              ),
+            );
+          },
       child: SmoothContainer(
         padding: const EdgeInsets.symmetric(
           vertical: 4,
@@ -493,12 +526,29 @@ class TransferTileWidget extends StatelessWidget {
                     color: PColors.primaryText(context),
                   ),
                 ),
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontSize: PSize.arw(context, 14),
-                    color: PColors.secondaryText(context),
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      time,
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 14),
+                        color: PColors.secondaryText(context),
+                      ),
+                    ),
+                    SizedBox(
+                      width: PSize.arw(context, 8),
+                    ),
+                    Text(
+                      !spending.billImage.isNotEmpty ? 'Bill ❌' : 'Bill ✅',
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 12),
+                        fontWeight: FontWeight.bold,
+                        color: !spending.billImage.isNotEmpty
+                            ? PColors.error
+                            : PColors.success,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -519,11 +569,142 @@ class TransferTileWidget extends StatelessWidget {
   }
 }
 
+class SplitTileWidget extends StatelessWidget {
+  final SpendingModel spending;
+  final Function()? onTap;
+
+  const SplitTileWidget({
+    super.key,
+    this.onTap,
+    required this.spending,
+  });
+
+  String lentOrBorrowed(SpendingModel data) {
+    String lentOrBorrowed = "";
+    if (data.createdBy ==
+        Get.find<AuthenticationController>().user.value?.uid) {
+      String lentAmount = "";
+      for (var user in data.splitSpendingModel!.userSplit) {
+        if (user.uid == data.createdBy) {
+          lentAmount = user.amount;
+          break;
+        }
+      }
+      lentOrBorrowed = 'lent ₹ $lentAmount';
+    } else {
+      String borrowedAmount = "";
+      for (var user in data.splitSpendingModel!.userSplit) {
+        if (user.uid != data.createdBy) {
+          borrowedAmount =
+              (double.parse(spending.splitSpendingModel!.totalAmount) -
+                      double.parse(user.amount))
+                  .toString();
+          break;
+        }
+      }
+      lentOrBorrowed = 'borrowed ₹ $borrowedAmount';
+    }
+
+    return lentOrBorrowed;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String lentOrBorrow = lentOrBorrowed(spending);
+
+    return ZoomTapAnimation(
+      onTap: onTap ??
+          () {
+            PNavigate.to(
+              SpendingDeatilsView(
+                spendingModel: spending,
+              ),
+            );
+          },
+      child: SmoothContainer(
+        padding: const EdgeInsets.symmetric(
+          vertical: 4,
+        ),
+        margin: const EdgeInsets.only(bottom: 8),
+        width: PSize.displayWidth(context),
+        borderRadius: BorderRadius.circular(10),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: PSize.arw(context, 25),
+              backgroundColor: PColors.containerSecondary(context),
+              child: Text(
+                '🤝',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 20),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: PSize.arw(context, 18),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${spending.splitSpendingModel!.message} • ${spending.splitSpendingModel!.userSplit.length} people',
+                  style: TextStyle(
+                    fontSize: PSize.arw(context, 16),
+                    fontWeight: FontWeight.w600,
+                    color: PColors.primaryText(context),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      PHelper.timeAgo(spending.createdAt),
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 14),
+                        color: PColors.secondaryText(context),
+                      ),
+                    ),
+                    SizedBox(
+                      width: PSize.arw(context, 8),
+                    ),
+                    Text(
+                      spending.billImage.isEmpty ? 'Bill ❌' : 'Bill ✅',
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 12),
+                        fontWeight: FontWeight.bold,
+                        color: spending.billImage.isEmpty
+                            ? PColors.error
+                            : PColors.success,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Spacer(),
+            Text(
+              lentOrBorrow,
+              style: TextStyle(
+                fontSize: PSize.arw(context, 16),
+                color: lentOrBorrow.contains("lent")
+                    ? PColors.success.withAlpha(180)
+                    : PColors.error,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class SectionDividerWidget extends StatelessWidget {
+  final SpendingType spendingType;
   final String label;
   final Function()? onTap;
   const SectionDividerWidget({
     super.key,
+    required this.spendingType,
     required this.label,
     this.onTap,
   });
@@ -543,7 +724,12 @@ class SectionDividerWidget extends StatelessWidget {
           ),
         ),
         ZoomTapAnimation(
-          onTap: onTap,
+          onTap: onTap ??
+              () {
+                PNavigate.to(SpendingListView(
+                  spendingType: spendingType,
+                ));
+              },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

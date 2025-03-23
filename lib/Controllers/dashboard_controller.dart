@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/constants/custom_enums.dart';
 
 class DashboardController extends GetxController {
+  IndicatorController indicatorController = IndicatorController();
   RxBool isLoading = false.obs;
   Rx<Map<String, dynamic>> currencyData = Rx({});
   Rx<UserModel?> user = Rx(null);
@@ -31,7 +33,7 @@ class DashboardController extends GetxController {
     fetchData();
   }
 
-  void fetchData() async {
+  Future<void> fetchData() async {
     isLoading.value = true;
     // fetching country data (currency rats, currency symbols etc)
     currencyData.value = await FirestoreAPIs.getCurrencyRates();
