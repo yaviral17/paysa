@@ -86,8 +86,8 @@ class SignUpView extends StatelessWidget {
       passwordController.text,
       UserModel(
         email: emailController.text,
-        firstname: firstNameController.text.trim(),
-        lastname: lastNameController.text.trim(),
+        firstname: firstNameController.text.toLowerCase().trim(),
+        lastname: lastNameController.text.toLowerCase().trim(),
         authtype: AuthType.email,
         phone: "",
         profile: "",

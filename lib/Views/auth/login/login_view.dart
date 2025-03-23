@@ -10,6 +10,7 @@ import 'package:paysa/Utils/helpers/helper.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
+import 'package:paysa/Views/auth/forget/forget_pass_view.dart';
 import 'package:paysa/Views/auth/signup/sign_up_view.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 
@@ -78,166 +79,170 @@ class LoginView extends StatelessWidget {
           },
         ),
       ),
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  SizedBox(
-                    height: PSize.rh(context, 36),
-                  ),
-                  Center(
-                    child: Hero(
-                      tag: PHeroTags.appLogo,
-                      child: Image.asset(
-                        'assets/images/dark_paysa.png',
-                        width: PSize.arw(context, 140),
-                      ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      height: PSize.rh(context, 36),
                     ),
-                  ),
-                  SizedBox(
-                    height: PSize.arh(context, 24),
-                  ),
-                  Text(
-                    'Let\'s get started! 🚀',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 24),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  FittedBox(
-                    child: Text(
-                      'Paysa helps you track your expenses effortlessly.💸\nStay on top of your spending and save more!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: PSize.rw(context, 16),
-                        color: PColors.secondaryText(context),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: PSize.rh(context, 12),
-              ),
-              // Add your login form fields here
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 8),
-                    child: Text(
-                      'Email',
-                      style: TextStyle(
-                        fontSize: PSize.rw(context, 14),
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                  ),
-                  PaysaPrimaryTextField(
-                    controller: emailController,
-                    hintText: "Email",
-                    fillColor: PColors.primaryText(context),
-                    prefixIcon: Icon(
-                      Icons.alternate_email,
-                      color: PColors.primaryText(context),
-                    ),
-                  ),
-                  SizedBox(
-                    height: PSize.arh(context, 4),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 8),
-                    child: Text(
-                      'Password',
-                      style: TextStyle(
-                        fontSize: PSize.arw(context, 14),
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                  ),
-                  Obx(
-                    () => PaysaPrimaryTextField(
-                      controller: passwordController,
-                      hintText: "Password",
-                      isPassword: true,
-                      onObsecure: () =>
-                          isVisibility.value = !isVisibility.value,
-                      fillColor: PColors.primaryText(context),
-                      prefixIcon: Icon(
-                        Iconsax.lock,
-                        color: PColors.primaryText(context),
-                      ),
-                      obscureText: isVisibility.value,
-                    ),
-                  ),
-                  SizedBox(
-                    height: PSize.arh(context, 14),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          // Navigate to the forgot password screen
-                        },
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: PSize.arw(context, 14),
-                            color: PColors.primaryText(context),
-                            fontFamily: 'Inter',
-                          ),
+                    Center(
+                      child: Hero(
+                        tag: PHeroTags.appLogo,
+                        child: Image.asset(
+                          'assets/images/dark_paysa.png',
+                          width: PSize.arw(context, 140),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: PSize.arh(context, 12),
-                  ),
-                  Center(
-                    child: Obx(
-                      () => PaysaPrimaryButton(
-                        // isLoading: true,
-                        text: 'Login',
-                        isLoading: authController.isLoading.value,
-                        onTap: () => login(),
-                        width: PSize.displayWidth(context),
-                        height: PSize.arh(context, 54),
-                        textColor: PColors.primaryText(context),
-                        fontSize: PSize.arw(context, 16),
+                    ),
+                    SizedBox(
+                      height: PSize.arh(context, 24),
+                    ),
+                    Text(
+                      'Let\'s get started! 🚀',
+                      style: TextStyle(
+                        fontSize: PSize.arw(context, 24),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    PNavigate.to(SignUpView());
-                  },
-                  child: Text(
-                    'Don\'t have an account? Register',
-                    style: TextStyle(
-                      fontSize: PSize.rw(context, 14),
-                      color: PColors.primaryText(context),
+                    const SizedBox(height: 20),
+                    FittedBox(
+                      child: Text(
+                        'Paysa helps you track your expenses effortlessly.💸\nStay on top of your spending and save more!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: PSize.rw(context, 16),
+                          color: PColors.secondaryText(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: PSize.rh(context, 12),
+                ),
+                // Add your login form fields here
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0, vertical: 8),
+                      child: Text(
+                        'Email',
+                        style: TextStyle(
+                          fontSize: PSize.rw(context, 14),
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                    PaysaPrimaryTextField(
+                      controller: emailController,
+                      hintText: "Email",
+                      fillColor: PColors.primaryText(context),
+                      prefixIcon: Icon(
+                        Icons.alternate_email,
+                        color: PColors.primaryText(context),
+                      ),
+                    ),
+                    SizedBox(
+                      height: PSize.arh(context, 4),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0, vertical: 8),
+                      child: Text(
+                        'Password',
+                        style: TextStyle(
+                          fontSize: PSize.arw(context, 14),
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                    Obx(
+                      () => PaysaPrimaryTextField(
+                        controller: passwordController,
+                        hintText: "Password",
+                        isPassword: true,
+                        onObsecure: () =>
+                            isVisibility.value = !isVisibility.value,
+                        fillColor: PColors.primaryText(context),
+                        prefixIcon: Icon(
+                          Iconsax.lock,
+                          color: PColors.primaryText(context),
+                        ),
+                        obscureText: isVisibility.value,
+                      ),
+                    ),
+                    SizedBox(
+                      height: PSize.arh(context, 14),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            PNavigate.to(ForgetPassView());
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              fontSize: PSize.arw(context, 14),
+                              color: PColors.primaryText(context),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: PSize.arh(context, 12),
+                    ),
+                    Center(
+                      child: Obx(
+                        () => PaysaPrimaryButton(
+                          // isLoading: true,
+                          text: 'Login',
+                          isLoading: authController.isLoading.value,
+                          onTap: () => login(),
+                          width: PSize.displayWidth(context),
+                          height: PSize.arh(context, 54),
+                          textColor: PColors.primaryText(context),
+                          fontSize: PSize.arw(context, 16),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // const Spacer(),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      PNavigate.to(SignUpView());
+                    },
+                    child: Text(
+                      'Don\'t have an account? Register',
+                      style: TextStyle(
+                        fontSize: PSize.rw(context, 14),
+                        color: PColors.primaryText(context),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: PSize.rh(context, 12),
-              ),
-            ],
+                Align(
+                  child: SizedBox(
+                    height: PSize.rh(context, 12),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -260,6 +265,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
   final FilteringTextInputFormatter? inputFormatter;
   final FocusNode? focusNode;
   final void Function()? onObsecure;
+  final int? maxLength;
 
   const PaysaPrimaryTextField({
     super.key,
@@ -277,6 +283,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
     this.inputFormatter,
     this.focusNode,
     this.onObsecure,
+    this.maxLength,
   });
 
   @override
@@ -285,6 +292,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
       focusNode: focusNode,
       controller: controller,
       obscureText: obscureText,
+      maxLength: maxLength,
       readOnly: readOnly,
       keyboardType: keyboardType,
       inputFormatters: inputFormatter != null ? [inputFormatter!] : null,

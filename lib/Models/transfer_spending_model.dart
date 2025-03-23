@@ -1,3 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:paysa/Controllers/authentication_controller.dart';
+import 'package:paysa/Models/user_model.dart';
+
 class TransferSpendingModel {
   final String message;
   final String amount;
@@ -5,6 +9,8 @@ class TransferSpendingModel {
   final String? location;
   final String transferedTo;
   final String transferedFrom;
+  UserModel? transferdToUser;
+  UserModel? transferdFromUser;
 
   TransferSpendingModel({
     required this.message,
@@ -13,9 +19,13 @@ class TransferSpendingModel {
     this.location,
     required this.transferedTo,
     required this.transferedFrom,
+    this.transferdToUser,
+    this.transferdFromUser,
   });
 
   factory TransferSpendingModel.fromJson(Map<String, dynamic> json) {
+    bool isMe = json['transferedTo'] == FirebaseAuth.instance.currentUser!.uid;
+
     return TransferSpendingModel(
       message: json['message'],
       amount: json['amount'],

@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       theme: PAppTheme.lightTheme,
       navigatorKey: navigatorKey,
       darkTheme: PAppTheme.darkTheme,
+
       navigatorObservers: [routeObserver],
       initialRoute: '/',
       // builder: (context, child) {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       //   return const AuthView();
       // },
       onGenerateRoute: RouteGenerator().generateRoute,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
     );
   }
 }

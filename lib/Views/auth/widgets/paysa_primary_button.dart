@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/utils/theme/colors.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
@@ -18,6 +19,7 @@ class PaysaPrimaryButton extends StatelessWidget {
   final Widget? suffixWidget;
   final bool isLoading;
   final String fontFamily;
+  final bool isDisabled;
 
   const PaysaPrimaryButton({
     super.key,
@@ -28,35 +30,44 @@ class PaysaPrimaryButton extends StatelessWidget {
     this.height = 54,
     this.border,
     this.fontSize = 16.0,
-    this.borderRadius = 12.0,
+    this.borderRadius = 18.0,
     this.textColor = PColors.primaryTextLight,
     this.fontWeight = FontWeight.bold,
     this.fontFamily = 'Inter',
     this.prefixWidget,
     this.suffixWidget,
     this.isLoading = false,
+    this.isDisabled = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return ZoomTapAnimation(
-      onTap: () {
-        if (!isLoading) {
-          onTap?.call();
-        }
-      },
+      onTap: isDisabled
+          ? null
+          : () {
+              if (!isLoading) {
+                onTap?.call();
+              }
+            },
       end: 0.98,
       beginCurve: Curves.fastEaseInToSlowEaseOut,
       endCurve: Curves.easeOut,
       child: SmoothClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        side: border ?? BorderSide.none,
+        borderRadius: BorderRadius.circular(PSize.arh(context, borderRadius)),
+        side: isDisabled
+            ? BorderSide(
+                color: PColors.containerSecondary(context),
+                width: 2,
+                strokeAlign: 0.5,
+              )
+            : border ?? BorderSide.none,
         smoothness: 0.8,
         child: Container(
           width: width,
           height: height,
           decoration: BoxDecoration(
-            color: color,
+            color: isDisabled ? PColors.containerSecondary(context) : color,
           ),
           child: Center(
             child: isLoading
@@ -71,7 +82,9 @@ class PaysaPrimaryButton extends StatelessWidget {
                       Text(
                         text,
                         style: TextStyle(
-                          color: textColor,
+                          color: isDisabled
+                              ? PColors.secondaryTextDark
+                              : textColor,
                           fontSize: fontSize,
                           fontWeight: fontWeight,
                           fontFamily: fontFamily,

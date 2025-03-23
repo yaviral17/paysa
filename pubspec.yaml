@@ -39,7 +39,7 @@ dependencies:
   hugeicons: ^0.0.7
   flutter_glow: ^0.3.2
   fl_chart: ^0.69.2
-  avatar_stack: ^1.2.0
+  avatar_stack: ^3.0.0
   carousel_slider: ^5.0.0
   icons_plus: ^5.0.0
   firebase_core: ^3.8.1
@@ -60,6 +60,11 @@ dependencies:
   device_info_plus: ^11.3.0
   image_cropper: ^9.0.0
   path_provider: ^2.1.5
+  intl: ^0.20.2
+  clean_captcha: ^0.0.2
+  pull_down_button: ^0.10.2
+  custom_refresh_indicator: ^4.0.1
+  syncfusion_flutter_datagrid: ^28.2.12
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -109,17 +114,6 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: OpenSans
-      fonts:
-        - asset: assets/fonts/OpenSans-Light.ttf
-          weight: 300
-        - asset: assets/fonts/OpenSans-Regular.ttf
-        - asset: assets/fonts/OpenSans-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/OpenSans-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/OpenSans-Italic.ttf
-          style: italic
     - family: Inter
       fonts:
         - asset: assets/fonts/static/Inter_28pt-ExtraLight.ttf
@@ -169,11 +163,16 @@ flutter_native_splash:
   image: assets/images/light_paysa.png
   color_dark: "#000000"
   image_dark: assets/images/dark_paysa.png
-
+  android_gravity: center             # Image position (top, center, bottom)
+  ios_content_mode: scaleAspectFit    # Image scaling mode (scaleAspectFill, scaleAspectFit, etc.)
+  fullscreen: true                    # Hide status bar during splash
+  android: true                       # Enable splash screen on Android
+  ios: true                           # Enable splash screen on iOS
+  web: false                          # Disable splash screen on web
   android_12:
     image: assets/images/light_paysa.png
     icon_background_color: "#2EAB57"
     image_dark: assets/images/dark_paysa.png
     icon_background_color_dark: "#000000"
-
-  web: false
+  
+  

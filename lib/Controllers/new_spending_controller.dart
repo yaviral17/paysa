@@ -11,17 +11,21 @@ import 'package:paysa/Controllers/dashboard_controller.dart';
 import 'package:paysa/Models/notification_model.dart';
 import 'package:paysa/Models/shopping_model.dart';
 import 'package:paysa/Models/spending_model.dart';
+import 'package:paysa/Models/split_spending_model.dart';
 import 'package:paysa/Models/transfer_spending_model.dart';
 import 'package:paysa/Models/user_model.dart';
+import 'package:paysa/Models/user_split_model.dart';
 import 'package:paysa/Utils/constants/custom_enums.dart';
 import 'package:paysa/Utils/helpers/helper.dart';
+import 'package:paysa/Utils/helpers/navigations.dart';
+import 'package:paysa/Views/Dashboard/dashboard_view.dart';
 import 'package:uuid/uuid.dart';
 
 class NewSpendingController {
   Rx<SpendingType> spendingMode = SpendingType.shopping.obs;
   RxString amount = "".obs;
   RxBool isLoading = false.obs;
-
+  RxList<UserSplitModel> splitmembers = <UserSplitModel>[].obs;
   Rx<File> image = File('').obs;
 
   final storageRef = FirebaseStorage.instance.ref();
@@ -32,6 +36,9 @@ class NewSpendingController {
   TextEditingController messageControler = TextEditingController();
 
   Future<String?> addFileFirebaseStorage({File? file, String? fileName}) async {
+    if (file == null || fileName == null) {
+      return null;
+    }
     try {
       final spendingStorage = storageRef.child('spendings').child(fileName!);
 
@@ -87,6 +94,12 @@ class NewSpendingController {
       log("Amount is empty");
       return;
     }
+    if (messageControler.text.trim().isEmpty) {
+      PHelper.showErrorMessageGet(
+          title: "Message is empty 😕", message: "Please enter a message");
+      log("Amount is empty");
+      return;
+    }
 
     double amountValue = double.parse(amount.value);
 
@@ -109,7 +122,7 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
-      billImage: imageUrl!,
+      billImage: imageUrl ?? "",
       users: [FirebaseAuth.instance.currentUser!.uid],
       shoppingModel: ShoppingModel(
         amount: amount.value,
@@ -170,7 +183,7 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
-      billImage: imageUrl!,
+      billImage: imageUrl ?? "",
       transferSpendingModel: TransferSpendingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
@@ -213,7 +226,7 @@ class NewSpendingController {
   Future<void> splitCreation() async {
     if (amount.value.isEmpty) {
       PHelper.showErrorMessageGet(
-        title: "Amount is empty",
+        title: "Amount is empty 😕",
         message: "Please enter the amount",
       );
       log("Amount is empty");
@@ -222,12 +235,82 @@ class NewSpendingController {
     double amountValue = double.parse(amount.value);
     if (amountValue <= 0) {
       PHelper.showErrorMessageGet(
-        title: "Amount is invalid",
+        title: "Amount is invalid 😕",
         message: "Please enter a valid amount",
       );
       log("Amount is invalid");
       return;
     }
+
+    if (splitmembers.isEmpty) {
+      PHelper.showErrorMessageGet(
+        title: "No Members Selected 😕",
+        message: "Please select members",
+      );
+      log("No Members Selected");
+      return;
+    }
+    if (image.value.path.isEmpty) {
+      PHelper.showErrorMessageGet(
+        title: "No Image Selected 😕",
+        message: "Please select an image",
+      );
+      log("No Image Selected");
+      return;
+    }
+
+    String id = Uuid().v4();
+
+    String? billUrl =
+        await addFileFirebaseStorage(fileName: id, file: image.value);
+
+    SpendingModel spending = SpendingModel(
+      id: id,
+      createdAt: DateTime.now().toIso8601String(),
+      createdBy: FirebaseAuth.instance.currentUser!.uid,
+      updatedAt: DateTime.now().toIso8601String(),
+      updatedBy: FirebaseAuth.instance.currentUser!.uid,
+      spendingType: spendingMode.value,
+      billImage: billUrl ?? "",
+      users: splitmembers.map((e) => e.uid).toList(),
+      splitSpendingModel: SplitSpendingModel(
+        dateTime: DateTime.now(),
+        message: messageControler.text.trim(),
+        totalAmount: amount.value,
+        userSplit: splitmembers,
+        category: "",
+        location: "",
+      ),
+    );
+
+    for (UserSplitModel user in splitmembers) {
+      await FirestoreAPIs.addSpendingToUser(user.uid, spending.id);
+    }
+
+    await FirestoreAPIs.addSpending(spending);
+
+    // send notification
+    List<NotificationModel> notifications = [];
+
+    for (UserSplitModel user in splitmembers) {
+      if (user.token != null) {
+        if (user.uid == FirebaseAuth.instance.currentUser!.uid) {
+          PHelper.showSuccessMessageGet(
+              title: "Spending Created",
+              message: "Spending created successfully");
+          continue;
+        }
+        notifications.add(NotificationModel(
+          title: "New Split Added",
+          body:
+              "You have been added to a split of ${amount.value} by ${Get.find<DashboardController>().user.value!.firstname}",
+          token: user.token!,
+        ));
+      }
+    }
+
+    await FirebsaeFunctionsApi.sendNotifications(notifications);
+    PNavigate.toAndRemoveUntil(DashMenuView());
   }
 
   Future<void> incomeCreation() async {

@@ -12,7 +12,7 @@ class CurrencyText extends StatelessWidget {
 
   const CurrencyText({
     super.key,
-    this.currency = '\$',
+    this.currency = '₹',
     this.amount = 0,
     this.convertTo = 'USD',
     this.showCurrency = true,
