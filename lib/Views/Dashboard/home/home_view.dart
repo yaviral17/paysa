@@ -1,10 +1,6 @@
-import 'dart:async';
 import 'dart:developer';
 
-import 'package:avatar_stack/animated_avatar_stack.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,6 +15,7 @@ import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/Dashboard/SpendingDetails/spending_deatils_view.dart';
 import 'package:paysa/Views/Dashboard/SpendingDetails/spending_list_view.dart';
+import 'package:paysa/Views/Dashboard/SpendingDetails/split_deatils_view.dart';
 import 'package:paysa/Views/Dashboard/home/widget/chart_widget.dart';
 import 'package:random_avatar/random_avatar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -616,7 +613,7 @@ class SplitTileWidget extends StatelessWidget {
       onTap: onTap ??
           () {
             PNavigate.to(
-              SpendingDeatilsView(
+              SplitDeatilsView(
                 spendingModel: spending,
               ),
             );
