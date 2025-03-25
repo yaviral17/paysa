@@ -12,15 +12,15 @@ import 'package:paysa/Utils/theme/colors.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
-class SpendingDeatilsView extends StatefulWidget {
+class SplitDeatilsView extends StatefulWidget {
   final SpendingModel spendingModel;
-  const SpendingDeatilsView({super.key, required this.spendingModel});
+  const SplitDeatilsView({super.key, required this.spendingModel});
 
   @override
-  State<SpendingDeatilsView> createState() => _SpendingDeatilsViewState();
+  State<SplitDeatilsView> createState() => _SplitDeatilsViewState();
 }
 
-class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
+class _SplitDeatilsViewState extends State<SplitDeatilsView> {
   @override
   Widget build(BuildContext context) {
     log(widget.spendingModel.billImage, name: 'billImage');
@@ -215,7 +215,8 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                   ),
                 ),
                 Text(
-                  widget.spendingModel.shoppingModel!.amount.toString(),
+                  widget.spendingModel.splitSpendingModel!.totalAmount
+                      .toString(),
                   style: TextStyle(
                     color: PColors.primaryText(context),
                     fontSize: 18,
@@ -245,12 +246,13 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Text(
-                  widget.spendingModel.shoppingModel!.category
+                  widget.spendingModel.splitSpendingModel!.category
                           .toString()
                           .trim()
                           .isEmpty
                       ? '-'
-                      : widget.spendingModel.shoppingModel!.category.toString(),
+                      : widget.spendingModel.splitSpendingModel!.category
+                          .toString(),
                   style: TextStyle(
                     color: PColors.primaryText(context),
                     fontSize: 18,
@@ -310,12 +312,13 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Text(
-                  widget.spendingModel.shoppingModel!.message
+                  widget.spendingModel.splitSpendingModel!.message
                           .toString()
                           .trim()
                           .isEmpty
                       ? '-'
-                      : widget.spendingModel.shoppingModel!.message.toString(),
+                      : widget.spendingModel.splitSpendingModel!.message
+                          .toString(),
                   style: TextStyle(
                     color: PColors.primaryText(context),
                     fontSize: 18,

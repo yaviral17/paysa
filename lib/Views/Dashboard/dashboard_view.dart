@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:paysa/APIs/api_function.dart';
 import 'package:paysa/APIs/firebase_api.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
@@ -33,10 +34,12 @@ class DashMenuView extends StatefulWidget {
 class _DashMenuViewState extends State<DashMenuView> with RouteAware {
   final DashboardController dashboardController =
       Get.put(DashboardController());
+  final ApiFunctions apiFunctions = Get.put(ApiFunctions());
 
   @override
   void initState() {
     super.initState();
+    apiFunctions.checkPermissionsAndGetLocation();
     PFirebaseAPI().initNotifications().then(
       (token) {
         log('FCM Token: $token');

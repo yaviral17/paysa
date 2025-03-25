@@ -215,7 +215,7 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                   ),
                 ),
                 Text(
-                  widget.spendingModel.shoppingModel!.amount.toString(),
+                  widget.spendingModel.transferSpendingModel!.amount.toString(),
                   style: TextStyle(
                     color: PColors.primaryText(context),
                     fontSize: 18,
@@ -239,22 +239,6 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                     color: PColors.secondaryText(context),
                     fontSize: 18,
                     fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Text(
-                  widget.spendingModel.shoppingModel!.category
-                          .toString()
-                          .trim()
-                          .isEmpty
-                      ? '-'
-                      : widget.spendingModel.shoppingModel!.category.toString(),
-                  style: TextStyle(
-                    color: PColors.primaryText(context),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -310,12 +294,13 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Text(
-                  widget.spendingModel.shoppingModel!.message
+                  widget.spendingModel.transferSpendingModel!.message
                           .toString()
                           .trim()
                           .isEmpty
                       ? '-'
-                      : widget.spendingModel.shoppingModel!.message.toString(),
+                      : widget.spendingModel.transferSpendingModel!.message
+                          .toString(),
                   style: TextStyle(
                     color: PColors.primaryText(context),
                     fontSize: 18,
