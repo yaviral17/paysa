@@ -65,6 +65,16 @@ class SpendingModel {
       'splitSpendingModel': splitSpendingModel?.toJson(),
       'transferSpendingModel': transferSpendingModel?.toJson(),
       'users': users,
+      'summary-for-llm': spendingType == SpendingType.shopping
+          ? '''
+This user has spent ${shoppingModel!.amount} on shopping on $createdAt 
+it's discritpion is ${shoppingModel!.message} 
+'''
+          : spendingType == SpendingType.split
+              ? '''
+
+'''
+              : ""
     };
   }
 }

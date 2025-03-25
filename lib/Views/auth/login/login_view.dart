@@ -266,6 +266,8 @@ class PaysaPrimaryTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final void Function()? onObsecure;
   final int? maxLength;
+  final int? maxLines;
+  final int? minLines;
 
   const PaysaPrimaryTextField({
     super.key,
@@ -284,6 +286,8 @@ class PaysaPrimaryTextField extends StatelessWidget {
     this.focusNode,
     this.onObsecure,
     this.maxLength,
+    this.maxLines,
+    this.minLines,
   });
 
   @override
@@ -298,6 +302,8 @@ class PaysaPrimaryTextField extends StatelessWidget {
       inputFormatters: inputFormatter != null ? [inputFormatter!] : null,
       onChanged: onChanged,
       onTap: onTap,
+      maxLines: maxLength,
+      minLines: maxLines,
       decoration: InputDecoration(
         suffixIcon: isPassword
             ? GestureDetector(
