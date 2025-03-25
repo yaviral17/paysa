@@ -188,7 +188,6 @@ class FirestoreAPIs {
         .collection('spendings')
         .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
         .orderBy('createdAt', descending: true)
-        .limit(range ?? 10)
         .get()
         .then((value) {
       for (var element in value.docs) {
