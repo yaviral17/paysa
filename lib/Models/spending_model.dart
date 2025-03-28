@@ -72,9 +72,12 @@ it's discritpion is ${shoppingModel!.message}
 '''
           : spendingType == SpendingType.split
               ? '''
-
+This user has created a split of ${splitSpendingModel!.totalAmount} with ${splitSpendingModel!.userSplit
+.map((user) => user.uid).join(', ').replaceFirstMapped(RegExp(r', (?=[^,]*$)'), (match) => ' and ')} on $createdAt 
+it's discritpion is ${splitSpendingModel!.message} 
 '''
-              : ""
+              : ''' This user has transfer ${transferSpendingModel!.amount} to ${transferSpendingModel!.transferdToUser!.uid} on $createdAt 
+it's discritpion is ${transferSpendingModel!.message} '''
     };
   }
 }
