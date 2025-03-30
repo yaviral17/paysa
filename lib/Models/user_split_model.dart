@@ -4,7 +4,7 @@ class UserSplitModel {
   final String uid;
   String amount;
   final String? token;
-  final bool isPaid;
+  bool isPaid;
   final String createdAt;
   final String? paidAt;
   UserModel? user;
