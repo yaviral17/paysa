@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/authentication_controller.dart';
 import 'package:paysa/Controllers/new_spending_controller.dart';
@@ -505,22 +505,12 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                 newSpendingController.searchedUsers.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                leading: newSpendingController
-                                            .searchedUsers[index].profile !=
-                                        null
-                                    ? CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            newSpendingController
-                                                .searchedUsers[index].profile!),
-                                        radius: PSize.arw(context, 20),
-                                      )
-                                    : RandomAvatar(
-                                        newSpendingController
-                                                .searchedUsers[index]
-                                                .firstname ??
-                                            "Random",
-                                        width: PSize.arw(context, 40),
-                                      ),
+                                leading: RandomAvatar(
+                                  newSpendingController
+                                          .searchedUsers[index].username ??
+                                      '',
+                                  width: PSize.arw(context, 40),
+                                ),
                                 title: Text(
                                   newSpendingController
                                           .searchedUsers[index].firstname ??
@@ -560,21 +550,10 @@ class _NewSpendingViewState extends State<NewSpendingView>
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: ListTile(
-                        leading:
-                            newSpendingController.transferUser.value!.profile !=
-                                    null
-                                ? CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                      newSpendingController
-                                          .transferUser.value!.profile!,
-                                    ),
-                                    radius: PSize.arw(context, 20),
-                                  )
-                                : RandomAvatar(
-                                    newSpendingController
-                                        .transferUser.value!.firstname!,
-                                    width: PSize.arw(context, 40),
-                                  ),
+                        leading: RandomAvatar(
+                          newSpendingController.transferUser.value!.username!,
+                          width: PSize.arw(context, 40),
+                        ),
                         title: Text(
                           newSpendingController.transferUser.value!.firstname ??
                               '',

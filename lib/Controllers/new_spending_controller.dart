@@ -5,10 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:paysa/APIs/api_function.dart';
 import 'package:paysa/APIs/firebsae_functions_api.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
 import 'package:paysa/Models/notification_model.dart';
+import 'package:paysa/Models/place_details_model.dart';
 import 'package:paysa/Models/shopping_model.dart';
 import 'package:paysa/Models/spending_model.dart';
 import 'package:paysa/Models/split_spending_model.dart';
@@ -34,6 +36,8 @@ class NewSpendingController {
   RxList<UserModel> searchedUsers = <UserModel>[].obs;
 
   TextEditingController messageControler = TextEditingController();
+
+  final ApiFunctions apiFunctions = Get.put(ApiFunctions());
 
   Future<String?> addFileFirebaseStorage({File? file, String? fileName}) async {
     if (file == null || fileName == null) {
@@ -66,15 +70,21 @@ class NewSpendingController {
     }
     isLoading.value = true;
 
+    PlaceDetailsModel? placeDetailsModel =
+        await apiFunctions.getAddressFromLatLng(
+            apiFunctions.currentLocation!.latitude,
+            apiFunctions.currentLocation!.longitude);
+
+    Get.log(placeDetailsModel!.toJson().toString());
     switch (spendingMode.value) {
       case SpendingType.shopping:
-        await shoppingCreation();
+        await shoppingCreation(placeDetailsModel: placeDetailsModel);
         break;
       case SpendingType.transfer:
-        await transferCreation();
+        await transferCreation(placeDetailsModel: placeDetailsModel);
         break;
       case SpendingType.split:
-        await splitCreation();
+        await splitCreation(placeDetailsModel: placeDetailsModel);
         break;
       case SpendingType.income:
         await incomeCreation();
@@ -87,7 +97,7 @@ class NewSpendingController {
     isLoading.value = false;
   }
 
-  Future<void> shoppingCreation() async {
+  Future<void> shoppingCreation({PlaceDetailsModel? placeDetailsModel}) async {
     if (amount.value.isEmpty) {
       PHelper.showErrorMessageGet(
           title: "Amount is empty", message: "Please enter the amount");
@@ -124,6 +134,7 @@ class NewSpendingController {
       spendingType: spendingMode.value,
       billImage: imageUrl ?? "",
       users: [FirebaseAuth.instance.currentUser!.uid],
+      location: placeDetailsModel,
       shoppingModel: ShoppingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
@@ -132,6 +143,8 @@ class NewSpendingController {
         category: "",
       ),
     );
+
+    Get.log(id);
     await FirestoreAPIs.addSpendingToUser(
         FirebaseAuth.instance.currentUser!.uid, spending.id);
     await FirestoreAPIs.addSpending(spending);
@@ -141,7 +154,7 @@ class NewSpendingController {
     log("Spending Created");
   }
 
-  Future<void> transferCreation() async {
+  Future<void> transferCreation({PlaceDetailsModel? placeDetailsModel}) async {
     if (transferUser.value == null) {
       PHelper.showErrorMessageGet(
         title: "No User Selected 😕",
@@ -183,6 +196,7 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
+      location: placeDetailsModel,
       billImage: imageUrl ?? "",
       transferSpendingModel: TransferSpendingModel(
         amount: amount.value,
@@ -191,6 +205,12 @@ class NewSpendingController {
         location: "",
         transferedFrom: FirebaseAuth.instance.currentUser!.uid,
         transferedTo: transferUser.value!.uid!,
+        transferdToUser: transferUser.value,
+        transferdFromUser: UserModel(
+          uid: FirebaseAuth.instance.currentUser!.uid,
+          firstname: FirebaseAuth.instance.currentUser!.displayName,
+          token: Get.find<DashboardController>().fcmToken.value,
+        ),
       ),
       users: [FirebaseAuth.instance.currentUser!.uid, transferUser.value!.uid!],
     );
@@ -223,7 +243,7 @@ class NewSpendingController {
     log("Spending Created");
   }
 
-  Future<void> splitCreation() async {
+  Future<void> splitCreation({PlaceDetailsModel? placeDetailsModel}) async {
     if (amount.value.isEmpty) {
       PHelper.showErrorMessageGet(
         title: "Amount is empty 😕",
@@ -273,6 +293,7 @@ class NewSpendingController {
       spendingType: spendingMode.value,
       billImage: billUrl ?? "",
       users: splitmembers.map((e) => e.uid).toList(),
+      location: placeDetailsModel,
       splitSpendingModel: SplitSpendingModel(
         dateTime: DateTime.now(),
         message: messageControler.text.trim(),

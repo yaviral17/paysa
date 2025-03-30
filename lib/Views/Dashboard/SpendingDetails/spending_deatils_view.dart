@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
@@ -15,7 +16,7 @@ import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:random_avatar/random_avatar.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:smooth_corner/smooth_corner.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class SpendingDeatilsView extends StatefulWidget {
@@ -59,45 +60,6 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
     log(widget.spendingModel.billImage, name: 'billImage');
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: PColors.primaryText(context),
-          ),
-        ),
-        backgroundColor: PColors.background(context),
-        centerTitle: true,
-        actions: [
-          CupertinoButton(
-            onPressed: () {
-              // delete spending
-            },
-            child: Icon(
-              HugeIcons.strokeRoundedDelete02,
-              color: PColors.primaryText(context),
-            ),
-          ),
-          Visibility(
-            visible: FirebaseAuth.instance.currentUser!.uid ==
-                widget.spendingModel.createdBy,
-            child: CupertinoButton(
-              onPressed: () async {
-                // edit spending
-                await editSpending();
-              },
-              child: Icon(
-                HugeIcons.strokeRoundedEdit02,
-                color: PColors.primaryText(context),
-              ),
-            ),
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: widget.spendingModel.spendingType == SpendingType.shopping
             ? _shoppingUI()
@@ -120,13 +82,55 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
-          child: Text(
-            "Spending Details",
-            style: TextStyle(
-              color: PColors.primaryText(context),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Spending Details",
+                style: TextStyle(
+                  color: PColors.primaryText(context),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Visibility(
+                visible: FirebaseAuth.instance.currentUser!.uid ==
+                        widget.spendingModel.createdBy &&
+                    widget.spendingModel.spendingType == SpendingType.split,
+                child: ZoomTapAnimation(
+                  onTap: () {
+                    editSpending();
+                  },
+                  child: Container(
+                    height: PSize.arw(context, 40),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: PColors.primary(context),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          HugeIcons.strokeRoundedEdit01,
+                          color: PColors.primaryText(context),
+                          size: PSize.arw(context, 20),
+                        ),
+                        SizedBox(width: PSize.arw(context, 8)),
+                        Text(
+                          'Edit',
+                          style: TextStyle(
+                            color: PColors.primaryText(context),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(
@@ -261,6 +265,7 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -273,24 +278,60 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: Text(
-                widget.spendingModel.shoppingModel!.location
-                        .toString()
-                        .trim()
-                        .isEmpty
-                    ? '-'
-                    : widget.spendingModel.shoppingModel!.location.toString(),
-                style: TextStyle(
-                  color: PColors.primaryText(context),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Text(
+                  widget.spendingModel.location == null
+                      ? '-'
+                      : widget.spendingModel.location!.address!,
+                  style: TextStyle(
+                    color: PColors.primaryText(context),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  softWrap: true,
+                  textAlign: TextAlign.end,
+                  // overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
           ],
         ),
+        SizedBox(
+          height: PSize.arh(context, 8),
+        ),
+        widget.spendingModel.location == null
+            ? SizedBox.shrink()
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.width,
+                    child: SmoothClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      smoothness: 0.6,
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(widget.spendingModel.location!.lat!,
+                              widget.spendingModel.location!.lat!),
+                          zoom: 15,
+                        ),
+                        zoomControlsEnabled: false,
+                        zoomGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
+                        rotateGesturesEnabled: false,
+                        markers: {
+                          Marker(
+                            markerId: MarkerId('departureLocation'),
+                            position: LatLng(
+                                widget.spendingModel.location!.lat!,
+                                widget.spendingModel.location!.lat!),
+                          ),
+                        },
+                      ),
+                    )),
+              ),
         SizedBox(
           height: PSize.arh(context, 8),
         ),
@@ -444,6 +485,7 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -456,25 +498,60 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: Text(
-                widget.spendingModel.transferSpendingModel!.location
-                        .toString()
-                        .trim()
-                        .isEmpty
-                    ? '-'
-                    : widget.spendingModel.transferSpendingModel!.location
-                        .toString(),
-                style: TextStyle(
-                  color: PColors.primaryText(context),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Text(
+                  widget.spendingModel.location == null
+                      ? '-'
+                      : widget.spendingModel.location!.address!,
+                  style: TextStyle(
+                    color: PColors.primaryText(context),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  softWrap: true,
+                  textAlign: TextAlign.end,
+                  // overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
           ],
         ),
+        SizedBox(
+          height: PSize.arh(context, 8),
+        ),
+        widget.spendingModel.location == null
+            ? SizedBox.shrink()
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.width,
+                    child: SmoothClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      smoothness: 0.6,
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(widget.spendingModel.location!.lat!,
+                              widget.spendingModel.location!.lat!),
+                          zoom: 15,
+                        ),
+                        zoomControlsEnabled: false,
+                        zoomGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
+                        rotateGesturesEnabled: false,
+                        markers: {
+                          Marker(
+                            markerId: MarkerId('departureLocation'),
+                            position: LatLng(
+                                widget.spendingModel.location!.lat!,
+                                widget.spendingModel.location!.lat!),
+                          ),
+                        },
+                      ),
+                    )),
+              ),
         SizedBox(
           height: PSize.arh(context, 8),
         ),
@@ -724,6 +801,7 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -736,30 +814,60 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: Text(
-                (fromFirebase != null
-                        ? widget.spendingModel.splitSpendingModel!.location
-                            .toString()
-                            .trim()
-                            .isEmpty
-                        : widget.spendingModel.splitSpendingModel!.location
-                            .toString()
-                            .trim()
-                            .isEmpty)
-                    ? '-'
-                    : widget.spendingModel.splitSpendingModel!.location
-                        .toString(),
-                style: TextStyle(
-                  color: PColors.primaryText(context),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Text(
+                  widget.spendingModel.location == null
+                      ? '-'
+                      : widget.spendingModel.location!.address!,
+                  style: TextStyle(
+                    color: PColors.primaryText(context),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  softWrap: true,
+                  textAlign: TextAlign.end,
+                  // overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
           ],
         ),
+        SizedBox(
+          height: PSize.arh(context, 8),
+        ),
+        widget.spendingModel.location == null
+            ? SizedBox.shrink()
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.width,
+                    child: SmoothClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      smoothness: 0.6,
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(widget.spendingModel.location!.lat!,
+                              widget.spendingModel.location!.lat!),
+                          zoom: 15,
+                        ),
+                        zoomControlsEnabled: false,
+                        zoomGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
+                        rotateGesturesEnabled: false,
+                        markers: {
+                          Marker(
+                            markerId: MarkerId('departureLocation'),
+                            position: LatLng(
+                                widget.spendingModel.location!.lat!,
+                                widget.spendingModel.location!.lat!),
+                          ),
+                        },
+                      ),
+                    )),
+              ),
         SizedBox(
           height: PSize.arh(context, 8),
         ),
@@ -824,6 +932,114 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                   offset: Offset(0, 0),
                 ),
               ]),
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: PSize.arw(context, 40),
+                      height: PSize.arw(context, 40),
+                      decoration: BoxDecoration(
+                        color: PColors.primaryText(context),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: PColors.background(context).withAlpha(100),
+                            spreadRadius: 1,
+                            blurRadius: 20,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: PColors.background(context),
+                          size: PSize.arw(context, 20),
+                        ),
+                      ),
+                    ),
+                    ZoomTapAnimation(
+                      onTap: () {
+                        // cupertino dialog to confirm delete
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text('Comfirm Delete 🗑'),
+                              content: Text(
+                                  'Are you sure you want to delete this spending? This action cannot be undone. 🤔'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      color: PColors.primaryText(context),
+                                    ),
+                                  ),
+                                ),
+                                CupertinoDialogAction(
+                                  onPressed: () {
+                                    FirestoreAPIs.deleteSpendings(
+                                        [widget.spendingModel.id]);
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: PColors.error,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        height: PSize.arw(context, 40),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: PColors.error,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              HugeIcons.strokeRoundedDelete02,
+                              color: PColors.primaryText(context),
+                              size: PSize.arw(context, 20),
+                            ),
+                            SizedBox(width: PSize.arw(context, 8)),
+                            Text(
+                              'Delete',
+                              style: TextStyle(
+                                color: PColors.primaryText(context),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
