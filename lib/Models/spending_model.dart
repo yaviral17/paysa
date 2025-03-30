@@ -1,3 +1,4 @@
+import 'package:paysa/Models/place_details_model.dart';
 import 'package:paysa/Models/shopping_model.dart';
 import 'package:paysa/Models/split_spending_model.dart';
 import 'package:paysa/Models/transfer_spending_model.dart';
@@ -14,6 +15,7 @@ class SpendingModel {
   final ShoppingModel? shoppingModel;
   final SplitSpendingModel? splitSpendingModel;
   final TransferSpendingModel? transferSpendingModel;
+  final PlaceDetailsModel? location;
   final List<String> users;
 
   SpendingModel({
@@ -27,6 +29,7 @@ class SpendingModel {
     this.shoppingModel,
     this.splitSpendingModel,
     this.transferSpendingModel,
+    this.location,
     required this.users,
   });
 
@@ -48,6 +51,9 @@ class SpendingModel {
       transferSpendingModel: map['transferSpendingModel'] != null
           ? TransferSpendingModel.fromJson(map['transferSpendingModel'])
           : null,
+      location: map['location'] != null
+          ? PlaceDetailsModel.fromJson(map['location'])
+          : null,
       users: List<String>.from(map['users'].map((x) => x)),
     );
   }
@@ -64,6 +70,7 @@ class SpendingModel {
       'shoppingModel': shoppingModel?.toJson(),
       'splitSpendingModel': splitSpendingModel?.toJson(),
       'transferSpendingModel': transferSpendingModel?.toJson(),
+      'location': location?.toJson(),
       'users': users,
       'summary-for-llm': spendingType == SpendingType.shopping
           ? '''
@@ -81,3 +88,5 @@ it's discritpion is ${transferSpendingModel!.message} '''
     };
   }
 }
+
+
