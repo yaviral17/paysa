@@ -382,7 +382,7 @@ class _SplitDeatilsViewState extends State<SplitDeatilsView> {
                         child: GoogleMap(
                           initialCameraPosition: CameraPosition(
                             target: LatLng(widget.spendingModel.location!.lat!,
-                                widget.spendingModel.location!.lat!),
+                                widget.spendingModel.location!.lng!),
                             zoom: 15,
                           ),
                           zoomControlsEnabled: false,
@@ -394,7 +394,7 @@ class _SplitDeatilsViewState extends State<SplitDeatilsView> {
                               markerId: MarkerId('departureLocation'),
                               position: LatLng(
                                   widget.spendingModel.location!.lat!,
-                                  widget.spendingModel.location!.lat!),
+                                  widget.spendingModel.location!.lng!),
                             ),
                           },
                         ),

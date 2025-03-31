@@ -364,7 +364,7 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                         child: GoogleMap(
                           initialCameraPosition: CameraPosition(
                             target: LatLng(widget.spendingModel.location!.lat!,
-                                widget.spendingModel.location!.lat!),
+                                widget.spendingModel.location!.lng!),
                             zoom: 15,
                           ),
                           zoomControlsEnabled: false,
@@ -376,7 +376,7 @@ class _SpendingDeatilsViewState extends State<SpendingDeatilsView> {
                               markerId: MarkerId('departureLocation'),
                               position: LatLng(
                                   widget.spendingModel.location!.lat!,
-                                  widget.spendingModel.location!.lat!),
+                                  widget.spendingModel.location!.lng!),
                             ),
                           },
                         ),
