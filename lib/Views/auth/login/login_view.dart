@@ -170,15 +170,15 @@ class LoginView extends StatelessWidget {
                       () => PaysaPrimaryTextField(
                         controller: passwordController,
                         hintText: "Password",
-                        isPassword: true,
-                        onObsecure: () =>
-                            isVisibility.value = !isVisibility.value,
+                        // isPassword: true,
+                        // onObsecure: () =>
+                        //     isVisibility.value = !isVisibility.value,
                         fillColor: PColors.primaryText(context),
                         prefixIcon: Icon(
                           Iconsax.lock,
                           color: PColors.primaryText(context),
                         ),
-                        obscureText: isVisibility.value,
+                        // obscureText: isVisibility.value,
                       ),
                     ),
                     SizedBox(

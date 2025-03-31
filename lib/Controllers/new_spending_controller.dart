@@ -9,6 +9,8 @@ import 'package:paysa/APIs/api_function.dart';
 import 'package:paysa/APIs/firebsae_functions_api.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
+import 'package:paysa/Models/chat_model.dart';
+import 'package:paysa/Models/chat_session.dart';
 import 'package:paysa/Models/notification_model.dart';
 import 'package:paysa/Models/place_details_model.dart';
 import 'package:paysa/Models/shopping_model.dart';
@@ -188,7 +190,13 @@ class NewSpendingController {
 
     String? imageUrl =
         await addFileFirebaseStorage(fileName: id, file: image.value);
-
+    List<String> users = [
+      FirebaseAuth.instance.currentUser!.uid,
+      transferUser.value!.uid!,
+    ];
+    users = PHelper.sortAlphabetically(users);
+    String? billUrl =
+        await addFileFirebaseStorage(fileName: id, file: image.value);
     SpendingModel spending = SpendingModel(
       id: id,
       createdAt: DateTime.now().toIso8601String(),
@@ -196,8 +204,10 @@ class NewSpendingController {
       updatedAt: DateTime.now().toIso8601String(),
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
-      location: placeDetailsModel,
       billImage: imageUrl ?? "",
+      location: placeDetailsModel,
+      shoppingModel: null,
+      splitSpendingModel: null,
       transferSpendingModel: TransferSpendingModel(
         amount: amount.value,
         message: messageControler.text.trim(),
@@ -205,8 +215,10 @@ class NewSpendingController {
         location: "",
         transferedFrom: FirebaseAuth.instance.currentUser!.uid,
         transferedTo: transferUser.value!.uid!,
+        transferdFromUser: Get.find<DashboardController>().user.value!,
+        transferdToUser: transferUser.value!,
       ),
-      users: [FirebaseAuth.instance.currentUser!.uid, transferUser.value!.uid!],
+      users: users,
     );
     await FirestoreAPIs.addSpendingToUser(
         FirebaseAuth.instance.currentUser!.uid, spending.id);
@@ -214,6 +226,34 @@ class NewSpendingController {
         transferUser.value!.uid!, spending.id);
     await FirestoreAPIs.addSpending(spending);
     String myToken = Get.find<DashboardController>().fcmToken.value;
+    String? sessionId = Uuid().v4();
+    ChatSession data = ChatSession(
+      id: sessionId,
+      participants: [
+        UserModel(
+          uid: FirebaseAuth.instance.currentUser!.uid,
+          firstname: FirebaseAuth.instance.currentUser!.displayName ?? "",
+          email: FirebaseAuth.instance.currentUser!.email ?? "",
+          token: myToken,
+        ),
+        transferUser.value!,
+      ],
+      messages: [
+        ChatMessage(
+          id: Uuid().v4(),
+          message: "Transfer of ${amount.value} sent",
+          time: DateTime.now(),
+          sender: Get.find<DashboardController>().user.value!,
+          isSpending: true,
+          spedingId: spending.id,
+        ),
+      ],
+      createdAt: DateTime.now(),
+      spendingModel: spending,
+      users: users,
+    );
+
+    await FirestoreAPIs.checkAndCreateChatSession(data);
 
     await FirebsaeFunctionsApi.sendNotifications(
       [
@@ -277,7 +317,9 @@ class NewSpendingController {
 
     String? billUrl =
         await addFileFirebaseStorage(fileName: id, file: image.value);
+    List<String> users = splitmembers.map((e) => e.uid).toList();
 
+    users = PHelper.sortAlphabetically(users);
     SpendingModel spending = SpendingModel(
       id: id,
       createdAt: DateTime.now().toIso8601String(),
@@ -286,8 +328,10 @@ class NewSpendingController {
       updatedBy: FirebaseAuth.instance.currentUser!.uid,
       spendingType: spendingMode.value,
       billImage: billUrl ?? "",
-      users: splitmembers.map((e) => e.uid).toList(),
+      users: users,
       location: placeDetailsModel,
+      shoppingModel: null,
+      transferSpendingModel: null,
       splitSpendingModel: SplitSpendingModel(
         dateTime: DateTime.now(),
         message: messageControler.text.trim(),
@@ -304,6 +348,30 @@ class NewSpendingController {
 
     await FirestoreAPIs.addSpending(spending);
 
+    String sessionId = Uuid().v4();
+    ChatSession data = ChatSession(
+      id: sessionId,
+      participants: List.generate(
+        splitmembers.length,
+        (index) {
+          return splitmembers[index].user!;
+        },
+      ),
+      messages: [
+        ChatMessage(
+          id: Uuid().v4(),
+          message: "Split of ${amount.value} created",
+          time: DateTime.now(),
+          sender: Get.find<DashboardController>().user.value!,
+          isSpending: true,
+          spedingId: spending.id,
+        ),
+      ],
+      createdAt: DateTime.now(),
+      spendingModel: spending,
+      users: users,
+    );
+    await FirestoreAPIs.checkAndCreateChatSession(data);
     // send notification
     List<NotificationModel> notifications = [];
 

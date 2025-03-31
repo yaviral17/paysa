@@ -77,14 +77,23 @@ class ApiFunctions extends GetxController {
   }
 
   Future<void> checkPermissionsAndGetLocation() async {
-    var status = await Permission.location.request();
-    if (status.isGranted) {
-      _getCurrentLocation();
-    } else if (status.isDenied) {
-      print("Location permission denied.");
-    } else if (status.isPermanentlyDenied) {
-      openAppSettings();
-    }
+    // var status = await Permission.location.request();
+    // if (status.isGranted) {
+    //   _getCurrentLocation();
+    // } else if (status.isDenied) {
+    //   Permission.location.request();
+
+    // }
+    // }
+
+    Geolocator.requestPermission().then((value) {
+      if (value == LocationPermission.always ||
+          value == LocationPermission.whileInUse) {
+        _getCurrentLocation();
+      } else {
+        log("Location permission denied");
+      }
+    });
   }
 
   Future<void> _getCurrentLocation() async {
