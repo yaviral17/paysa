@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
@@ -14,18 +16,18 @@ class ChatScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<ChatMessage> messages = [
       ChatMessage(
+        id: "1",
         message:
             "Hi, good to see you! We're starting work on a presentation for a new product today, right?",
-        sender: "You",
-        time: "8:36 PM",
-        isUser: true,
+        sender: UserModel(),
+        time: DateTime.now(),
       ),
       ChatMessage(
+        id: "2",
         message:
             "Yes, that's right. Let's discuss the main points and structure of the presentation.",
-        sender: "John Doe",
-        time: "8:36 PM",
-        isUser: false,
+        sender: UserModel(),
+        time: DateTime.now(),
       ),
     ];
     return Scaffold(
@@ -64,7 +66,7 @@ class ChatScreenView extends StatelessWidget {
         title: Column(
           children: [
             Text(
-              messages[1].sender,
+              'John Doe',
               style: TextStyle(
                 letterSpacing: 0.4,
                 color: Colors.white,
@@ -109,16 +111,20 @@ class ChatScreenView extends StatelessWidget {
                 final message = messages[index];
 
                 return Align(
-                  alignment:
-                      (message.isUser) ? Alignment.topRight : Alignment.topLeft,
+                  alignment: (message.sender.uid ==
+                          FirebaseAuth.instance.currentUser!.uid)
+                      ? Alignment.topRight
+                      : Alignment.topLeft,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: (message.isUser)
+                    mainAxisAlignment: (message.sender.uid ==
+                            FirebaseAuth.instance.currentUser!.uid)
                         ? MainAxisAlignment.end
                         : MainAxisAlignment.start,
                     children: [
                       // User avatar
-                      (!message.isUser)
+                      (message.sender.uid ==
+                              FirebaseAuth.instance.currentUser!.uid)
                           ? Container(
                               margin: const EdgeInsets.only(bottom: 10),
                               child: SmoothClipRRect(
@@ -136,7 +142,8 @@ class ChatScreenView extends StatelessWidget {
                               ),
                             )
                           : const SizedBox(),
-                      (!message.isUser)
+                      (message.sender.uid ==
+                              FirebaseAuth.instance.currentUser!.uid)
                           ? const SizedBox(width: 8)
                           : const SizedBox(),
 
@@ -145,7 +152,8 @@ class ChatScreenView extends StatelessWidget {
                       CustChatBubble(message: message),
                       const SizedBox(width: 8),
                       // User avatar
-                      if (message.isUser)
+                      if (message.sender.uid !=
+                          FirebaseAuth.instance.currentUser!.uid)
                         Container(
                           margin: const EdgeInsets.only(bottom: 10),
                           child: SmoothClipRRect(
@@ -249,7 +257,7 @@ class CustChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (message.isUser)
+    return (message.sender.uid == FirebaseAuth.instance.currentUser!.uid)
         ?
         // user chat bubble
         Container(
@@ -270,7 +278,7 @@ class CustChatBubble extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  message.sender,
+                  message.sender.username ?? "-",
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -294,7 +302,7 @@ class CustChatBubble extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      message.time,
+                      message.time.toString(),
                       // "8:36 PM",
                       style: const TextStyle(
                         fontSize: 12,
@@ -326,7 +334,7 @@ class CustChatBubble extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  message.sender,
+                  message.sender.username ?? "-",
                   style: const TextStyle(
                     color: Color(0xffc1f6a7),
                     fontWeight: FontWeight.bold,
@@ -350,7 +358,7 @@ class CustChatBubble extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      message.time,
+                      message.time.toString(),
                       // "8:36 PM",
                       style: const TextStyle(
                         fontSize: 12,

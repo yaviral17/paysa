@@ -5,8 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:paysa/Models/chat_session.dart';
 import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Models/spending_model.dart';
+import 'package:paysa/Utils/helpers/helper.dart';
+import 'package:uuid/uuid.dart';
 
 class FirestoreAPIs {
   static CollectionReference users =
@@ -238,5 +241,33 @@ class FirestoreAPIs {
         .doc(spendingId)
         .get();
     return SpendingModel.fromJson(doc.data() as Map<String, dynamic>);
+    
+  static Future<void> checkAndCreateChatSession(ChatSession sessionData) async {
+    // Check if the chat session already exists
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('chat-sessions')
+        .where('users', isEqualTo: sessionData.users)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      // Create a new chat session if it doesn't exist
+      String sessionId = const Uuid().v4();
+
+      await FirebaseFirestore.instance
+          .collection('chat-sessions')
+          .doc(sessionId)
+          .set(
+            sessionData.toJson(),
+          );
+    } else {
+      // If the chat session already exists, you can handle it as needed
+      // For example, you can return the existing session ID or update it
+      String existingSessionId = querySnapshot.docs.first.id;
+      // PHelper.showWarningMessageGet(
+      //   title: "Chat Session Already Exists 👀",
+      //   message: "The chat session already exists with ID: $existingSessionId",
+      // );
+      // You can also return the existing session data if needed
+    }
   }
 }
