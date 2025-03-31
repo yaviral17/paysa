@@ -221,6 +221,29 @@ class FirestoreAPIs {
     }
   }
 
+  static Future<void> upadteSpending(
+      String spendingId, Map<String, dynamic> data) async {
+    await FirebaseFirestore.instance
+        .collection('spendings')
+        .doc(spendingId)
+        .update(data);
+  }
+
+  static Future<void> deleteSpending(String spendingId) async {
+    await FirebaseFirestore.instance
+        .collection('spendings')
+        .doc(spendingId)
+        .delete();
+  }
+
+  static Future<SpendingModel> getSpendingById(String spendingId) async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('spendings')
+        .doc(spendingId)
+        .get();
+    return SpendingModel.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
   static Future<void> checkAndCreateChatSession(ChatSession sessionData) async {
     // Check if the chat session already exists
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
