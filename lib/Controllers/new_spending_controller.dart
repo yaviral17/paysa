@@ -205,6 +205,12 @@ class NewSpendingController {
         location: "",
         transferedFrom: FirebaseAuth.instance.currentUser!.uid,
         transferedTo: transferUser.value!.uid!,
+        transferdToUser: transferUser.value,
+        transferdFromUser: UserModel(
+          uid: FirebaseAuth.instance.currentUser!.uid,
+          firstname: FirebaseAuth.instance.currentUser!.displayName,
+          token: Get.find<DashboardController>().fcmToken.value,
+        ),
       ),
       users: [FirebaseAuth.instance.currentUser!.uid, transferUser.value!.uid!],
     );

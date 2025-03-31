@@ -90,6 +90,9 @@ class DashboardController extends GetxController {
 
   Future<void> fetchSpendings(int? range) async {
     spendings.value = await FirestoreAPIs.getSpendings(range);
+    for (var element in spendings.value) {
+      log(element.spendingType.value, name: "Spending Type");
+    }
   }
 
   void changePage(int index) {

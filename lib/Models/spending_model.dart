@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:paysa/Models/place_details_model.dart';
 import 'package:paysa/Models/shopping_model.dart';
 import 'package:paysa/Models/split_spending_model.dart';
@@ -59,6 +61,8 @@ class SpendingModel {
   }
 
   Map<String, dynamic> toJson() {
+    log(''' This user has transfer ${transferSpendingModel?.amount} to ${transferSpendingModel?.transferdToUser?.uid} on $createdAt 
+it's discritpion is ${transferSpendingModel?.message} ''', name: 'toJson');
     return {
       'id': id,
       'createdBy': createdBy,
@@ -79,14 +83,11 @@ it's discritpion is ${shoppingModel!.message}
 '''
           : spendingType == SpendingType.split
               ? '''
-This user has created a split of ${splitSpendingModel!.totalAmount} with ${splitSpendingModel!.userSplit
-.map((user) => user.uid).join(', ').replaceFirstMapped(RegExp(r', (?=[^,]*$)'), (match) => ' and ')} on $createdAt 
+This user has created a split of ${splitSpendingModel!.totalAmount} with ${splitSpendingModel!.userSplit.map((user) => user.uid).join(', ').replaceFirstMapped(RegExp(r', (?=[^,]*$)'), (match) => ' and ')} on $createdAt 
 it's discritpion is ${splitSpendingModel!.message} 
 '''
-              : ''' This user has transfer ${transferSpendingModel!.amount} to ${transferSpendingModel!.transferdToUser!.uid} on $createdAt 
-it's discritpion is ${transferSpendingModel!.message} '''
+              : ''' This user has transfer ${transferSpendingModel?.amount} to ${transferSpendingModel?.transferdToUser!.uid} on $createdAt 
+it's discritpion is ${transferSpendingModel?.message} '''
     };
   }
 }
-
-

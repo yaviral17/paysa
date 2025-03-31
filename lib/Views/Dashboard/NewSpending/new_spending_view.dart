@@ -505,22 +505,12 @@ class _NewSpendingViewState extends State<NewSpendingView>
                                 newSpendingController.searchedUsers.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                leading: newSpendingController
-                                            .searchedUsers[index].profile !=
-                                        null
-                                    ? CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            newSpendingController
-                                                .searchedUsers[index].profile!),
-                                        radius: PSize.arw(context, 20),
-                                      )
-                                    : RandomAvatar(
-                                        newSpendingController
-                                                .searchedUsers[index]
-                                                .firstname ??
-                                            "Random",
-                                        width: PSize.arw(context, 40),
-                                      ),
+                                leading: RandomAvatar(
+                                  newSpendingController
+                                          .searchedUsers[index].username ??
+                                      '',
+                                  width: PSize.arw(context, 40),
+                                ),
                                 title: Text(
                                   newSpendingController
                                           .searchedUsers[index].firstname ??
@@ -560,21 +550,10 @@ class _NewSpendingViewState extends State<NewSpendingView>
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: ListTile(
-                        leading:
-                            newSpendingController.transferUser.value!.profile !=
-                                    null
-                                ? CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                      newSpendingController
-                                          .transferUser.value!.profile!,
-                                    ),
-                                    radius: PSize.arw(context, 20),
-                                  )
-                                : RandomAvatar(
-                                    newSpendingController
-                                        .transferUser.value!.firstname!,
-                                    width: PSize.arw(context, 40),
-                                  ),
+                        leading: RandomAvatar(
+                          newSpendingController.transferUser.value!.username!,
+                          width: PSize.arw(context, 40),
+                        ),
                         title: Text(
                           newSpendingController.transferUser.value!.firstname ??
                               '',

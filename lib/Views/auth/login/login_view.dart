@@ -166,20 +166,18 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Obx(
-                      () => PaysaPrimaryTextField(
-                        controller: passwordController,
-                        hintText: "Password",
-                        isPassword: true,
-                        onObsecure: () =>
-                            isVisibility.value = !isVisibility.value,
-                        fillColor: PColors.primaryText(context),
-                        prefixIcon: Icon(
-                          Iconsax.lock,
-                          color: PColors.primaryText(context),
-                        ),
-                        obscureText: isVisibility.value,
+                    PaysaPrimaryTextField(
+                      controller: passwordController,
+                      hintText: "Password",
+                      // isPassword: true,
+                      // onObsecure: () =>
+                      //     isVisibility.value = !isVisibility.value,
+                      fillColor: PColors.primaryText(context),
+                      prefixIcon: Icon(
+                        Iconsax.lock,
+                        color: PColors.primaryText(context),
                       ),
+                      // obscureText: isVisibility.value,
                     ),
                     SizedBox(
                       height: PSize.arh(context, 14),
@@ -259,7 +257,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final void Function()? onTap;
   final bool isPassword;
-  final bool obscureText;
+  final bool? obscureText;
   final bool readOnly;
   final TextInputType keyboardType;
   final FilteringTextInputFormatter? inputFormatter;
@@ -279,7 +277,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
     this.onChanged,
     this.onTap,
     this.isPassword = false,
-    this.obscureText = false,
+    this.obscureText,
     this.readOnly = false,
     this.keyboardType = TextInputType.text,
     this.inputFormatter,
@@ -295,7 +293,7 @@ class PaysaPrimaryTextField extends StatelessWidget {
     return TextField(
       focusNode: focusNode,
       controller: controller,
-      obscureText: obscureText,
+      obscureText: obscureText ?? false,
       maxLength: maxLength,
       readOnly: readOnly,
       keyboardType: keyboardType,
@@ -309,7 +307,9 @@ class PaysaPrimaryTextField extends StatelessWidget {
             ? GestureDetector(
                 onTap: onObsecure,
                 child: Icon(
-                  !obscureText ? Iconsax.eye : Iconsax.eye_slash,
+                  !(obscureText ?? false) && obscureText != null
+                      ? Iconsax.eye
+                      : Iconsax.eye_slash,
                 ),
               )
             : suffixIcon,
