@@ -327,4 +327,10 @@ class PHelper {
   bool isPdf(File file) {
     return file.path.toLowerCase().endsWith('.pdf');
   }
+
+  // sort in alphabetical order, case sensitive
+  static List<String> sortAlphabetically(List<String> list) {
+    list.sort((a, b) => a.compareTo(b));
+    return list;
+  }
 }

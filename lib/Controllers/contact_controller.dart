@@ -8,7 +8,7 @@ class ContactsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getContacts();
+    // getContacts();
   }
 
   void getContacts() async {
