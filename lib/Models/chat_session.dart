@@ -8,6 +8,8 @@ class ChatSession {
   List<UserModel> participants;
   List<ChatMessage> messages;
   DateTime createdAt;
+  String? lastMessage;
+  DateTime? lastUpdateTime;
 
   SpendingModel? spendingModel;
   List<String> users;
@@ -19,6 +21,8 @@ class ChatSession {
     required this.createdAt,
     this.spendingModel,
     required this.users,
+    this.lastMessage,
+    this.lastUpdateTime,
   });
 
   factory ChatSession.fromJson(Map<String, dynamic> json) {
@@ -36,6 +40,10 @@ class ChatSession {
           : null,
       users: PHelper.sortAlphabetically(
           (json['users'] as List).map((user) => user.toString()).toList()),
+      lastMessage: json['lastMessage'],
+      lastUpdateTime: json['lastUpdateTime'] != null
+          ? DateTime.parse(json['lastUpdateTime'])
+          : null,
     );
   }
   Map<String, dynamic> toJson() {
@@ -47,6 +55,8 @@ class ChatSession {
       'createdAt': createdAt.toIso8601String(),
       'spendingModel': spendingModel?.toJson(),
       'users': PHelper.sortAlphabetically(users),
+      'lastMessage': lastMessage,
+      'lastUpdateTime': DateTime.now().toIso8601String(),
     };
   }
 }

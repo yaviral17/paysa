@@ -10,26 +10,15 @@ import 'package:paysa/Models/chat_model.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 class ChatScreenView extends StatelessWidget {
-  const ChatScreenView({super.key});
+  final String sessionId;
+  const ChatScreenView({
+    super.key,
+    required this.sessionId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final List<ChatMessage> messages = [
-      ChatMessage(
-        id: "1",
-        message:
-            "Hi, good to see you! We're starting work on a presentation for a new product today, right?",
-        sender: UserModel(),
-        time: DateTime.now(),
-      ),
-      ChatMessage(
-        id: "2",
-        message:
-            "Yes, that's right. Let's discuss the main points and structure of the presentation.",
-        sender: UserModel(),
-        time: DateTime.now(),
-      ),
-    ];
+    final List<ChatMessage> messages = [];
     return Scaffold(
       appBar: AppBar(
         leadingWidth: MediaQuery.of(context).size.width * 0.25,

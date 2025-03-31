@@ -1,6 +1,14 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:paysa/APIs/firestore_apis.dart';
+import 'package:paysa/Controllers/dashboard_controller.dart';
+import 'package:paysa/Models/chat_session.dart';
+import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/helpers/navigations.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
@@ -20,13 +28,22 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   FocusNode searchNode = FocusNode();
   TextEditingController searchController = TextEditingController();
-
+  final DashboardController dashboardController =
+      Get.find<DashboardController>();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     searchNode.addListener(() {
       setState(() {});
+    });
+  }
+
+  Stream<List<ChatSession>> getChatSessions() {
+    return FirestoreAPIs.getChatSessions().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => ChatSession.fromJson(doc.data()))
+          .toList();
     });
   }
 
@@ -104,18 +121,64 @@ class _ChatScreenState extends State<ChatScreen> {
                 controller: searchController,
               ),
               const SizedBox(height: 20),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return ChatTile(
-                      // onTap: () {
-                      //   PNavigation.push(context, MessagesScreen());
-                      // },
+              // Obx(
+              //   () => ListView.builder(
+              //     shrinkWrap: true,
+              //     physics: NeverScrollableScrollPhysics(),
+              //     itemCount: dashboardController.chatSessions.length,
+              //     itemBuilder: (context, index) {
+              //       ChatSession chatSession =
+              //           dashboardController.chatSessions[index];
+              //       return ChatTile(
+              //         chatSession: chatSession,
+              //       );
+              //     },
+              //   ),
+              // ),
+              StreamBuilder<List<ChatSession>>(
+                stream: getChatSessions(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'Error: ${snapshot.error}',
+                        style: TextStyle(
+                          color: PColors.primaryText(context),
+                        ),
+                      ),
+                    );
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'No chat sessions found',
+                        style: TextStyle(
+                          color: PColors.primaryText(context),
+                        ),
+                      ),
+                    );
+                  }
+
+                  // Use the data from the snapshot to build the list
+                  final chatSessions = snapshot.data!;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: chatSessions.length,
+                    itemBuilder: (context, index) {
+                      ChatSession chatSession = chatSessions[index];
+                      return ChatTile(
+                        chatSession: chatSession,
                       );
+                    },
+                  );
                 },
-              ),
+              )
             ],
           ),
         ),
@@ -182,10 +245,17 @@ class SearchTextField extends StatelessWidget {
 }
 
 class ChatTile extends StatelessWidget {
-  const ChatTile({super.key});
+  final ChatSession chatSession;
+  const ChatTile({
+    super.key,
+    required this.chatSession,
+  });
 
   @override
   Widget build(BuildContext context) {
+    bool isBetweenTwoUsers = chatSession.users.length == 2;
+    bool isGroupChat = chatSession.users.length > 2;
+
     return ListTile(
       splashColor: PColors.containerSecondary(context),
       shape: ShapeBorder.lerp(
@@ -198,15 +268,27 @@ class ChatTile extends StatelessWidget {
         1,
       ),
       onTap: () {
-        PNavigate.to(ChatScreenView());
+        PNavigate.to(ChatScreenView(
+          sessionId: chatSession.id,
+        ));
       },
       leading: RandomAvatar(
-        "John Doe",
+        isBetweenTwoUsers
+            ? chatSession.participants[0].uid ==
+                    FirebaseAuth.instance.currentUser!.uid
+                ? chatSession.participants[1].username!
+                : chatSession.participants[0].username!
+            : chatSession.id,
         width: 40,
         height: 40,
       ),
       title: Text(
-        'John Doe',
+        isBetweenTwoUsers
+            ? chatSession.participants[0].uid ==
+                    FirebaseAuth.instance.currentUser!.uid
+                ? chatSession.participants[1].username!
+                : chatSession.participants[0].username!
+            : chatSession.id,
         style: TextStyle(
           color: PColors.primaryText(context),
           fontSize: 16,
@@ -214,7 +296,8 @@ class ChatTile extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        'Hey, how are you?',
+        chatSession.lastMessage ?? " ",
+        maxLines: 1,
         style: TextStyle(
           color: PColors.secondaryText(context),
           fontSize: 14,

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paysa/APIs/firestore_apis.dart';
+import 'package:paysa/Models/chat_session.dart';
 import 'package:paysa/Models/spending_model.dart';
 import 'package:paysa/Models/user_model.dart';
 import 'package:paysa/Utils/constants/custom_enums.dart';
@@ -23,7 +24,8 @@ class DashboardController extends GetxController {
   Rx<List<SpendingModel>> shoppingSpendings = Rx(<SpendingModel>[]);
   Rx<List<SpendingModel>> splitSpendings = Rx(<SpendingModel>[]);
   Rx<List<SpendingModel>> transferSpendings = Rx(<SpendingModel>[]);
-
+  RxList<ChatSession> chatSessions = <ChatSession>[].obs;
+  RxList<ChatSession> chatSessionsFiltered = <ChatSession>[].obs;
   PageController pageController = PageController(initialPage: 0);
 
   // init

@@ -72,21 +72,15 @@ class NewSpendingController {
     }
     isLoading.value = true;
 
-    PlaceDetailsModel? placeDetailsModel =
-        await apiFunctions.getAddressFromLatLng(
-            apiFunctions.currentLocation!.latitude,
-            apiFunctions.currentLocation!.longitude);
-
-    Get.log(placeDetailsModel!.toJson().toString());
     switch (spendingMode.value) {
       case SpendingType.shopping:
-        await shoppingCreation(placeDetailsModel: placeDetailsModel);
+        await shoppingCreation();
         break;
       case SpendingType.transfer:
-        await transferCreation(placeDetailsModel: placeDetailsModel);
+        await transferCreation();
         break;
       case SpendingType.split:
-        await splitCreation(placeDetailsModel: placeDetailsModel);
+        await splitCreation();
         break;
       case SpendingType.income:
         await incomeCreation();
@@ -99,7 +93,7 @@ class NewSpendingController {
     isLoading.value = false;
   }
 
-  Future<void> shoppingCreation({PlaceDetailsModel? placeDetailsModel}) async {
+  Future<void> shoppingCreation() async {
     if (amount.value.isEmpty) {
       PHelper.showErrorMessageGet(
           title: "Amount is empty", message: "Please enter the amount");
@@ -112,7 +106,10 @@ class NewSpendingController {
       log("Amount is empty");
       return;
     }
-
+    PlaceDetailsModel? placeDetailsModel =
+        await apiFunctions.getAddressFromLatLng(
+            apiFunctions.currentLocation!.latitude,
+            apiFunctions.currentLocation!.longitude);
     double amountValue = double.parse(amount.value);
 
     if (amountValue <= 0) {
@@ -185,7 +182,10 @@ class NewSpendingController {
       log("Amount is invalid");
       return;
     }
-
+    PlaceDetailsModel? placeDetailsModel =
+        await apiFunctions.getAddressFromLatLng(
+            apiFunctions.currentLocation!.latitude,
+            apiFunctions.currentLocation!.longitude);
     String id = Uuid().v4();
 
     String? imageUrl =
@@ -230,12 +230,7 @@ class NewSpendingController {
     ChatSession data = ChatSession(
       id: sessionId,
       participants: [
-        UserModel(
-          uid: FirebaseAuth.instance.currentUser!.uid,
-          firstname: FirebaseAuth.instance.currentUser!.displayName ?? "",
-          email: FirebaseAuth.instance.currentUser!.email ?? "",
-          token: myToken,
-        ),
+        Get.find<DashboardController>().user.value!,
         transferUser.value!,
       ],
       messages: [
@@ -251,6 +246,7 @@ class NewSpendingController {
       createdAt: DateTime.now(),
       spendingModel: spending,
       users: users,
+      lastMessage: "Transfer of ${amount.value} sent",
     );
 
     await FirestoreAPIs.checkAndCreateChatSession(data);
@@ -312,7 +308,10 @@ class NewSpendingController {
       log("No Image Selected");
       return;
     }
-
+    PlaceDetailsModel? placeDetailsModel =
+        await apiFunctions.getAddressFromLatLng(
+            apiFunctions.currentLocation!.latitude,
+            apiFunctions.currentLocation!.longitude);
     String id = Uuid().v4();
 
     String? billUrl =
@@ -370,6 +369,7 @@ class NewSpendingController {
       createdAt: DateTime.now(),
       spendingModel: spending,
       users: users,
+      lastMessage: "Split of ${amount.value} created",
     );
     await FirestoreAPIs.checkAndCreateChatSession(data);
     // send notification

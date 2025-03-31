@@ -265,11 +265,32 @@ class FirestoreAPIs {
       // If the chat session already exists, you can handle it as needed
       // For example, you can return the existing session ID or update it
       String existingSessionId = querySnapshot.docs.first.id;
-      // PHelper.showWarningMessageGet(
-      //   title: "Chat Session Already Exists 👀",
-      //   message: "The chat session already exists with ID: $existingSessionId",
-      // );
-      // You can also return the existing session data if needed
+      log('Chat session already exists with ID: $existingSessionId');
+
+      // append chatmessage to existing session and update last message
+      await FirebaseFirestore.instance
+          .collection('chat-sessions')
+          .doc(existingSessionId)
+          .update({
+        'lastMessage': sessionData.lastMessage,
+      });
+      await FirebaseFirestore.instance
+          .collection('chat-sessions')
+          .doc(existingSessionId)
+          .update({
+        'messages': FieldValue.arrayUnion([sessionData.messages.last.toJson()])
+      });
     }
+  }
+
+  // Get chat sessions for a user
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getChatSessions() async* {
+    List<ChatSession> chatSessions = [];
+    // Listen for changes in the chat sessions collection
+    yield* FirebaseFirestore.instance
+        .collection('chat-sessions')
+        .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy('lastUpdateTime', descending: true)
+        .snapshots();
   }
 }
