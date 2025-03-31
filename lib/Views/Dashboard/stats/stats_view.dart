@@ -60,6 +60,13 @@ class _StatisticsViewState extends State<StatisticsView> {
     var request =
         http.Request('POST', Uri.parse('http://localhost:11434/api/chat'));
 
+    var requestData = {
+      "messages": [],
+      "model": "llama3.2:latest",
+      "temperature": 1,
+      "stream": false
+    };
+
     List<Map<String, dynamic>> messages = [
       {
         "role": "system",
