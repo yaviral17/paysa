@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -37,20 +36,9 @@ class _HomeViewState extends State<HomeView> {
   final contactController = Get.put(ContactsController());
   final dashboardController = Get.find<DashboardController>();
 
-  bool showRefreshButton = false;
-
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 10), () {
-      if (mounted &&
-          showRefreshButton == false &&
-          !dashboardController.isLoading.value) {
-        setState(() {
-          showRefreshButton = true;
-        });
-      }
-    });
   }
 
   void fetchRecentTransactions() {}
@@ -63,84 +51,50 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: PColors.background(context),
         surfaceTintColor: PColors.background(context),
         elevation: 0,
-
-        title: ZoomTapAnimation(
-          onTap: () {
-            dashboardController.fetchData();
-            setState(() {
-              showRefreshButton = false;
-            });
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 4,
-            ),
-            curve: Curves.easeInOut,
-            decoration: !showRefreshButton
-                ? null
-                : BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: PColors.containerSecondary(context),
-                  ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                HugeIcon(
-                  icon: Iconsax.refresh,
-                  color: PColors.primary(context),
-                  size: PSize.arw(context, 18),
-                ),
-                if (showRefreshButton)
-                  SizedBox(
-                    width: PSize.arw(context, 4),
-                  ),
-                if (showRefreshButton)
-                  Text(
-                    'Refresh',
-                    style: TextStyle(
-                      fontSize: PSize.arw(context, 12),
-                      color: PColors.primary(context),
-                    ),
-                  ),
-              ],
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 18.0),
+          child: IconButton(
+            onPressed: () {
+              dashboardController.fetchData();
+            },
+            icon: HugeIcon(
+              icon: Iconsax.refresh,
+              color: PColors.primary(context),
             ),
           ),
         ),
-        // title: Container(
-        //   height: PSize.arw(context, 36),
-        //   width: PSize.arw(context, 120),
-        //   padding: const EdgeInsets.symmetric(
-        //     horizontal: 8,
-        //     vertical: 4,
-        //   ),
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(10),
-        //     color: PColors.containerSecondary(context),
-        //   ),
-        //   child: Row(
-        //     mainAxisSize: MainAxisSize.max,
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       Icon(
-        //         Icons.keyboard_arrow_down_rounded,
-        //         color: PColors.primary(context),
-        //         size: PSize.arw(context, 24),
-        //       ),
-        //       Text(
-        //         // currency symbol flag icon
-        //         ' ₹ INR 🇮🇳',
-        //         style: TextStyle(
-        //           fontSize: PSize.arw(context, 16),
-        //           color: PColors.primaryText(context).withAlpha(200),
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-
+        title: Container(
+          height: PSize.arw(context, 36),
+          width: PSize.arw(context, 120),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 4,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: PColors.containerSecondary(context),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: PColors.primary(context),
+                size: PSize.arw(context, 24),
+              ),
+              Text(
+                // currency symbol flag icon
+                ' ₹ INR 🇮🇳',
+                style: TextStyle(
+                  fontSize: PSize.arw(context, 16),
+                  color: PColors.primaryText(context).withAlpha(200),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 18.0),
@@ -659,7 +613,7 @@ class SplitTileWidget extends StatelessWidget {
       onTap: onTap ??
           () {
             PNavigate.to(
-              SpendingDeatilsView(
+              SplitDeatilsView(
                 spendingModel: spending,
               ),
             );
