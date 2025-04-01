@@ -1,20 +1,18 @@
+import 'dart:convert';
+
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:hugeicons/hugeicons.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:paysa/Controllers/dashboard_controller.dart';
 import 'package:paysa/Models/spending_model.dart';
 import 'package:paysa/Utils/constants/custom_enums.dart';
 import 'package:paysa/Utils/sizes.dart';
 import 'package:paysa/Utils/theme/colors.dart';
 import 'package:paysa/Views/auth/login/login_view.dart';
-import 'package:paysa/Views/auth/widgets/paysa_primary_button.dart';
+import 'package:paysa/firebase_options.dart';
 import 'package:random_avatar/random_avatar.dart';
-import 'package:smooth_corner/smooth_corner.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class StatisticsView extends StatefulWidget {
@@ -42,6 +40,8 @@ class _StatisticsViewState extends State<StatisticsView> {
     ];
   }
 
+  final RegExp regex = RegExp(r"\*\*(.*?)\*\*");
+
   final DashboardController controller = Get.find();
   final TextEditingController searchController = TextEditingController();
   List<String> getChips = ['Day', 'Week', 'Month', 'Year'];
@@ -56,15 +56,22 @@ class _StatisticsViewState extends State<StatisticsView> {
   ];
 
   Future<Map<String, dynamic>> getResponseFromLlama(String pormt) async {
-    var headers = {'Content-Type': 'application/json'};
-    var request =
-        http.Request('POST', Uri.parse('http://localhost:11434/api/chat'));
+    Get.log('[llmResponse] sending data');
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${DefaultFirebaseOptions.llmKey}',
+    };
+    var request = http.Request(
+        'POST', Uri.parse('https://api.groq.com/openai/v1/chat/completions'));
 
     var requestData = {
       "messages": [],
-      "model": "llama3.2:latest",
+      "model": "llama-3.3-70b-versatile",
       "temperature": 1,
-      "stream": false
+      "max_completion_tokens": 1024,
+      "top_p": 1,
+      "stream": false,
+      "stop": null
     };
 
     List<Map<String, dynamic>> messages = [
@@ -88,20 +95,28 @@ class _StatisticsViewState extends State<StatisticsView> {
 
     request.body = json.encode({
       "messages": messages,
-      "model": "llama3.2:latest",
+      "model": "llama-3.3-70b-versatile",
       "temperature": 1,
+      "max_completion_tokens": 1024,
+      "top_p": 1,
       "stream": false,
+      "stop": null
     });
     request.headers.addAll(headers);
 
+    // Get.log('[llmResponse] ${request.url.toString()}');
+
     http.StreamedResponse response = await request.send();
+    // Get.log(json.decode(await response.stream.bytesToString()).toString());
 
     if (response.statusCode == 200) {
       Map<String, dynamic> res =
           json.decode(await response.stream.bytesToString());
       res['isSuccess'] = true;
+      Get.log('[llmResponse] response successfull');
       return res;
     } else {
+      Get.log('[llmResponse] response failed ${response.reasonPhrase}');
       return {
         'isSuccess': false,
         'message': 'Failed to get response from Llama',
@@ -119,7 +134,7 @@ class _StatisticsViewState extends State<StatisticsView> {
       // Convert dynamic map to string map
       Map<String, String> llmMessage = {
         "role": "assistant",
-        "content": res['message']['content'].toString()
+        "content": res['choices'][0]['message']['content'].toString()
       };
       chat.add(llmMessage);
     }
@@ -135,6 +150,7 @@ class _StatisticsViewState extends State<StatisticsView> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 18, vertical: 5),
           child: Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
                 child: ListView.builder(
@@ -145,6 +161,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 18.0, vertical: 4),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
@@ -188,6 +205,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 18.0, vertical: 4),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
